@@ -1,14 +1,11 @@
 package model
 
-import (
-	"tzgolkin/model/wheel"
-)
 
 type Game struct {
 	players []*Player
 	workers []*Worker
 
-	calendar Calendar 
+	calendar *Calendar 
 	// temples []Temple 
 	// research []Research 
 	
@@ -25,43 +22,43 @@ type Game struct {
 }
 
 func (g *Game) Init() {
-	g.players := make([]Player, 4)
+	g.players = make([]*Player, 4)
 	for i, color := range [...]string{"red", "blue", "green", "yellow"} {
 		g.players[i] = &Player{
 			resources: [...]int{0, 0, 0},
 			corn: 0,
-			color: color
+			color: color,
 		}
 
-		for j := 0, j < 6; i++ {
+		for j := 0; j < 6; j++ {
 			g.workers = append(g.workers, &Worker{
 				id: i * 6 + j,
 				color: color,
 				available: j < 3,
-				wheel_id: nil,
-				position: nil
+				wheel_id: -1,
+				position: -1,
 			})
 		}
 	}
 
-	g.calendar = new(wheel.Calendar)
+	g.calendar = new(Calendar)
 	g.calendar.Init()
 
 	g.currPlayer = 0
 	g.firstPlayer = 0
 }
 
-func (g *Game) round() {
-	g.currPlayer = g.firstPlayer
-	for i := 0; i < len(g.players); i++ {
-		g.players[g.currPlayer].play()
-		g.currPlayer = (g.currPlayer + 1) % len(g.players)
-	}
+// func (g *Game) round() {
+// 	g.currPlayer = g.firstPlayer
+// 	for i := 0; i < len(g.players); i++ {
+// 		g.players[g.currPlayer].play()
+// 		g.currPlayer = (g.currPlayer + 1) % len(g.players)
+// 	}
 
-	// todo first player nonsense
-	// todo food days
-	g.calendar.rotate()
-}
+// 	// todo first player nonsense
+// 	// todo food days
+// 	g.calendar.rotate()
+// }
 
 func (g *Game) GenerateMoves(p *Player) []Move {
 	// all possible moves are:
@@ -97,8 +94,8 @@ func (g *Game) GenerateMoves(p *Player) []Move {
 	placement := make([]int, 0)
 
 	for _, w := range g.workers {
-		if w.player.id == p.id {
-			if w.wheel != nil {
+		if w.color == p.color {
+			if w.wheel_id != -1 {
 				retrieval = append(retrieval, w.id)
 			} else if w.available {
 				placement = append(placement, w.id)
@@ -107,13 +104,11 @@ func (g *Game) GenerateMoves(p *Player) []Move {
 	}
 
 	// todo find extend method
-	for _, m := range make_retrieval_moves([make_empty_retrieval_move()], retrieval) {
-		moves = append(moves, m)
-	}
+	retrieval_moves := append(make([]Move, 0), MakeEmptyRetrievalMove())
+	moves = append(moves, g.MakeRetrievalMoves(retrieval_moves, retrieval)...)
 	
-	for _, m := range make_placement_moves([make_empty_placement_move()], placement) {
-		moves = append(moves, m)
-	}
+	placement_moves := append(make([]Move, 0), MakeEmptyPlacementMove())
+	moves = append(moves, g.MakePlacementMoves(placement_moves, placement)...)
 
 	return moves
 }
@@ -129,19 +124,21 @@ func (g *Game) GenerateMoves(p *Player) []Move {
 			m.append(j + i)
 		return make_retrieval_moves(m, r)
 */
-func (g *Game) make_retrieval_moves(moves []Move, retrieval []int) []Move {
+func (g *Game) MakeRetrievalMoves(moves []Move, retrieval []int) []Move {
 	if len(retrieval) == 0 {
 		return moves
 	}
 
-	worker = retrieval[0]
-	rest = retrieval[1:]
-	out = copy_moves(moves)
+	worker := retrieval[0]
+	rest := retrieval[1:]
+	out := make([]Move, 0)
 
-	for _, move := range moves {
-		out = append(out, move.retrieve(worker))
+	l := len(moves)
+
+	for i := 0; i < l; i++ {
+		moves = append(moves, moves[i].Retrieve(worker))
 	}
-	return make_retrieval_moves(out, rest)
+	return g.MakeRetrievalMoves(out, rest)
 }
 
 /*
@@ -161,24 +158,28 @@ func (g *Game) make_retrieval_moves(moves []Move, retrieval []int) []Move {
 
 		return mpm(m, p, wheels)
 */
-func (g *Game) make_placement_moves(moves []Move, placement []int) []Move {
+func (g *Game) MakePlacementMoves(moves []Move, placement []int) []Move {
 	// todo first player nonsense
 	if len(placement) == 0 {
 		return moves
 	}
 
-	worker = placement[0]
-	rest = placement[1:]
-	out = copy_moves(moves)
+	worker := placement[0]
+	rest := placement[1:]
 
-	for _, move := range moves {
-		new_calendar := g.calendar.clone()
-		new_calendar.execute(move)
+	l := len(moves)
+	for i := 0; i < l; i++ {
+		new_calendar := g.calendar.Clone()
+		new_calendar.Execute(moves[i])
 
-		for _, position := range new_wheels.legal_positions() {
-			out = append(out, move.place(worker, position))
+		for _, position := range new_calendar.LegalPositions() {
+			moves = append(moves, moves[i].Place(worker, position))
 		}
 	}
 
-	return make_placement_moves(out, rest)
+	return g.MakePlacementMoves(moves, rest)
+}
+
+func (g *Game) GetPlayer(num int) *Player {
+	return g.players[num]
 }

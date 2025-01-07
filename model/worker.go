@@ -6,6 +6,6 @@ type Worker struct {
 	color string // todo Color type
 
 	available bool
-	wheel_id int | nil // ?
-	position int | nil
+	wheel_id int// | nil // ?
+	position int// | nil
 }

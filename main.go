@@ -10,7 +10,7 @@ func main() {
 	game := new(model.Game)
 	game.Init()
 
-	p := game.players[0]
+	p := game.GetPlayer(0)
 	for i, move := range game.GenerateMoves(p) {
 		fmt.Fprintf(os.Stdout, "%d %s\n", i, move.String())
 	}

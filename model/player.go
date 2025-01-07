@@ -1,7 +1,7 @@
 package model
 
 type Player struct {
-	resources []int
+	resources [3]int
 	corn int 
 	color string // todo Color type?
 }
