@@ -1,5 +1,10 @@
 package model
 
+import (
+	"fmt"
+	"os"
+	"math/rand"
+)
 
 type Game struct {
 	players []*Player
@@ -48,17 +53,30 @@ func (g *Game) Init() {
 	g.firstPlayer = 0
 }
 
-// func (g *Game) round() {
-// 	g.currPlayer = g.firstPlayer
-// 	for i := 0; i < len(g.players); i++ {
-// 		g.players[g.currPlayer].play()
-// 		g.currPlayer = (g.currPlayer + 1) % len(g.players)
-// 	}
+func (g *Game) Round() {
+	g.currPlayer = g.firstPlayer
+	for i := 0; i < len(g.players); i++ {
+		// g.players[g.currPlayer].play()
+		g.TakeTurn()
+		g.currPlayer = (g.currPlayer + 1) % len(g.players)
+	}
 
-// 	// todo first player nonsense
-// 	// todo food days
-// 	g.calendar.rotate()
-// }
+	// todo first player nonsense
+	// todo food days
+	g.calendar.Rotate()
+
+	fmt.Fprintf(os.Stdout, "Calendar State: \n%s\n", g.calendar.String())
+}
+
+func (g *Game) TakeTurn() {
+	player := g.players[g.currPlayer]
+	moves := g.GenerateMoves(g.players[g.currPlayer])
+	move := moves[rand.Intn(len(moves))]
+
+	fmt.Fprintf(os.Stdout, "Playing move %s for %s\n", move.String(), player.color)
+	
+	g.calendar.Execute(move)
+}
 
 func (g *Game) GenerateMoves(p *Player) []Move {
 	// all possible moves are:
@@ -103,14 +121,21 @@ func (g *Game) GenerateMoves(p *Player) []Move {
 		}
 	}
 
-	// todo find extend method
 	retrieval_moves := append(make([]Move, 0), MakeEmptyRetrievalMove())
 	moves = append(moves, g.MakeRetrievalMoves(retrieval_moves, retrieval)...)
 	
 	placement_moves := append(make([]Move, 0), MakeEmptyPlacementMove())
 	moves = append(moves, g.MakePlacementMoves(placement_moves, placement)...)
 
-	return moves
+	// todo find filter method
+	out := make([]Move, 0)
+	for _, move := range moves {
+		if len(move.workers) > 0 {
+			out = append(out, move)
+		}
+	}
+
+	return out
 }
 
 /*

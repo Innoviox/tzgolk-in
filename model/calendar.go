@@ -68,13 +68,13 @@ func (c *Calendar) LegalPositions() []*Position {
 	return positions
 }
 
-// func (c *Calendar) setRotation(rotation int) {
-// 	c.rotation = rotation
-// 	for i := 0; i < len(c.wheels); i++ {
-// 		c.wheels[i].setRotation(rotation)
-// 	}
-// }
+func (c *Calendar) SetRotation(rotation int) {
+	c.rotation = rotation
+	for i := 0; i < len(c.wheels); i++ {
+		c.wheels[i].SetRotation(rotation)
+	}
+}
 
-// func (c *Calendar) rotate() {
-// 	c.setRotation(c.rotation + 1);
-// }
+func (c *Calendar) Rotate() {
+	c.SetRotation(c.rotation + 1);
+}
