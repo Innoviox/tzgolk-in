@@ -1,9 +1,14 @@
 package model
 
+import (
+	"fmt"
+	"strings"
+)
+
 type Calendar struct {
 	wheels []*Wheel
 	rotation int
-	// todo food days & such
+	// tojm9 do food days & such
 }
 
 func (c *Calendar) Init() {
@@ -52,7 +57,7 @@ func (c *Calendar) LegalPositions() []*Position {
 	for _, wheel := range c.wheels {
 		i := 0
 		for j := 0; j < len(wheel.occupied); j++ {
-			if wheel.occupied[j] > i {
+			if (wheel.occupied[j] + wheel.rotation) > i {
 				break
 			} else {
 				i++
@@ -77,4 +82,32 @@ func (c *Calendar) SetRotation(rotation int) {
 
 func (c *Calendar) Rotate() {
 	c.SetRotation(c.rotation + 1);
+}
+
+func (c *Calendar) String(workers []*Worker) string {
+	var br strings.Builder
+
+	for i, wheel := range c.wheels {
+		fmt.Fprintf(&br, "%d: ", i)
+
+		out := make([]string, wheel.size)
+
+		for i := 0; i < len(wheel.occupied); i++ {
+			if wheel.occupied[i] + wheel.rotation < wheel.size {
+				out[wheel.occupied[i] + wheel.rotation] = workers[wheel.workers[i]].color
+			}
+		}
+
+		for _, o := range out {
+			if len(o) > 0 {
+				fmt.Fprintf(&br, "%s", o)
+			} else {
+				fmt.Fprintf(&br, "_")
+			}
+		}
+		fmt.Fprintf(&br, "\n")
+	}
+
+
+	return br.String()
 }

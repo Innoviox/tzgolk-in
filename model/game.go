@@ -28,7 +28,7 @@ type Game struct {
 
 func (g *Game) Init() {
 	g.players = make([]*Player, 4)
-	for i, color := range [...]string{"red", "blue", "green", "yellow"} {
+	for i, color := range [...]string{"R", "B", "G", "Y"} {
 		g.players[i] = &Player{
 			resources: [...]int{0, 0, 0},
 			corn: 0,
@@ -63,9 +63,10 @@ func (g *Game) Round() {
 
 	// todo first player nonsense
 	// todo food days
+	fmt.Fprintf(os.Stdout, "Rotating Calendar\n")
 	g.calendar.Rotate()
 
-	fmt.Fprintf(os.Stdout, "Calendar State: \n%s\n", g.calendar.String())
+	fmt.Fprintf(os.Stdout, "Calendar State: \n%s\n", g.calendar.String(g.workers))
 }
 
 func (g *Game) TakeTurn() {

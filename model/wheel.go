@@ -14,7 +14,7 @@ type Wheel struct {
 
 	// positions []Position
 	// workers []int
-	// rotation int
+	rotation int
 }
 
 func (w *Wheel) Clone() *Wheel {
@@ -33,6 +33,10 @@ func (w *Wheel) Clone() *Wheel {
 func (w *Wheel) AddWorker(position int, worker int) {
 	w.occupied = append(w.occupied, position)
 	w.workers = append(w.workers, worker)
+}
+
+func (w *Wheel) SetRotation(rotation int) {
+	w.rotation = rotation
 }
 
 // func (w *Wheel) AddPosition(p Position) {
@@ -55,3 +59,4 @@ func (w *Wheel) AddWorker(position int, worker int) {
 // 		}
 // 	}
 // }
+

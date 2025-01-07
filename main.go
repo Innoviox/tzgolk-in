@@ -1,10 +1,7 @@
 package main
 
 import (
-	"fmt"
-	"os"
 	"tzgolkin/model"
-	
 )
 
 func main() {
