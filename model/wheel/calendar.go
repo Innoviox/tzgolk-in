@@ -1,7 +1,7 @@
 package wheel
 
 type Calendar struct {
-	wheels []Wheel
+	wheels []*Wheel
 	rotation int
 }
 
