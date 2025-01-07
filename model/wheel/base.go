@@ -1,22 +1,28 @@
 package wheel
 
 import (
-	"tzgolkin/model/util/util"
+	"tzgolkin/model/util"
 )
 
 type Wheel struct {
-	positions []Position
-	workers []int
-	rotation int
+	// this is all todo
+	id int
+	size int
+	occupied []int
+
+
+	// positions []Position
+	// workers []int
+	// rotation int
 }
 
-func (w *Wheel) AddPosition(p Position) {
-	w.positions = append(w.positions, p)
-}
+// func (w *Wheel) AddPosition(p Position) {
+// 	w.positions = append(w.positions, p)
+// }
 
-func (w *Wheel) AddWorker(worker int) {
-	w.workers = append(w.workers, worker)
-}
+// func (w *Wheel) AddWorker(worker int) {
+// 	w.workers = append(w.workers, worker)
+// }
 
 // func (w *Wheel) rotate() {
 // 	i := 0

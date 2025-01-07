@@ -63,7 +63,7 @@ func (g *Game) round() {
 	g.calendar.rotate()
 }
 
-func (g *Game) generateMoves(p *Player) []Move {
+func (g *Game) GenerateMoves(p *Player) []Move {
 	// all possible moves are:
 	// - retrieve any combination of workers
 	// - place any legal combination of workers
@@ -172,8 +172,8 @@ func (g *Game) make_placement_moves(moves []Move, placement []int) []Move {
 	out = copy_moves(moves)
 
 	for _, move := range moves {
-		new_wheels = copy_wheels(wheels)
-		new_wheels.execute(move)
+		new_calendar := g.calendar.clone()
+		new_calendar.execute(move)
 
 		for _, position := range new_wheels.legal_positions() {
 			out = append(out, move.place(worker, position))
