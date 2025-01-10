@@ -30,11 +30,10 @@ func (g *Game) Init() {
 	g.players = make([]*Player, 4)
 	for i, color := range [...]string{"R", "B", "G", "Y"} {
 		g.players[i] = &Player{
-			stone: 0,
-			gold: 0,
-			wood: 0,
+			resources: [...]int{0, 0, 0, 0},
 			corn: 10, // todo wealth tiles
 			color: color,
+			points: 0,
 		}
 
 		for j := 0; j < 6; j++ {
@@ -138,6 +137,8 @@ func (g *Game) GenerateMoves(p *Player) []Move {
 		}
 	}
 
+	// todo filter by corn cost
+
 	return out
 }
 
@@ -164,6 +165,8 @@ func (g *Game) MakeRetrievalMoves(moves []Move, retrieval []int) []Move {
 	l := len(moves)
 
 	for i := 0; i < l; i++ {
+		// todo: generate choices for retrieval
+		// todo: order matters
 		moves = append(moves, moves[i].Retrieve(worker))
 	}
 	return g.MakeRetrievalMoves(out, rest)

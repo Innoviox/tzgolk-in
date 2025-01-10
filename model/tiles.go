@@ -8,7 +8,7 @@ func Tile1(g *Game, playerId int) {
 	player := g.GetPlayer(playerId)
 
 	player.corn += 6
-	player.stone += 2
+	player.resources[Stone] += 2
 }
 
 func MakeWealthTiles() []Tile {

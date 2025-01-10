@@ -1,9 +1,8 @@
 package model
 
 type Player struct {
-	gold int
-	wood int
-	stone int
+	resources [4]int
 	corn int 
 	color string // todo Color type?
+	points int
 }
