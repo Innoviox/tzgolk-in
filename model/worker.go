@@ -3,7 +3,7 @@ package model
 type Worker struct {
 	id int
 
-	color string // todo Color type
+	color Color
 
 	available bool
 	wheel_id int// | nil // use -1's

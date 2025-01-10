@@ -15,6 +15,15 @@ const (
 	Skull
 )
 
+type Color int
+
+const (
+	Red Color = iota
+	Green
+	Blue
+	Yellow
+)
+
 func MakeEmptyRetrievalMove() Move {
 	return Move {
 		placing: false,
