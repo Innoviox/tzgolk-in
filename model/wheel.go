@@ -39,6 +39,20 @@ func (w *Wheel) SetRotation(rotation int) {
 	w.rotation = rotation
 }
 
+func (w *Wheel) RemoveWorker(worker int) {
+	// todo use indexof method?
+	j := 0
+	for i := 0; i < len(w.workers); i++ {
+		if w.workers[i] == worker {
+			j = i
+			break
+		}
+	}
+
+	w.workers = remove(w.workers, j)
+	w.occupied = remove(w.occupied, j)
+}
+
 // func (w *Wheel) AddPosition(p Position) {
 // 	w.positions = append(w.positions, p)
 // }

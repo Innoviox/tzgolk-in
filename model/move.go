@@ -28,7 +28,7 @@ func (m *Move) Place(worker int, position *Position) Move {
 		placing: m.placing,
 		workers: append(m.workers, worker),
 		positions: append(m.positions, position),
-		corn: m.corn,
+		corn: m.corn + len(m.workers) + position.corn,
 	}
 }
 

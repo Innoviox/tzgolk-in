@@ -30,8 +30,10 @@ func (g *Game) Init() {
 	g.players = make([]*Player, 4)
 	for i, color := range [...]string{"R", "B", "G", "Y"} {
 		g.players[i] = &Player{
-			resources: [...]int{0, 0, 0},
-			corn: 0,
+			stone: 0,
+			gold: 0,
+			wood: 0,
+			corn: 10, // todo wealth tiles
 			color: color,
 		}
 
@@ -76,7 +78,7 @@ func (g *Game) TakeTurn() {
 
 	fmt.Fprintf(os.Stdout, "Playing move %s for %s\n", move.String(), player.color)
 	
-	g.calendar.Execute(move)
+	g.calendar.Execute(move, g)
 }
 
 func (g *Game) GenerateMoves(p *Player) []Move {
@@ -196,7 +198,7 @@ func (g *Game) MakePlacementMoves(moves []Move, placement []int) []Move {
 	l := len(moves)
 	for i := 0; i < l; i++ {
 		new_calendar := g.calendar.Clone()
-		new_calendar.Execute(moves[i])
+		new_calendar.Execute(moves[i], g)
 
 		for _, position := range new_calendar.LegalPositions() {
 			moves = append(moves, moves[i].Place(worker, position))
@@ -208,4 +210,8 @@ func (g *Game) MakePlacementMoves(moves []Move, placement []int) []Move {
 
 func (g *Game) GetPlayer(num int) *Player {
 	return g.players[num]
+}
+
+func (g *Game) GetWorker(num int) *Worker {
+	return g.workers[num]
 }

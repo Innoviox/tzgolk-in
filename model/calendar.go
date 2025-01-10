@@ -40,14 +40,23 @@ func (c *Calendar) Clone() Calendar {
 	}
 }
 
-func (c *Calendar) Execute(move Move) {
+func (c *Calendar) Execute(move Move, game *Game) {
 	if (move.placing) {
 		for i := 0; i < len(move.workers); i++ {
 			p := move.positions[i]
 			c.wheels[p.wheel_id].AddWorker(p.position_num, move.workers[i])
 		}
 	} else {
-		// todo
+		for i := 0; i < len(move.workers); i++ {
+			// steps:
+			// - call the position's function on the game & player id
+			// - return the worker to the player
+			w := game.GetWorker(move.workers[i])
+			p := move.positions[i]
+
+			p.Execute(game, w.color)
+			w.ReturnFrom(c.wheels[p.wheel_id])
+		}
 	}
 }
 
@@ -66,7 +75,8 @@ func (c *Calendar) LegalPositions() []*Position {
 		
 		positions = append(positions, &Position{
 			wheel_id: wheel.id,
-			position_num : i,
+			position_num: i,
+			corn: i,
 		})
 	}
 
