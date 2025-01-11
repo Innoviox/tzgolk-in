@@ -75,7 +75,6 @@ func (c *Calendar) LegalPositions() []*Position {
 		
 		positions = append(positions, &Position{
 			wheel_id: wheel.id,
-			position_num: i,
 			corn: i,
 		})
 	}

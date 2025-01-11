@@ -7,6 +7,7 @@ import (
 )
 
 type Game struct {
+	// todo multiskull edge case
 	players []*Player
 	workers []*Worker
 
@@ -18,9 +19,10 @@ type Game struct {
 	// currentMonuments []Monument
 	// allMonuments []Monument 
 
-	// currentBuildings []Building
-	// age1Buildings []Building
-	// age2Buildings []Building 
+	age int
+	currentBuildings []*Building
+	age1Buildings []*Building
+	age2Buildings []*Building 
 
 	currPlayer int
 	firstPlayer int 

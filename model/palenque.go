@@ -1,13 +1,13 @@
 package model
 
 // todo research
-func Palenque0(g *Game) []Option {
+func Palenque0(g *Game, p *Player) []Option {
 	return make([]Option, 0)
 }
 
-func Palenque1(g *Game) []Option {
+func Palenque1(g *Game, p *Player) []Option {
 	return []Option{
-		func (p *Player) {
+		func () {
 			c := 0
 			if g.research.HasLevel(p.color, Agriculture, 2) {
 				c = 1
@@ -17,11 +17,11 @@ func Palenque1(g *Game) []Option {
 	}
 }
 
-func Palenque2(g *Game) []Option {
+func Palenque2(g *Game, p *Player) []Option {
 	options := make([]Option, 0)
 
 	if g.calendar.wheels[0].positions[2].pData.cornTiles > 0 {
-		options = append(options, func(p *Player) {
+		options = append(options, func() {
 			c := 0
 			if g.research.HasLevel(p.color, Agriculture, 1) {
 				c += 1
