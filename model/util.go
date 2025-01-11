@@ -41,3 +41,11 @@ func MakeEmptyPlacementMove() Move {
 		corn: 0,
 	}
 }
+
+func flatten(options [][]Option) []Option {
+	out := make([]Option, 0)
+	for _, o := range options {
+		out = append(out, o...)
+	}
+	return out
+}

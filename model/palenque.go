@@ -4,7 +4,7 @@ func Palenque0(g *Game, c Color, d int) {
 	return
 }
 
-func Palenque1(g *Game, c Color, d int) {
+func Palenque1(p *Player) {
 
 }
 
@@ -20,7 +20,7 @@ func MakePalenque() Wheel {
 
 	return Wheel {
 		id: 1,
-		size: 7,
+		size: len(positions),
 		occupied: make([]int, 0),
 		workers: make([]int, 0),
 		positions: positions,
