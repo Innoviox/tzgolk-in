@@ -44,7 +44,7 @@ func (c *Calendar) Execute(move Move, game *Game) {
 	if (move.placing) {
 		for i := 0; i < len(move.workers); i++ {
 			p := move.positions[i]
-			c.wheels[p.wheel_id].AddWorker(p.position_num, move.workers[i])
+			c.wheels[p.wheel_id].AddWorker(p.corn, move.workers[i])
 		}
 	} else {
 		for i := 0; i < len(move.workers); i++ {

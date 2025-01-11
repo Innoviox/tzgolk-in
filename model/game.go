@@ -215,6 +215,16 @@ func (g *Game) GetPlayer(num int) *Player {
 	return g.players[num]
 }
 
+func (g *Game) GetPlayerByColor(color Color) *Player {
+	for _, player := range g.players {
+		if player.color == color {
+			return player
+		}
+	}
+
+	return nil
+}
+
 func (g *Game) GetWorker(num int) *Worker {
 	return g.workers[num]
 }
