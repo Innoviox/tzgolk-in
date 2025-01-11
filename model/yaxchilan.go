@@ -28,10 +28,8 @@ func Yaxchilan5(p *Player) {
 	p.corn += 2
 }
 
-func MakeYaxchilan() *Wheel {
-	positions := make([]*Position, 0)
-
-	options := [][]Option{
+func Yaxchilan() [][]Option {
+	return [][]Option{
 		[]Option{PlayerOption(Yaxchilan0)},
 		[]Option{PlayerOption(Yaxchilan1)},
 		[]Option{PlayerOption(Yaxchilan2)},
@@ -39,30 +37,8 @@ func MakeYaxchilan() *Wheel {
 		[]Option{PlayerOption(Yaxchilan4)},
 		[]Option{PlayerOption(Yaxchilan5)},
 	}
+}
 
-	for i := 0; i < 6; i++ {
-		positions = append(positions, &Position{
-			wheel_id: 2,
-			corn: i,
-			options: options[i],
-		})
-	}
-
-	for i := 6; i < 8; i++ {
-		positions = append(positions, &Position{
-			wheel_id: 2,
-			corn: i,
-			options: flatten(options),
-		})
-	}
-
-	return &Wheel{
-		id: 2,
-		size: len(positions),
-		occupied: make([]int, 0),
-		workers: make([]int, 0),
-		positions: positions, 
-		rotation: 0,
-		name: "Yaxchilan",
-	}
+func MakeYaxchilan() *Wheel {
+	return MakeWheel(Yaxchilan(), 2, "Yaxchilan")
 }

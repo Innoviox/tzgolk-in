@@ -54,3 +54,32 @@ func (w *Wheel) RemoveWorker(worker int) {
 	w.occupied = remove(w.occupied, j)
 }
 
+func MakeWheel(options [][]Option, id int, name string) *Wheel {
+	positions := make([]*Position, 0)
+
+	for i := 0; i < len(options); i++ {
+		positions = append(positions, &Position{
+			wheel_id: id,
+			corn: i,
+			options: options[i],
+		})
+	}
+
+	for i := 6; i < 8; i++ {
+		positions = append(positions, &Position{
+			wheel_id: id,
+			corn: i,
+			options: flatten(options),
+		})
+	}
+
+	return &Wheel{
+		id: id,
+		size: len(positions),
+		occupied: make([]int, 0),
+		workers: make([]int, 0),
+		positions: positions, 
+		rotation: 0,
+		name: name,
+	}
+}

@@ -1,10 +1,10 @@
 package model
 
-func Palenque0(g *Game, c Color, d int) {
+func Palenque0(g *Game, c Color) {
 	return
 }
 
-func Palenque1(p *Player) {
+func Palenque1(g *Game, c Color) {
 
 }
 
