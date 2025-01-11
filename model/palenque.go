@@ -8,7 +8,11 @@ func Palenque0(g *Game) []Option {
 func Palenque1(g *Game) []Option {
 	return []Option{
 		func (p *Player) {
-			p.corn += 3
+			c := 0
+			if g.research.HasLevel(p.color, Agriculture, 2) {
+				c = 1
+			}
+			p.corn += 3 + c
 		},
 	}
 }
@@ -18,7 +22,15 @@ func Palenque2(g *Game) []Option {
 
 	if g.calendar.wheels[0].positions[2].pData.cornTiles > 0 {
 		options = append(options, func(p *Player) {
-			p.corn += 4
+			c := 0
+			if g.research.HasLevel(p.color, Agriculture, 1) {
+				c += 1
+			}
+			if g.research.HasLevel(p.color, Agriculture, 3) {
+				c += 2
+			}
+
+			p.corn += 4 + c
 			p.cornTiles += 1
 			g.calendar.wheels[0].positions[2].pData.cornTiles -= 1
 		})

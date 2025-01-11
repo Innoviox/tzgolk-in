@@ -12,7 +12,7 @@ type Game struct {
 
 	calendar *Calendar 
 	// temples []Temple 
-	// research []Research 
+	research *Research 
 	
 
 	// currentMonuments []Monument

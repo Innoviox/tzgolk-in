@@ -1,5 +1,16 @@
 package model
 
+// todo research
+func YaxchilanWrapper(f func (*Player)) Options {
+	return func (g *Game) []Option {
+		return []Option{
+			func (p *Player) {
+				f(p)
+			},
+		}
+	}
+}
+
 func Yaxchilan0(g *Game) []Option {
 	return make([]Option, 0)
 }
