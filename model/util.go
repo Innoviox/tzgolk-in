@@ -42,10 +42,12 @@ func MakeEmptyPlacementMove() Move {
 	}
 }
 
-func flatten(options [][]Option) []Option {
-	out := make([]Option, 0)
-	for _, o := range options {
-		out = append(out, o...)
+func flatten(options []Options) Options {
+	return func (g *Game) []Option {
+		result := make([]Option, 0)
+		for _, o := range options {
+			result = append(result, o(g)...)
+		}
+		return result
 	}
-	return out
 }
