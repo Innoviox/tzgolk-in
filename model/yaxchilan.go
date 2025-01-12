@@ -8,7 +8,7 @@ func Yaxchilan1(g *Game, p *Player) {
 	return []Option {
 		func() {
 			p.resources[Wood] += 1 + g.research.ResourceBonus(p.color, Wood)
-		}
+		},
 	}
 }
 
@@ -60,5 +60,5 @@ func Yaxchilan() []Options {
 }
 
 func MakeYaxchilan() *Wheel {
-	return MakeWheel(Yaxchilan(), 2, "Yaxchilan")
+	return MakeWheel(Yaxchilan(), 1, "Yaxchilan")
 }

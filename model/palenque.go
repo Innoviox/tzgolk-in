@@ -1,6 +1,5 @@
 package model
 
-// todo research
 func Palenque0(g *Game, p *Player) []Option {
 	return make([]Option, 0)
 }
@@ -8,11 +7,7 @@ func Palenque0(g *Game, p *Player) []Option {
 func Palenque1(g *Game, p *Player) []Option {
 	return []Option{
 		func () {
-			c := 0
-			if g.research.HasLevel(p.color, Agriculture, 2) {
-				c = 1
-			}
-			p.corn += 3 + c
+			p.corn += 3 + g.research.CornBonus(p.color, Blue)
 		},
 	}
 }
@@ -22,66 +17,73 @@ func Palenque2(g *Game, p *Player) []Option {
 
 	if g.calendar.wheels[0].positions[2].pData.cornTiles > 0 {
 		options = append(options, func() {
-			c := 0
-			if g.research.HasLevel(p.color, Agriculture, 1) {
-				c += 1
-			}
-			if g.research.HasLevel(p.color, Agriculture, 3) {
-				c += 2
-			}
-
-			p.corn += 4 + c
+			p.corn += 4 + g.research.CornBonus(p.color, Green)
 			p.cornTiles += 1
 			g.calendar.wheels[0].positions[2].pData.cornTiles -= 1
+		})
+	} else if g.research.Irrigation(p.color) {
+		options = append(options, func() {
+			p.corn += 4 + g.research.CornBonus(p.color, Green)
 		})
 	}
 
 	return options
 }
 
-func Palenque3(g *Game) []Option {
-	options := make([]Option, 0)
+func Jungle(corn int, wood int, position int) Options {
+	return func (g *Game, p *Player) []Option {
+		options := make([]Option, 0)
 
-	if g.calendar.wheels[0].positions[3].pData.woodTiles > 0 {
-		options = append(options, func (p *Player) {
-			p.resources[Wood] += 2
-			p.woodTiles += 1
-			g.calendar.wheels[0].positions[3].pData.woodTiles -= 1
-		})
+		if g.calendar.wheels[0].positions[position].pData.woodTiles > 0 {
+			options = append(options, func () {
+				p.resources[Wood] += wood + g.research.ResourceBonus(p.color, Wood)
+				p.woodTiles += 1
+				g.calendar.wheels[0].positions[3].pData.woodTiles -= 1
+			})
+	
+			for i := 0; i < 3; i++ {
+				if g.temples.CanStep(p.color, i, -1) {
+					options = append(options, func () {
+						p.corn += corn + g.research.CornBonus(p.color, Green)
+						p.cornTiles += 1
+						g.calendar.wheels[0].positions[3].pData.woodTiles -= 1
+						g.calendar.wheels[0].positions[3].pData.cornTiles -= 1
 
-		// todo anger the gods
-		options = append(options, func (p *Player) {
-			p.corn += 5
-			p.cornTiles += 1
-			g.calendar.wheels[0].positions[3].pData.woodTiles -= 1
-			g.calendar.wheels[0].positions[3].pData.cornTiles -= 1
-		})
-	} else if g.calendar.wheels[0].positions[3].pData.cornTiles > 0 {
-		options = append(options, func (p *Player) {
-			p.corn += 5
-			p.cornTiles += 1
-			g.calendar.wheels[0].positions[3].pData.cornTiles -= 1
-		})
+						g.temples.Step(p.color, i, -1)
+					})
+				}
+			}
+		} 
+		
+		if g.calendar.wheels[0].positions[position].HasCornShowing() {
+			options = append(options, func () {
+				p.corn += corn + g.research.CornBonus(p.color, Green)
+				p.cornTiles += 1
+				g.calendar.wheels[0].positions[3].pData.cornTiles -= 1
+			})
+		}
+
+		if g.research.Irrigation(p.color) {
+			options = append(options, func() {
+				p.corn += corn + g.research.CornBonus(p.color, Green)
+			})
+		}
+
+		return options
+	}
+}
+
+func Palenque() []Options {
+	return []Options{
+		Palenque0,
+		Palenque1,
+		Palenque2,
+		Jungle(5, 2, 3),
+		Jungle(7, 3, 4),
+		Jungle(9, 4, 5),
 	}
 }
 
 func MakePalenque() Wheel {
-	positions := make([]*Position, 0)
-	positions = append(positions, &Position{
-		wheel_id: 1,
-		corn: 0,
-		Execute: Palenque0,
-		decisions: 0, 
-	})
-
-
-	return Wheel {
-		id: 1,
-		size: len(positions),
-		occupied: make([]int, 0),
-		workers: make([]int, 0),
-		positions: positions,
-		rotation: 0,
-		name: "Palenque",
-	}
+	return MakeWheel(Palenque(), 0, "Palenque")
 }

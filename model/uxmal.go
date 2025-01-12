@@ -89,5 +89,5 @@ func Uxmal() []Options {
 }
 
 func MakeUxmal() *Wheel {
-	return MakeWheel(Uxmal(), 4, "Uxmal")
+	return MakeWheel(Uxmal(), 3, "Uxmal")
 }

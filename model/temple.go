@@ -39,8 +39,8 @@ func MakeTemples() *Temples {
 	}
 }
 
-func (t *Temples) Step(c Color, temple int) {
-	t.temples[temple].playerLocations[c]++
+func (t *Temples) Step(c Color, temple int, dir int) {
+	t.temples[temple].playerLocations[c] += dir
 }
 
 // func (t *Temples) GetSteps(p *Player) Options
