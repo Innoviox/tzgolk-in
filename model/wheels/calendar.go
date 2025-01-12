@@ -1,4 +1,4 @@
-package model
+package wheels
 
 import (
 	"fmt"

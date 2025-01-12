@@ -1,4 +1,4 @@
-package model
+package wheels
 
 func Tikal0(g *Game, p *Player) []Option {
 	return make([]Option, 0)
@@ -22,12 +22,14 @@ func Tikal2(g *Game, p *Player) []Option {
 
 					effect()
 
-					if g.research.HasLevel(p.color, Construction, 1) {
-						p.corn += 1
-					}
-					if g.research.HasLevel(p.color, Construction, 2) {
-						p.points += 2
-					}
+					g.research.Built(p.color)
+
+					// if g.research.HasLevel(p.color, Construction, 1) {
+					// 	p.corn += 1
+					// }
+					// if g.research.HasLevel(p.color, Construction, 2) {
+					// 	p.points += 2
+					// }
 					// todo building colors?
 				})
 			}
@@ -42,7 +44,7 @@ func Tikal3(g *Game, p *Player) []Option {
 }
 
 func Tikal4(g *Game, p *Player) []Option {
-
+	// todo double building
 }
 
 func Tikal5(g *Game, p *Player) []Option {
@@ -64,4 +66,12 @@ func Tikal5(g *Game, p *Player) []Option {
 			}
 		}
 	}
+}
+
+func Tikal() []Options {
+	return []Options{ Tikal0, TIkal1, Tikal2, Tikal3, TIkal4, TIkal5, }
+}
+
+func MakeTikal() Wheel {
+	return MakeWheel(Tikal(), 2, "Tikal")
 }
