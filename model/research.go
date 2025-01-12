@@ -124,11 +124,14 @@ func (r *Research) GetOptionsHelper(g *Game, p *Player, resources [4]int, levels
 			for _, newResources := range PayBlocks(resources, 1) {
 				switch Science(s) {
 				case Agriculture:
-					advancedOptions = append(advancedOptions, g.temples.GainTempleStep(p.color, func() {}, 1)...)
+					advancedOptions = append(advancedOptions, g.temples.GainTempleStep(p.color, func() {
+						p.resources = newResources
+					}, 1)...)
 				case Resources:
 					for i := 0; i < 3; i++ {
 						for j := 0; j < 3; j++ {
 							advancedOptions = append(advancedOptions, func() {
+								p.resources = newResources
 								p.resources[i] += 1
 								p.resources[j] += 1
 							})
@@ -136,10 +139,12 @@ func (r *Research) GetOptionsHelper(g *Game, p *Player, resources [4]int, levels
 					}
 				case Construction:
 					advancedOptions = append(advancedOptions, func() {
+						p.resources = newResources
 						p.points += 3
 					})
 				case Theology:
 					advancedOptions = append(advancedOptions, func() {
+						p.resources = newResources
 						p.resources[Skull] += 1
 					})
 				}

@@ -69,3 +69,23 @@ func flatten(options []Options) Options {
 		return result
 	}
 }
+
+func PayBlocks(resources [4]int, nBlocks int) [][4]int {
+	if nBlocks == 0 {
+		return [][4]int{resources}
+	}
+
+	result := make([][4]int, 0)
+	for i := 0; i < 3; i++ {
+		if resources[i] > 0 {
+			newResources := [4]int{}
+			copy(newResources[:], resources[:])
+			newResources[i] -= 1
+			for _, r := range PayBlocks(newResources, nBlocks - 1) {
+				result = append(result, r)
+			}
+		}
+	}
+
+	return result
+}
