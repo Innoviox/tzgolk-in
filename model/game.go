@@ -147,6 +147,14 @@ func (g *Game) GenerateMoves(p *Player) []Move {
 	return out
 }
 
+func (g *Game) GetOptions(worker *Worker) []Option {
+	wheel := g.calendar.wheels[worker.wheel_id]
+	position := wheel.positions[worker.position]
+	player := g.GetPlayerByColor(worker.color)
+
+	return position.GetOptions(g, player)
+}
+
 /*
 	make_retrieval_moves(moves, retrieval)
 		if retrieval = []:
@@ -162,17 +170,24 @@ func (g *Game) MakeRetrievalMoves(moves []Move, retrieval []int) []Move {
 	if len(retrieval) == 0 {
 		return moves
 	}
-
-	worker := retrieval[0]
+	
+	// todo: order matters
+	w := retrieval[0]
+	worker := g.GetWorker(w)
 	rest := retrieval[1:]
 	out := make([]Move, 0)
 
 	l := len(moves)
 
 	for i := 0; i < l; i++ {
-		// todo: generate choices for retrieval
-		// todo: order matters
-		moves = append(moves, moves[i].Retrieve(worker))
+		for _, option := range g.GetOptions(worker) {
+			// todo pay corn to go lower
+			moves = append(moves, moves[i].Retrieve(w, &SpecificPosition {
+				wheel_id: worker.wheel_id,
+				corn: worker.position,
+				Execute: option,
+			}))
+		}
 	}
 	return g.MakeRetrievalMoves(out, rest)
 }
