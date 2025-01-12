@@ -1,12 +1,16 @@
 package wheels
 
+import (
+	"tzgolkin/model"
+)
+
 func Chichen0(g *Game, p *Player) []Option {
 	return make([]Option, 0)
 }
 
-func ChichenX(temple int, points int, block boolean, position int) Options {
+func ChichenX(temple int, points int, block bool, position int) Options {
 	return func(g *Game, p *Player) []Option {
-		func ChichenHelper() []Option {
+		ChichenHelper := func () []Option {
 			options := make([]Option, 0)
 		
 			if block {

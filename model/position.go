@@ -5,9 +5,6 @@ import (
 	"strings"
 )
 
-type Option func()
-type Options func(*Game, *Player) []Option
-
 type Position struct {
 	wheel_id int
 	corn int

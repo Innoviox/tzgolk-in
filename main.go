@@ -9,4 +9,5 @@ func main() {
 	game.Init()
 
 	game.Round()
+	game.Round()
 }

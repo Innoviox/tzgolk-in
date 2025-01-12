@@ -6,6 +6,10 @@ func remove(s []int, i int) []int {
     return s[:len(s)-1]
 }
 
+type Option func()
+type Options func(*Game, *Player) []Option
+
+
 type Resource int
 
 const (
