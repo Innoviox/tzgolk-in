@@ -53,6 +53,7 @@ func (g *Game) Init() {
 	g.calendar.Init()
 
 	g.temples = MakeTemples()
+	g.research = MakeResearch()
 
 	g.currPlayer = 0
 	g.firstPlayer = 0
@@ -128,6 +129,8 @@ func (g *Game) GenerateMoves(p *Player) []Move {
 		}
 	}
 
+	// fmt.Fprintf(os.Stdout, "\t%s R %v P %v\n", p.color, retrieval, placement)
+
 	retrieval_moves := append(make([]Move, 0), MakeEmptyRetrievalMove())
 	moves = append(moves, g.MakeRetrievalMoves(retrieval_moves, retrieval)...)
 	
@@ -152,7 +155,11 @@ func (g *Game) GetOptions(worker *Worker) []Option {
 	position := wheel.positions[worker.position]
 	player := g.GetPlayerByColor(worker.color)
 
-	return position.GetOptions(g, player)
+	options := position.GetOptions(g, player)
+
+	// fmt.Fprintf(os.Stdout, "\tOptions for worker on wheel %s position %d: %v\n", wheel.name, worker.position, len(options))
+
+	return options
 }
 
 /*
@@ -167,29 +174,40 @@ func (g *Game) GetOptions(worker *Worker) []Option {
 		return make_retrieval_moves(m, r)
 */
 func (g *Game) MakeRetrievalMoves(moves []Move, retrieval []int) []Move {
+	fmt.Fprintf(os.Stdout, "\tMakeRetrievalMoves %v %v\n", len(moves), retrieval)
+
 	if len(retrieval) == 0 {
 		return moves
 	}
-	
-	// todo: order matters
-	w := retrieval[0]
-	worker := g.GetWorker(w)
-	rest := retrieval[1:]
+
 	out := make([]Move, 0)
+	out = append(out, moves...)
+	
+	for _, w := range retrieval {
+		worker := g.GetWorker(w)
 
-	l := len(moves)
+		m := make([]Move, 0)
+		m = append(m, moves...)
 
-	for i := 0; i < l; i++ {
-		for _, option := range g.GetOptions(worker) {
-			// todo pay corn to go lower
-			moves = append(moves, moves[i].Retrieve(w, &SpecificPosition {
-				wheel_id: worker.wheel_id,
-				corn: worker.position,
-				Execute: option,
-			}))
+		fmt.Fprintf(os.Stdout, "\t\tR %v W %v\n", retrieval, w)
+		rest := except(retrieval, w)
+		fmt.Fprintf(os.Stdout, "\t\tRest %v\n", rest)
+
+		for i := 0; i < len(moves); i++ {
+			for _, option := range g.GetOptions(worker) {
+				// fmt.Fprintf(os.Stdout, "\t\tOption %v\n", option)
+				// todo pay corn to go lower
+				m = append(m, moves[i].Retrieve(w, &SpecificPosition {
+					wheel_id: worker.wheel_id,
+					corn: worker.position,
+					Execute: option,
+				}))
+			}
 		}
+
+		out = append(out, g.MakeRetrievalMoves(m, rest)...)
 	}
-	return g.MakeRetrievalMoves(out, rest)
+	return out // g.MakeRetrievalMoves(out, rest)
 }
 
 /*

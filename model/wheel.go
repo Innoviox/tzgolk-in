@@ -41,6 +41,9 @@ func (w *Wheel) Rotate(g *Game) {
 		w.occupied[i]++
 		if w.occupied[i] >= w.size {
 			workerToRemove = w.workers[i]
+		} else {
+			worker := g.GetWorker(w.workers[i])
+			worker.position++
 		}
 	}
 

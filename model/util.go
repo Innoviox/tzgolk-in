@@ -1,9 +1,8 @@
 package model
 
 // https://stackoverflow.com/questions/37334119/how-to-delete-an-element-from-a-slice-in-golang
-func remove(s []int, i int) []int {
-    s[i] = s[len(s)-1]
-    return s[:len(s)-1]
+func remove(slice []int, s int) []int {
+    return append(slice[:s], slice[s+1:]...)
 }
 
 type Option func()
@@ -87,4 +86,14 @@ func PayBlocks(resources [4]int, nBlocks int) [][4]int {
 	}
 
 	return result
+}
+
+func except(arr []int, n int) []int {
+	new := make([]int, 0)
+	for _, v := range arr {
+		if v != n {
+			new = append(new, v)
+		}
+	}
+	return new
 }
