@@ -28,6 +28,7 @@ func Tikal2(g *Game, p *Player) []Option {
 					if g.research.HasLevel(p.color, Construction, 2) {
 						p.points += 2
 					}
+					// todo building colors?
 				})
 			}
 		}

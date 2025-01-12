@@ -71,33 +71,5 @@ func Yaxchilan() []Options {
 }
 
 func MakeYaxchilan() *Wheel {
-	positions := make([]*Position, 0)
-
-	options := Yaxchilan()
-
-	for i := 0; i < len(options); i++ {
-		positions = append(positions, &Position{
-			wheel_id: 2,
-			corn: i,
-			GetOptions: options[i],
-		})
-	}
-
-	for i := 6; i < 8; i++ {
-		positions = append(positions, &Position{
-			wheel_id: 2,
-			corn: i,
-			GetOptions: flatten(options),
-		})
-	}
-
-	return &Wheel{
-		id: 2,
-		size: len(positions),
-		occupied: make([]int, 0),
-		workers: make([]int, 0),
-		positions: positions, 
-		rotation: 0,
-		name: "Yaxchilan",
-	}
+	return MakeWheel(Yaxchilan(), 2, "Yaxchilan")
 }
