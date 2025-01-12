@@ -30,7 +30,7 @@ type Game struct {
 
 func (g *Game) Init() {
 	g.players = make([]*Player, 4)
-	for i, color := range [...]string{"R", "B", "G", "Y"} {
+	for i, color := range [...]Color{Red, Green, Blue, Yellow} {
 		g.players[i] = &Player{
 			resources: [...]int{0, 0, 0, 0},
 			corn: 10, // todo wealth tiles
@@ -231,4 +231,15 @@ func (g *Game) GetPlayerByColor(color Color) *Player {
 
 func (g *Game) GetWorker(num int) *Worker {
 	return g.workers[num]
+}
+
+func (g *Game) UnlockWorker(color Color) {
+	for _, w := range g.workers {
+		if w.color == color {
+			if !w.available && w.wheel_id == -1 {
+				w.available = true
+				break
+			}
+		}
+	}
 }

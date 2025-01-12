@@ -37,6 +37,10 @@ func MakePData(hasWood bool) *PalenqueData {
 	}
 }
 
+func (pd *PalenqueData) HasCornShowing() bool {
+	return pd.cornTiles > pd.woodTiles
+}
+
 func MakeCData() *ChichenData {
 	return &ChichenData {
 		full: false,

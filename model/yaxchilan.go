@@ -4,7 +4,7 @@ func Yaxchilan0(g *Game, p *Player) []Option {
 	return make([]Option, 0)
 }
 
-func Yaxchilan1(g *Game, p *Player) {
+func Yaxchilan1(g *Game, p *Player) []Option {
 	return []Option {
 		func() {
 			p.resources[Wood] += 1 + g.research.ResourceBonus(p.color, Wood)
@@ -12,35 +12,35 @@ func Yaxchilan1(g *Game, p *Player) {
 	}
 }
 
-func Yaxchilan2(g *Game) []Option {
+func Yaxchilan2(g *Game, p *Player) []Option {
 	return []Option {
-		func (p *Player) {
+		func () {
 			p.resources[Stone] += 1 + g.research.ResourceBonus(p.color, Stone)
 			p.corn += 1
 		},
 	}
 }
 
-func Yaxchilan3(g *Game) []Option {
+func Yaxchilan3(g *Game, p *Player) []Option {
 	return []Option {
-		func (p *Player) {
+		func () {
 			p.resources[Gold] += 1 + g.research.ResourceBonus(p.color, Gold)
 			p.corn += 1
 		},
 	}
 }
 
-func Yaxchilan4(g *Game) []Option {
+func Yaxchilan4(g *Game, p *Player) []Option {
 	return []Option {
-		func (p *Player) {
+		func () {
 			p.resources[Skull] += 1 + g.research.ResourceBonus(p.color, Skull)
 		},
 	}
 }
 
-func Yaxchilan5(g *Game) []Option {
+func Yaxchilan5(g *Game, p *Player) []Option {
 	return []Option {
-		func (p *Player) {
+		func () {
 			p.resources[Gold] += 1 + g.research.ResourceBonus(p.color, Gold)
 			p.resources[Stone] += 1 + g.research.ResourceBonus(p.color, Stone)
 			p.corn += 2

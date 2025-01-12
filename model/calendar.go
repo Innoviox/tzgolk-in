@@ -12,20 +12,24 @@ type Calendar struct {
 }
 
 func (c *Calendar) Init() {
-	c.wheels = make([]*Wheel, 0)
+	// c.wheels = make([]*Wheel, 0)
 	c.rotation = 0
 
-	for i := 0; i < 5; i++ {
-		c.AddWheel(&Wheel {
-			id: i,
-			size: 5,
-			occupied: make([]int, 0),
-		})
+	c.wheels = []*Wheel {
+		MakePalenque(),
+		MakeYaxchilan(),
+		MakeTikal(),
+		MakeUxmal(),
+		MakeChichen(),
 	}
-}
 
-func (c *Calendar) AddWheel(w *Wheel) {
-	c.wheels = append(c.wheels, w)
+	// for i := 0; i < 5; i++ {
+	// 	c.AddWheel(&Wheel {
+	// 		id: i,
+	// 		size: 5,
+	// 		occupied: make([]int, 0),
+	// 	})
+	// }
 }
 
 func (c *Calendar) Clone() Calendar {

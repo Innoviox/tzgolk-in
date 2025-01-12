@@ -22,14 +22,7 @@ func Tikal2(g *Game, p *Player) []Option {
 
 					effect()
 
-					g.research.Built(p.color)
-
-					// if g.research.HasLevel(p.color, Construction, 1) {
-					// 	p.corn += 1
-					// }
-					// if g.research.HasLevel(p.color, Construction, 2) {
-					// 	p.points += 2
-					// }
+					g.research.Built(p)
 					// todo building colors?
 				})
 			}
@@ -45,6 +38,7 @@ func Tikal3(g *Game, p *Player) []Option {
 
 func Tikal4(g *Game, p *Player) []Option {
 	// todo double building
+	return make([]Option, 0)
 }
 
 func Tikal5(g *Game, p *Player) []Option {
@@ -59,19 +53,21 @@ func Tikal5(g *Game, p *Player) []Option {
 					}
 					options = append(options, func() {
 						p.resources[i] -= 1
-						g.temples.Step(p.color, j)
-						g.temples.Step(p.color, k)
+						g.temples.Step(p.color, j, 1)
+						g.temples.Step(p.color, k, 1)
 					})
 				}
 			}
 		}
 	}
+
+	return options
 }
 
 func Tikal() []Options {
-	return []Options{ Tikal0, TIkal1, Tikal2, Tikal3, TIkal4, TIkal5, }
+	return []Options{ Tikal0, Tikal1, Tikal2, Tikal3, Tikal4, Tikal5, }
 }
 
-func MakeTikal() Wheel {
+func MakeTikal() *Wheel {
 	return MakeWheel(Tikal(), 2, "Tikal")
 }

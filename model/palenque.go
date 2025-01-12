@@ -41,21 +41,16 @@ func Jungle(corn int, wood int, position int) Options {
 				g.calendar.wheels[0].positions[3].pData.woodTiles -= 1
 			})
 	
-			for i := 0; i < 3; i++ {
-				if g.temples.CanStep(p.color, i, -1) {
-					options = append(options, func () {
-						p.corn += corn + g.research.CornBonus(p.color, Green)
-						p.cornTiles += 1
-						g.calendar.wheels[0].positions[3].pData.woodTiles -= 1
-						g.calendar.wheels[0].positions[3].pData.cornTiles -= 1
+			options = append(options, g.temples.GainTempleStep(p.color, func () {
+				p.corn += corn + g.research.CornBonus(p.color, Green)
+				p.cornTiles += 1
+				g.calendar.wheels[0].positions[3].pData.woodTiles -= 1
+				g.calendar.wheels[0].positions[3].pData.cornTiles -= 1
 
-						g.temples.Step(p.color, i, -1)
-					})
-				}
-			}
+			}, -1)...)
 		} 
 		
-		if g.calendar.wheels[0].positions[position].HasCornShowing() {
+		if g.calendar.wheels[0].positions[position].pData.HasCornShowing() {
 			options = append(options, func () {
 				p.corn += corn + g.research.CornBonus(p.color, Green)
 				p.cornTiles += 1
@@ -84,7 +79,7 @@ func Palenque() []Options {
 	}
 }
 
-func MakePalenque() Wheel {
+func MakePalenque() *Wheel {
 	positions := make([]*Position, 0)
 
 	options := Palenque()

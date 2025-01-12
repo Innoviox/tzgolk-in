@@ -8,12 +8,9 @@ func Uxmal1(g *Game, p *Player) []Option {
 	options := make([]Option, 0)
 
 	if p.corn > 3 {
-		for i := 0; i < 3; i++ {
-			options = append(options, func() {
-				p.corn -= 3
-				g.temples.Step(p.color, i)
-			})
-		}
+		options = append(options, g.temples.GainTempleStep(p.color, func() {
+			p.corn -= 3
+		}, 1)...,)
 	}
 
 	return options
@@ -21,6 +18,7 @@ func Uxmal1(g *Game, p *Player) []Option {
 
 func Uxmal2(g *Game, p *Player) []Option {
 	// todo
+	return make([]Option, 0)
 }
 
 func Uxmal3(g *Game, p *Player) []Option {
@@ -35,7 +33,7 @@ func Uxmal4(g *Game, p *Player) []Option {
 	options := make([]Option, 0)
 
 	for _, b := range g.currentBuildings {
-		cost := b.CornCost(g, p) // todo how does research interact with this
+		cost := b.CornCost(g, p) 
 		if p.corn >= cost {
 			for _, effect := range b.GetEffects(g, p) {
 				options = append(options, func() {
@@ -53,6 +51,8 @@ func Uxmal4(g *Game, p *Player) []Option {
 			}
 		}
 	}
+
+	return options
 }
 
 func Uxmal5(g *Game, p *Player) []Option {

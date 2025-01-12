@@ -33,7 +33,7 @@ func Brown() *Temple {
 	}
 }
 
-func Yellow() *Temple {
+func YellowT() *Temple {
 	return &Temple {
 		steps: 9,
 		playerLocations: map[Color]int{
@@ -52,7 +52,7 @@ func Yellow() *Temple {
 	}
 }
 
-func Green() *Temple {
+func GreenT() *Temple {
 	return &Temple {
 		steps: 8,
 		playerLocations: map[Color]int {
@@ -74,7 +74,7 @@ func Green() *Temple {
 
 func MakeTemples() *Temples {
 	return &Temples{
-		temples: []Temple{Brown(), Yellow(), Green()},
+		temples: []*Temple{Brown(), YellowT(), GreenT()},
 	}
 }
 
@@ -82,4 +82,27 @@ func (t *Temples) Step(c Color, temple int, dir int) {
 	t.temples[temple].playerLocations[c] += dir
 }
 
-// func (t *Temples) GetSteps(p *Player) Options
+func (t *Temples) CanStep(c Color, temple int, dir int) bool {
+	if dir == -1 {
+		return t.temples[temple].playerLocations[c] > 0
+	} else if dir == 1 {
+		return t.temples[temple].playerLocations[c] < t.temples[temple].steps - 1
+	} else {
+		return false 
+	}
+}
+
+func (t *Temples) GainTempleStep(c Color, f func(), dir int) []Option {
+	options := make([]Option, 0)
+
+	for i := 0; i < 3; i++ {
+		if t.CanStep(c, i, dir) {
+			options = append(options, func() {
+				t.Step(c, i, dir)
+				f()
+			})
+		}
+	}
+
+	return options
+}
