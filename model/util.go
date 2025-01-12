@@ -28,6 +28,20 @@ const (
 	Yellow
 )
 
+func (c Color) String() string {
+	switch c {
+	case Red:
+		return "Red"
+	case Green:
+		return "Green"
+	case Blue:
+		return "Blue"
+	case Yellow:
+		return "Yellow"
+	}
+	return "Unknown"
+}
+
 func MakeEmptyRetrievalMove() Move {
 	return Move {
 		placing: false,

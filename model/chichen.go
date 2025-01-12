@@ -77,12 +77,12 @@ func Chichen() []Options {
 		ChichenX(0, 4, false, 1),
 		ChichenX(0, 5, false, 2),
 		ChichenX(0, 6, false, 3),
-		ChichenX(1, 7, false, 4),
-		ChichenX(1, 8, false, 5),
-		ChichenX(1, 8, true, 6),
-		ChichenX(2, 10, false, 7),
-		ChichenX(2, 11, true, 8),
-		ChichenX(2, 13, true, 9),
+		ChichenX(2, 7, false, 4),
+		ChichenX(2, 8, false, 5),
+		ChichenX(2, 8, true, 6),
+		ChichenX(1, 10, false, 7),
+		ChichenX(1, 11, true, 8),
+		ChichenX(1, 13, true, 9),
 	}
 }
 

@@ -12,7 +12,7 @@ type Game struct {
 	workers []*Worker
 
 	calendar *Calendar 
-	// temples []Temple 
+	temples *Temples
 	research *Research 
 	
 
@@ -51,6 +51,8 @@ func (g *Game) Init() {
 
 	g.calendar = new(Calendar)
 	g.calendar.Init()
+
+	g.temples = MakeTemples()
 
 	g.currPlayer = 0
 	g.firstPlayer = 0
