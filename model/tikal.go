@@ -9,7 +9,31 @@ func Tikal1(g *Game, p *Player) []Option {
 }
 
 func Tikal2(g *Game, p *Player) []Option {
+	options := make([]Option, 0)
 
+	for _, b := range g.currentBuildings {
+		costs := b.GetCosts(g, p)
+		for _, cost := range costs {
+			for _, effect := range b.GetEffects(g, p) {
+				options = append(options, func() {
+					for i := 0; i < 4; i++ {
+						p.resources[i] -= cost[i]
+					}
+
+					effect()
+
+					if g.research.HasLevel(p.color, Construction, 1) {
+						p.corn += 1
+					}
+					if g.research.HasLevel(p.color, Construction, 2) {
+						p.points += 2
+					}
+				})
+			}
+		}
+	}
+
+	return options
 }
 
 func Tikal3(g *Game, p *Player) []Option {

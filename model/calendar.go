@@ -103,7 +103,7 @@ func (c *Calendar) String(workers []*Worker) string {
 
 		for i := 0; i < len(wheel.occupied); i++ {
 			if wheel.occupied[i] + wheel.rotation < wheel.size {
-				out[wheel.occupied[i] + wheel.rotation] = workers[wheel.workers[i]].color
+				out[wheel.occupied[i] + wheel.rotation] = workers[wheel.workers[i]].color.String()
 			}
 		}
 
