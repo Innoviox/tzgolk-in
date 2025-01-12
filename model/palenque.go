@@ -107,7 +107,6 @@ func MakePalenque() *Wheel {
 		occupied: make([]int, 0),
 		workers: make([]int, 0),
 		positions: positions, 
-		rotation: 0,
 		name: "Palenque",
 	}
 }

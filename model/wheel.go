@@ -4,13 +4,12 @@ type Wheel struct {
 	// this is all todo
 	id int
 	size int
+
 	occupied []int
 	workers []int
 
 
 	positions []*Position
-	// workers []int
-	rotation int
 	name string
 }
 
@@ -27,7 +26,6 @@ func (w *Wheel) Clone() *Wheel {
 		occupied: new_occupied,
 		workers: new_workers,
 		positions: w.positions,
-		rotation: w.rotation,
 		name: w.name,
 	}
 }
@@ -37,8 +35,18 @@ func (w *Wheel) AddWorker(position int, worker int) {
 	w.workers = append(w.workers, worker)
 }
 
-func (w *Wheel) SetRotation(rotation int) {
-	w.rotation = rotation
+func (w *Wheel) Rotate(g *Game) {
+	workerToRemove := -1
+	for i := 0; i < len(w.occupied); i++ {
+		w.occupied[i]++
+		if w.occupied[i] >= w.size {
+			workerToRemove = w.workers[i]
+		}
+	}
+
+	if workerToRemove != -1 {
+		g.GetWorker(workerToRemove).ReturnFrom(w)
+	}
 }
 
 func (w *Wheel) RemoveWorker(worker int) {
@@ -80,7 +88,6 @@ func MakeWheel(options []Options, wheel_id int, wheel_name string) *Wheel {
 		occupied: make([]int, 0),
 		workers: make([]int, 0),
 		positions: positions, 
-		rotation: 0,
 		name: wheel_name,
 	}
 }

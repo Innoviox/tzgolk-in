@@ -49,6 +49,11 @@ func (c *Calendar) Execute(move Move, game *Game) {
 		for i := 0; i < len(move.workers); i++ {
 			p := move.positions[i]
 			c.wheels[p.wheel_id].AddWorker(p.corn, move.workers[i])
+
+			worker := game.GetWorker(move.workers[i])
+			worker.available = false
+			worker.wheel_id = p.wheel_id
+			worker.position = p.corn
 		}
 	} else {
 		for i := 0; i < len(move.workers); i++ {
@@ -70,7 +75,7 @@ func (c *Calendar) LegalPositions() []*SpecificPosition {
 	for _, wheel := range c.wheels {
 		i := 0
 		for j := 0; j < len(wheel.occupied); j++ {
-			if (wheel.occupied[j] + wheel.rotation) > i {
+			if (wheel.occupied[j]) > i {
 				break
 			} else {
 				i++
@@ -86,15 +91,20 @@ func (c *Calendar) LegalPositions() []*SpecificPosition {
 	return positions
 }
 
-func (c *Calendar) SetRotation(rotation int) {
-	c.rotation = rotation
-	for i := 0; i < len(c.wheels); i++ {
-		c.wheels[i].SetRotation(rotation)
-	}
-}
+// func (c *Calendar) Rotate(g *Game) {
+// 	c.rotation = rotation
+// 	for i := 0; i < len(c.wheels); i++ {
+// 		c.wheels[i].SetRotation(rotation)
+// 	}
+// }
 
-func (c *Calendar) Rotate() {
-	c.SetRotation(c.rotation + 1);
+// todo rework when days are implemented?
+
+func (c *Calendar) Rotate(g *Game) {
+	// c.SetRotation(c.rotation + 1);
+	for i := 0; i < len(c.wheels); i++ {
+		c.wheels[i].Rotate(g)
+	}
 }
 
 func (c *Calendar) String(workers []*Worker) string {
@@ -106,8 +116,8 @@ func (c *Calendar) String(workers []*Worker) string {
 		out := make([]string, wheel.size)
 
 		for i := 0; i < len(wheel.occupied); i++ {
-			if wheel.occupied[i] + wheel.rotation < wheel.size {
-				out[wheel.occupied[i] + wheel.rotation] = workers[wheel.workers[i]].color.String()
+			if wheel.occupied[i] < wheel.size {
+				out[wheel.occupied[i]] = workers[wheel.workers[i]].color.String()
 			}
 		}
 
@@ -118,7 +128,7 @@ func (c *Calendar) String(workers []*Worker) string {
 				fmt.Fprintf(&br, "_")
 			}
 		}
-		fmt.Fprintf(&br, "\n")
+		fmt.Fprintf(&br, "(%v %v)\n", wheel.occupied, wheel.workers)
 	}
 
 

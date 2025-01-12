@@ -70,7 +70,7 @@ func (g *Game) Round() {
 	// todo first player nonsense
 	// todo food days
 	fmt.Fprintf(os.Stdout, "Rotating Calendar\n")
-	g.calendar.Rotate()
+	g.calendar.Rotate(g)
 
 	fmt.Fprintf(os.Stdout, "Calendar State: \n%s\n", g.calendar.String(g.workers))
 }
