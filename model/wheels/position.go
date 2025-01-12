@@ -13,6 +13,7 @@ type Position struct {
 	corn int
 	GetOptions Options
 	pData *PalenqueData
+	cData *ChichenData
 }
 
 type PalenqueData struct {
@@ -20,11 +21,28 @@ type PalenqueData struct {
 	woodTiles int
 }
 
-func MakePData() *PalenqueData {
+type ChichenData struct {
+	full bool
+}
+
+func MakePData(hasWood bool) *PalenqueData {
 	// todo based on player count
+	if (hasWood) {
+		return &PalenqueData{
+			cornTiles: 4,
+			woodTiles: 4,
+		}
+	}
+
 	return &PalenqueData{
 		cornTiles: 4,
-		woodTiles: 4,
+		woodTiles: 0,
+	}
+}
+
+func MakeCData() *ChichenData {
+	return &ChichenData {
+		full: false,
 	}
 }
 

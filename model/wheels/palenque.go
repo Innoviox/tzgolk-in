@@ -85,5 +85,34 @@ func Palenque() []Options {
 }
 
 func MakePalenque() Wheel {
-	return MakeWheel(Palenque(), 0, "Palenque")
+	positions := make([]*Position, 0)
+
+	options := Palenque()
+
+	for i := 0; i < len(options); i++ {
+		positions = append(positions, &Position{
+			wheel_id: 0,
+			corn: i,
+			GetOptions: options[i],
+			pData: MakePData(i > 2),
+		})
+	}
+
+	for i := 6; i < 8; i++ {
+		positions = append(positions, &Position{
+			wheel_id: 0,
+			corn: i,
+			GetOptions: flatten(options),
+		})
+	}
+
+	return &Wheel{
+		id: 0,
+		size: len(positions),
+		occupied: make([]int, 0),
+		workers: make([]int, 0),
+		positions: positions, 
+		rotation: 0,
+		name: "Palenque",
+	}
 }
