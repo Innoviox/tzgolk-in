@@ -1,4 +1,4 @@
-package wheels
+package model
 
 func Yaxchilan0(g *Game, p *Player) []Option {
 	return make([]Option, 0)

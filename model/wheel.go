@@ -1,4 +1,4 @@
-package wheels
+package model
 
 import (
 	// "tzgolkin/model/util"

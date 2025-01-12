@@ -1,8 +1,8 @@
-package wheels
+package model
 
-import (
-	"tzgolkin/model"
-)
+// import (
+// 	"tzgolkin/model"
+// )
 
 func Chichen0(g *Game, p *Player) []Option {
 	return make([]Option, 0)

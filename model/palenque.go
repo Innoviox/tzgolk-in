@@ -1,4 +1,4 @@
-package wheels
+package model
 
 func Palenque0(g *Game, p *Player) []Option {
 	return make([]Option, 0)
