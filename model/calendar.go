@@ -58,14 +58,14 @@ func (c *Calendar) Execute(move Move, game *Game) {
 			w := game.GetWorker(move.workers[i])
 			p := move.positions[i]
 
-			p.Execute(game, w.color)
+			p.Execute()
 			w.ReturnFrom(c.wheels[p.wheel_id])
 		}
 	}
 }
 
-func (c *Calendar) LegalPositions() []*Position {
-	positions := make([]*Position, 0)
+func (c *Calendar) LegalPositions() []*SpecificPosition {
+	positions := make([]*SpecificPosition, 0)
 
 	for _, wheel := range c.wheels {
 		i := 0
@@ -77,7 +77,7 @@ func (c *Calendar) LegalPositions() []*Position {
 			}
 		}
 		
-		positions = append(positions, &Position{
+		positions = append(positions, &SpecificPosition{
 			wheel_id: wheel.id,
 			corn: i,
 		})

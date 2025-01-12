@@ -9,9 +9,11 @@ type Move struct {
 	placing bool
 	workers []int
 
-	positions []*Position
+	positions []*SpecificPosition
 
 	corn int
+
+	Execute func()
 }
 
 func (m *Move) Retrieve(worker int) Move {
@@ -23,7 +25,7 @@ func (m *Move) Retrieve(worker int) Move {
 	}
 }
 
-func (m *Move) Place(worker int, position *Position) Move {
+func (m *Move) Place(worker int, position *SpecificPosition) Move {
 	return Move {
 		placing: m.placing,
 		workers: append(m.workers, worker),

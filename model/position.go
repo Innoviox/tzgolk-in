@@ -13,6 +13,12 @@ type Position struct {
 	cData *ChichenData
 }
 
+type SpecificPosition struct {
+	wheel_id int
+	corn int
+	Execute Option
+}
+
 type PalenqueData struct {
 	cornTiles int
 	woodTiles int
@@ -47,7 +53,7 @@ func MakeCData() *ChichenData {
 	}
 }
 
-func (p *Position) String() string {
+func (p *SpecificPosition) String() string {
 	var br strings.Builder
 
 	fmt.Fprintf(&br, "%d %d", p.wheel_id, p.corn)

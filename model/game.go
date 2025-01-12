@@ -56,6 +56,7 @@ func (g *Game) Init() {
 
 	g.currPlayer = 0
 	g.firstPlayer = 0
+	g.age = 1
 }
 
 func (g *Game) Round() {

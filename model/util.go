@@ -31,13 +31,13 @@ const (
 func (c Color) String() string {
 	switch c {
 	case Red:
-		return "Red"
+		return "R"
 	case Green:
-		return "Green"
+		return "G"
 	case Blue:
-		return "Blue"
+		return "B"
 	case Yellow:
-		return "Yellow"
+		return "Y"
 	}
 	return "Unknown"
 }
@@ -46,7 +46,7 @@ func MakeEmptyRetrievalMove() Move {
 	return Move {
 		placing: false,
 		workers: make([]int, 0),
-		positions: make([]*Position, 0),
+		positions: make([]*SpecificPosition, 0),
 		corn: 0,
 	}
 }
@@ -55,7 +55,7 @@ func MakeEmptyPlacementMove() Move {
 	return Move {
 		placing: true,
 		workers: make([]int, 0),
-		positions: make([]*Position, 0),
+		positions: make([]*SpecificPosition, 0),
 		corn: 0,
 	}
 }
@@ -81,9 +81,8 @@ func PayBlocks(resources [4]int, nBlocks int) [][4]int {
 			newResources := [4]int{}
 			copy(newResources[:], resources[:])
 			newResources[i] -= 1
-			for _, r := range PayBlocks(newResources, nBlocks - 1) {
-				result = append(result, r)
-			}
+			
+			result = append(result, PayBlocks(newResources, nBlocks - 1)...)
 		}
 	}
 

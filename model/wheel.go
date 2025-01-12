@@ -1,9 +1,5 @@
 package model
 
-import (
-	// "tzgolkin/model/util"
-)
-
 type Wheel struct {
 	// this is all todo
 	id int
@@ -20,14 +16,19 @@ type Wheel struct {
 
 func (w *Wheel) Clone() *Wheel {
 	new_occupied := make([]int, 0)
-	for _, o := range w.occupied {
-		new_occupied = append(new_occupied, o)
-	}
+	new_occupied = append(new_occupied, w.occupied...)
+
+	new_workers := make([]int, 0)
+	new_workers = append(new_workers, w.workers...)
 
 	return &Wheel {
 		id: w.id,
 		size: w.size,
 		occupied: new_occupied,
+		workers: new_workers,
+		positions: w.positions,
+		rotation: w.rotation,
+		name: w.name,
 	}
 }
 

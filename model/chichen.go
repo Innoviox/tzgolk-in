@@ -58,9 +58,7 @@ func ChichenX(temple int, points int, block bool, position int) Options {
 			}
 		} else {
 			// just use each option
-			for _, o := range ChichenHelper() {
-				options = append(options, o)
-			}
+			options = append(options, ChichenHelper()...)
 		}
 
 		return options
