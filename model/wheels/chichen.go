@@ -10,6 +10,7 @@ func ChichenX(temple int, points int, block boolean, position int) Options {
 			options := make([]Option, 0)
 		
 			if block {
+				// if blocK: generate option for gaining each block
 				for i := 0; i < 3; i++ {
 					options = append(options, func() {
 						g.temples.Step(p.color, temple, 1)
@@ -20,6 +21,7 @@ func ChichenX(temple int, points int, block boolean, position int) Options {
 					})
 				}
 			} else {
+				// just generate option for points
 				options = append(options, func() {
 					g.temples.Step(p.color, temple, 1)
 					p.points += points
@@ -38,10 +40,13 @@ func ChichenX(temple int, points int, block boolean, position int) Options {
 		}
 
 		if g.research.Devout(p.color) {
+			// for each block
 			for i := 0; i < 3; i++ {
 				if p.resources[i] > 0 {
+					// for each temple
 					for j := 0; j < 3; j++ {
 						for _, o := range ChichenHelper() {
+							// add "spend block for temple" to each option
 							options = append(options, func() {
 								p.resources[i] -= 1
 								g.temples.Step(p.color, j, 1)
@@ -52,6 +57,7 @@ func ChichenX(temple int, points int, block boolean, position int) Options {
 				}
 			}
 		} else {
+			// just use each option
 			for _, o := range ChichenHelper() {
 				options = append(options, o)
 			}
