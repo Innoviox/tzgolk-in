@@ -6,28 +6,55 @@ func Chichen0(g *Game, p *Player) []Option {
 
 func ChichenX(temple int, points int, block boolean, position int) Options {
 	return func(g *Game, p *Player) []Option {
+		func ChichenHelper() []Option {
+			options := make([]Option, 0)
+		
+			if block {
+				for i := 0; i < 3; i++ {
+					options = append(options, func() {
+						g.temples.Step(p.color, temple, 1)
+						p.points += points
+						p.resources[i] += 1
+		
+						g.calendar.wheels[4].positions[position].cData.full = true
+					})
+				}
+			} else {
+				options = append(options, func() {
+					g.temples.Step(p.color, temple, 1)
+					p.points += points
+		
+					g.calendar.wheels[4].positions[position].cData.full = true
+				})
+			}
+		
+			return options
+		}
+
 		options := make([]Option, 0)
 
 		if g.calendar.wheels[4].positions[position].cData.full {
 			return options 
 		}
-		if block {
-			for i := 0; i < 3; i++ {
-				options = append(options, func() {
-					g.temples.Step(p.color, temple, 1)
-					p.points += points
-					p.resources[i] += 1
 
-					g.calendar.wheels[4].positions[position].cData.full = true
-				})
+		if g.research.Devout(p.color) {
+			for i := 0; i < 3; i++ {
+				if p.resources[i] > 0 {
+					for j := 0; j < 3; j++ {
+						for _, o := range ChichenHelper() {
+							options = append(options, func() {
+								p.resources[i] -= 1
+								g.temples.Step(p.color, j, 1)
+								o()
+							})
+						}
+					}
+				}
 			}
 		} else {
-			options = append(options, func() {
-				g.temples.Step(p.color, temple, 1)
-				p.points += points
-
-				g.calendar.wheels[4].positions[position].cData.full = true
-			})
+			for _, o := range ChichenHelper() {
+				options = append(options, o)
+			}
 		}
 
 		return options
