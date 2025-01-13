@@ -19,6 +19,13 @@ type Temples struct {
 	temples []*Temple
 }
 
+func (t *Temples) Clone() *Temples {
+	// todo if this matters
+	return &Temples {
+		temples: t.temples,
+	}
+}
+
 // todo real temple names
 func Brown() *Temple {
 	return &Temple {

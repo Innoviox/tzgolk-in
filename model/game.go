@@ -270,6 +270,9 @@ func (g *Game) FoodDay() {
 
 func (g *Game) TakeTurn() {
 	player := g.players[g.currPlayer]
+	if player.corn < 3 {
+		player.corn = 3 // todo actually have begging
+	}
 	moves := g.GenerateMoves(g.players[g.currPlayer])
 	move := moves[rand.Intn(len(moves))]
 
@@ -343,7 +346,7 @@ func (g *Game) GenerateMoves(p *Player) []Move {
 		}
 	}
 
-	// fmt.Fprintf(os.Stdout, "\t%s R %v P %v\n", p.color, retrieval, placement)
+	fmt.Fprintf(os.Stdout, "\t%s R %v P %v\n", p.color, retrieval, placement)
 
 	retrieval_moves := append(make([]Move, 0), MakeEmptyRetrievalMove())
 	moves = append(moves, g.MakeRetrievalMoves(retrieval_moves, retrieval)...)
@@ -460,15 +463,54 @@ func (g *Game) MakePlacementMoves(moves []Move, placement []int) []Move {
 
 	l := len(moves)
 	for i := 0; i < l; i++ {
-		new_calendar := g.calendar.Clone()
-		new_calendar.Execute(moves[i], g)
+		new_game := g.Clone()
+		new_game.calendar.Execute(moves[i], new_game)
 
-		for _, position := range new_calendar.LegalPositions() {
+		for _, position := range new_game.calendar.LegalPositions() {
 			moves = append(moves, moves[i].Place(worker, position))
 		}
 	}
 
 	return g.MakePlacementMoves(moves, rest)
+}
+
+func (g *Game) Clone() *Game {
+	players := make([]*Player, 0)
+	for _, p := range g.players {
+		players = append(players, p.Clone())
+	}
+
+	workers := make([]*Worker, 0)
+	for _, w := range g.workers {
+		workers = append(workers, w.Clone())
+	}
+
+	new_calendar := g.calendar.Clone()
+	new_temples := g.temples.Clone()
+	new_research := g.research.Clone()
+
+	return &Game {
+		players: players,
+		workers: workers,
+		calendar: &new_calendar,
+		temples: new_temples,
+		research: new_research,
+		nMonuments: g.nMonuments,
+		currentMonuments: g.currentMonuments,
+		allMonuments: g.allMonuments,
+		nBuildings: g.nBuildings,
+		currentBuildings: g.currentBuildings,
+		age1Buildings: g.age1Buildings,
+		age2Buildings: g.age2Buildings,
+		currPlayer: g.currPlayer,
+		firstPlayer: g.firstPlayer,
+		accumulatedCorn: g.accumulatedCorn,
+		age: g.age,
+		day: g.day,
+		resDays: g.resDays,
+		pointDays: g.pointDays,
+		over: g.over,
+	}
 }
 
 func (g *Game) GetPlayer(num int) *Player {

@@ -18,3 +18,13 @@ func (w *Worker) ReturnFrom(wheel *Wheel) {
 	
 	wheel.RemoveWorker(w.id)
 }
+
+func (w *Worker) Clone() *Worker {
+	return &Worker {
+		id: w.id,
+		color: w.color,
+		available: w.available,
+		wheel_id: w.wheel_id,
+		position: w.position,
+	}
+}

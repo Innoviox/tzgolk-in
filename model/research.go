@@ -23,6 +23,13 @@ type Research struct {
 	levels map[Color]Levels
 }
 
+func (r *Research) Clone() *Research {
+	// todo if this matters
+	return &Research {
+		levels: r.levels,
+	}
+}
+
 func MakeLevels() Levels {
 	return Levels{
 		Agriculture: 0,

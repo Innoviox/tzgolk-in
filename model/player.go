@@ -43,3 +43,19 @@ func (p *Player) String() string {
 
 	return br.String()
 }
+
+func (p *Player) Clone() *Player {
+	return &Player {
+		resources: p.resources,
+		corn: p.corn,
+		color: p.color,
+		points: p.points,
+		cornTiles: p.cornTiles,
+		woodTiles: p.woodTiles,
+		freeWorkers: p.freeWorkers,
+		workerDeduction: p.workerDeduction,
+		lightSide: p.lightSide,
+		buildings: p.buildings,
+		monuments: p.monuments,
+	}
+}

@@ -49,15 +49,19 @@ func (c *Calendar) Clone() Calendar {
 }
 
 func (c *Calendar) Execute(move Move, game *Game) {
+	fmt.Fprintf(os.Stdout, "Executing move %s\n", move.String())
 	if (move.placing) {
+		fmt.Fprintf(os.Stdout, "Placing workers %s\n", move.String())
 		for i := 0; i < len(move.workers); i++ {
 			p := move.positions[i]
 			worker := game.GetWorker(move.workers[i])
 
 			if p.firstPlayer {
+				fmt.Fprintf(os.Stdout, "First playering!\n")
 				c.firstPlayer = move.workers[i]
 				worker.available = false
 			} else {
+				fmt.Fprintf(os.Stdout, "Placing worker %d on %s position %d\n", move.workers[i], c.wheels[p.wheel_id].name, p.corn)
 				c.wheels[p.wheel_id].AddWorker(p.corn, move.workers[i])
 
 				worker.available = false
@@ -102,7 +106,7 @@ func (c *Calendar) LegalPositions() []*SpecificPosition {
 
 	if c.firstPlayer == -1 {
 		positions = append(positions, &SpecificPosition{
-			wheel_id: -1,
+			wheel_id: -2,
 			corn: 0,
 			firstPlayer: true,
 		})

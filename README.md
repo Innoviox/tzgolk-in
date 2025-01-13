@@ -31,6 +31,11 @@ Things left to do
 - [ ] beg for corn
 - [ ] pay corn to go lower (first attempt broke)
 - [ ] uxmal exchange (first attempt broke)
+- [ ] make game clone itself not calendar
+- [ ] can't use same resources twice
+
+
+
 - [ ] change age1 and age2 stuff to just be arrays
 - [ ] add cdata.full to display
 - [ ] display buildings & monuments

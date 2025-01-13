@@ -1,5 +1,10 @@
 package model
 
+import (
+	"fmt"
+	"os"
+)
+
 type Wheel struct {
 	// this is all todo
 	id int
@@ -31,6 +36,7 @@ func (w *Wheel) Clone() *Wheel {
 }
 
 func (w *Wheel) AddWorker(position int, worker int) {
+	fmt.Fprintf(os.Stdout, "Adding worker %d to %s position %d\n", worker, w.name, position)
 	w.occupied = append(w.occupied, position)
 	w.workers = append(w.workers, worker)
 }
