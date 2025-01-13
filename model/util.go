@@ -1,15 +1,26 @@
 package model
 
+import (
+	"fmt"
+)
+
 // https://stackoverflow.com/questions/37334119/how-to-delete-an-element-from-a-slice-in-golang
 func remove(slice []int, s int) []int {
     return append(slice[:s], slice[s+1:]...)
 }
 
-type Option func()
+type Option struct {
+	Execute func()
+	description string
+}
+
 type Options func(*Game, *Player) []Option
 
 
 type Resource int
+
+const ResourceDebug = "WSGC"
+const TempleDebug = "BYG"
 
 const (
 	Wood Resource = iota
@@ -60,6 +71,7 @@ func MakeEmptyPlacementMove() Move {
 }
 
 func flatten(options []Options) Options {
+	// todo add "mirror" to description?
 	return func (g *Game, p *Player) []Option {
 		result := make([]Option, 0)
 		for _, o := range options {
@@ -96,4 +108,14 @@ func except(arr []int, n int) []int {
 		}
 	}
 	return new
+}
+
+func CostString(cost [4]int) string {
+	result := ""
+	for i := 0; i < 4; i++ {
+		if cost[i] > 0 {
+			result += fmt.Sprintf("%d%s ", cost[i], string(ResourceDebug[i]))
+		}
+	}
+	return result
 }

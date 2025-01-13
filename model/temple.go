@@ -1,5 +1,9 @@
 package model
 
+import (
+	"fmt"
+)
+
 type Temple struct {
 	steps int
 	playerLocations map[Color]int
@@ -92,14 +96,17 @@ func (t *Temples) CanStep(c Color, temple int, dir int) bool {
 	}
 }
 
-func (t *Temples) GainTempleStep(c Color, f func(), dir int) []Option {
+func (t *Temples) GainTempleStep(c Color, o Option, dir int) []Option {
 	options := make([]Option, 0)
 
 	for i := 0; i < 3; i++ {
 		if t.CanStep(c, i, dir) {
-			options = append(options, func() {
-				t.Step(c, i, dir)
-				f()
+			options = append(options, Option{
+				Execute: func() {
+					t.Step(c, i, dir)
+					o.Execute()
+				},
+				description: fmt.Sprintf("%s, %s temple %d", o.description, c.String(), dir),
 			})
 		}
 	}

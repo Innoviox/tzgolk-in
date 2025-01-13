@@ -1,6 +1,11 @@
 package model
 
+import (
+	"fmt"
+)
+
 type Science int
+type Levels map[Science]int
 
 // todo get actual names
 const (
@@ -10,13 +15,15 @@ const (
 	Theology
 )
 
+const ResearchDebug = "ARCT"
+
 
 type Research struct {
-	levels map[Color]map[Science]int
+	levels map[Color]Levels
 }
 
-func MakeLevels() map[Science]int {
-	return map[Science]int{
+func MakeLevels() Levels {
+	return Levels{
 		Agriculture: 0,
 		Resources: 0,
 		Construction: 0,
@@ -26,7 +33,7 @@ func MakeLevels() map[Science]int {
 
 func MakeResearch() *Research {
 	return &Research{
-		levels: map[Color]map[Science]int{
+		levels: map[Color]Levels{
 			Red: MakeLevels(),
 			Green: MakeLevels(),
 			Blue: MakeLevels(),
@@ -98,22 +105,49 @@ func (r *Research) GetOptions(g *Game, p *Player, n int) []Option{
 	return r.GetOptionsHelper(g, p, resources, r.levels[p.color], n)
 }
 
-func (r *Research) GetOptionsHelper(g *Game, p *Player, resources [4]int, levels map[Science]int, n int) []Option {
+func GenerateResearchDescription(r [4]int, nr [4]int, l Levels, nl Levels) string {
+	return fmt.Sprintf("pay %s, gain %s", GeneratePaymentDescription(r, nr), GenerateLevelsDescription(l, nl))
+}
+
+func GeneratePaymentDescription(r [4]int, nr [4]int) string {
+	payments := make([]string, 0)
+	for i := 0; i < 4; i++ {
+		if nr[i] < r[i] {
+			payments = append(payments, fmt.Sprintf("%d %s", r[i] - nr[i], string(ResourceDebug[i])))
+		}
+	}
+	return fmt.Sprintf("%v", payments)
+}
+
+func GenerateLevelsDescription(l Levels, nl Levels) string {
+	descriptions := make([]string, 0)
+	for s := 0; s < 4; s++ {
+		if nl[Science(s)] > l[Science(s)] {
+			descriptions = append(descriptions, fmt.Sprintf("%s %d", string(ResearchDebug[s]), nl[Science(s)] - l[Science(s)]))
+		}
+	}
+	return fmt.Sprintf("%v", descriptions)
+}
+
+func (r *Research) GetOptionsHelper(g *Game, p *Player, resources [4]int, levels Levels, n int) []Option {
 	options := make([]Option, 0)
 	for s := 0; s < 4; s++ {
 		level := levels[Science(s)]
 		if level < 3 {
 			for _, newResources := range PayBlocks(resources, level) {
-				newLevels := make(map[Science]int)
+				newLevels := make(Levels)
 				for k, v := range levels {
 					newLevels[k] = v
 				}
 				newLevels[Science(s)] += 1
 
 				if n == 1 {
-					options = append(options, func() {
-						p.resources = newResources
-						r.levels[p.color] = newLevels
+					options = append(options, Option{
+						Execute: func() {
+							p.resources = newResources
+							r.levels[p.color] = newLevels
+						},
+						description: GenerateResearchDescription(resources, newResources, levels, newLevels),
 					})
 				} else {
 					options = append(options, r.GetOptionsHelper(g, p, newResources, newLevels, n - 1)...)
@@ -124,28 +158,40 @@ func (r *Research) GetOptionsHelper(g *Game, p *Player, resources [4]int, levels
 			for _, newResources := range PayBlocks(resources, 1) {
 				switch Science(s) {
 				case Agriculture:
-					advancedOptions = append(advancedOptions, g.temples.GainTempleStep(p.color, func() {
-						p.resources = newResources
+					advancedOptions = append(advancedOptions, g.temples.GainTempleStep(p.color, Option{
+						Execute: func() {
+							p.resources = newResources
+						},
+						description: fmt.Sprintf("[agr tier 4] pay %s", GeneratePaymentDescription(resources, newResources)),
 					}, 1)...)
 				case Resources:
 					for i := 0; i < 3; i++ {
 						for j := 0; j < 3; j++ {
-							advancedOptions = append(advancedOptions, func() {
-								p.resources = newResources
-								p.resources[i] += 1
-								p.resources[j] += 1
+							advancedOptions = append(advancedOptions, Option{
+								Execute: func() {
+									p.resources = newResources
+									p.resources[i] += 1
+									p.resources[j] += 1
+								},
+								description: fmt.Sprintf("[res tier 4] pay %s, 1 %s, 1 %s", GeneratePaymentDescription(resources, newResources), string(ResourceDebug[i]), string(ResourceDebug[j])),
 							})
 						}
 					}
 				case Construction:
-					advancedOptions = append(advancedOptions, func() {
-						p.resources = newResources
-						p.points += 3
+					advancedOptions = append(advancedOptions, Option{
+						Execute: func() {
+							p.resources = newResources
+							p.points += 3
+						},
+						description: fmt.Sprintf("[cons tier 4] pay %s, 3 points", GeneratePaymentDescription(resources, newResources)),
 					})
 				case Theology:
-					advancedOptions = append(advancedOptions, func() {
-						p.resources = newResources
-						p.resources[Skull] += 1
+					advancedOptions = append(advancedOptions, Option{
+						Execute: func() {
+							p.resources = newResources
+							p.resources[Skull] += 1
+						},
+						description: fmt.Sprintf("[theo tier 4] pay %s, 1 skull", GeneratePaymentDescription(resources, newResources)),
 					})
 				}
 			}
@@ -155,9 +201,12 @@ func (r *Research) GetOptionsHelper(g *Game, p *Player, resources [4]int, levels
 			} else {
 				for _, o1 := range advancedOptions {
 					for _, o2 := range r.GetOptionsHelper(g, p, resources, levels, n - 1) {
-						options = append(options, func() {
-							o1()
-							o2()
+						options = append(options, Option{
+							Execute: func() {
+								o1.Execute()
+								o2.Execute()
+							},
+							description: fmt.Sprintf("%s; %s", o1.description, o2.description),
 						})
 					}
 				}

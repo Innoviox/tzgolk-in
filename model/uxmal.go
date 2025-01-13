@@ -1,5 +1,9 @@
 package model
 
+import (
+	"fmt"
+)
+
 func Uxmal0(g *Game, p *Player) []Option {
 	return make([]Option, 0)
 }
@@ -8,8 +12,11 @@ func Uxmal1(g *Game, p *Player) []Option {
 	options := make([]Option, 0)
 
 	if p.corn > 3 {
-		options = append(options, g.temples.GainTempleStep(p.color, func() {
-			p.corn -= 3
+		options = append(options, g.temples.GainTempleStep(p.color, Option{
+			Execute: func() {
+				p.corn -= 3
+			},
+			description: "pay 3 corn",
 		}, 1)...,)
 	}
 
@@ -22,11 +29,12 @@ func Uxmal2(g *Game, p *Player) []Option {
 }
 
 func Uxmal3(g *Game, p *Player) []Option {
-	return []Option{
-		func() {
+	return []Option{Option{
+		Execute: func() {
 			g.UnlockWorker(p.color)
 		},
-	}
+		description: "unlock worker",
+	}}
 }
 
 func Uxmal4(g *Game, p *Player) []Option {
@@ -36,17 +44,21 @@ func Uxmal4(g *Game, p *Player) []Option {
 		cost := b.CornCost(g, p) 
 		if p.corn >= cost {
 			for _, effect := range b.GetEffects(g, p) {
-				options = append(options, func() {
-					p.corn -= cost
-					effect()
+				options = append(options, Option{
+					Execute: func() {
+						p.corn -= cost
+						effect.Execute()
 
-					if g.research.HasLevel(p.color, Construction, 1) {
-						p.corn += 1
-					}
-					if g.research.HasLevel(p.color, Construction, 2) {
-						p.points += 2
-					}
-					// todo building colors?
+						// todo move to research file to remove HasLevels
+						if g.research.HasLevel(p.color, Construction, 1) {
+							p.corn += 1
+						}
+						if g.research.HasLevel(p.color, Construction, 2) {
+							p.points += 2
+						}
+						// todo building colors?
+					},
+					description: fmt.Sprintf("[build] pay %d corn, %s", cost, effect.description),
 				})
 			}
 		}
@@ -75,9 +87,12 @@ func Uxmal5(g *Game, p *Player) []Option {
 
 
 	for _, option := range allOptions {
-		options = append(options, func() {
-			p.corn -= 1
-			option()
+		options = append(options, Option{
+			Execute: func() {
+				p.corn -= 1
+				option.Execute()
+			},
+			description: fmt.Sprintf("[mirror] pay 1 corn, %s", option.description),
 		})
 	}
 

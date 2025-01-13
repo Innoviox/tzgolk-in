@@ -2,6 +2,7 @@ package model
 
 import (
 	"fmt"
+	"os"
 	"strings"
 )
 
@@ -63,7 +64,9 @@ func (c *Calendar) Execute(move Move, game *Game) {
 			w := game.GetWorker(move.workers[i])
 			p := move.positions[i]
 
-			p.Execute()
+			fmt.Fprintf(os.Stdout, "Retrieving worker %d from wheel %d position %d, executing %s\n", 
+						w.id, p.wheel_id, p.corn, p.Execute.description)
+			p.Execute.Execute()
 			w.ReturnFrom(c.wheels[p.wheel_id])
 		}
 	}

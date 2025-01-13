@@ -1,5 +1,9 @@
 package model
 
+import (
+	"fmt"
+)
+
 func Tikal0(g *Game, p *Player) []Option {
 	return make([]Option, 0)
 }
@@ -15,15 +19,18 @@ func Tikal2(g *Game, p *Player) []Option {
 		costs := b.GetCosts(g, p)
 		for _, cost := range costs {
 			for _, effect := range b.GetEffects(g, p) {
-				options = append(options, func() {
-					for i := 0; i < 4; i++ {
-						p.resources[i] -= cost[i]
-					}
+				options = append(options, Option{
+					Execute: func() {
+						for i := 0; i < 4; i++ {
+							p.resources[i] -= cost[i]
+						}
 
-					effect()
+						effect.Execute()
 
-					g.research.Built(p)
-					// todo building colors?
+						g.research.Built(p)
+						// todo building colors?
+					},
+					description: fmt.Sprintf("[build] pay %s, %s", CostString(cost), effect.description),
 				})
 			}
 		}
@@ -51,10 +58,13 @@ func Tikal5(g *Game, p *Player) []Option {
 					if (j == k) {
 						continue
 					}
-					options = append(options, func() {
-						p.resources[i] -= 1
-						g.temples.Step(p.color, j, 1)
-						g.temples.Step(p.color, k, 1)
+					options = append(options, Option{
+						Execute: func() {
+							p.resources[i] -= 1
+							g.temples.Step(p.color, j, 1)
+							g.temples.Step(p.color, k, 1)
+						},
+						description: fmt.Sprintf("pay 1 %s, 1 %sT, 1 %sT", string(ResourceDebug[i]), string(TempleDebug[j]), string(TempleDebug[k])),
 					})
 				}
 			}

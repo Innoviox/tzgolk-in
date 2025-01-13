@@ -1,8 +1,8 @@
 package model
 
-// import (
-// 	"tzgolkin/model"
-// )
+import (
+	"fmt"
+)
 
 func Chichen0(g *Game, p *Player) []Option {
 	return make([]Option, 0)
@@ -16,21 +16,29 @@ func ChichenX(temple int, points int, block bool, position int) Options {
 			if block {
 				// if blocK: generate option for gaining each block
 				for i := 0; i < 3; i++ {
-					options = append(options, func() {
-						g.temples.Step(p.color, temple, 1)
-						p.points += points
-						p.resources[i] += 1
-		
-						g.calendar.wheels[4].positions[position].cData.full = true
+					options = append(options, Option{
+						Execute: func() {
+							g.temples.Step(p.color, temple, 1)
+							p.points += points
+							p.resources[i] += 1
+							p.resources[Skull] -= 1
+			
+							g.calendar.wheels[4].positions[position].cData.full = true
+						},
+						description: fmt.Sprintf("%s temple, %d points, 1 %sT", string(ResourceDebug[i]), points, string(TempleDebug[temple])),
 					})
 				}
 			} else {
 				// just generate option for points
-				options = append(options, func() {
-					g.temples.Step(p.color, temple, 1)
-					p.points += points
-		
-					g.calendar.wheels[4].positions[position].cData.full = true
+				options = append(options, Option{
+					Execute: func() {
+						g.temples.Step(p.color, temple, 1)
+						p.points += points
+						p.resources[Skull] -= 1
+			
+						g.calendar.wheels[4].positions[position].cData.full = true
+					},
+					description: fmt.Sprintf("%s temple, %d points", string(TempleDebug[temple]), points),
 				})
 			}
 		
@@ -39,7 +47,7 @@ func ChichenX(temple int, points int, block bool, position int) Options {
 
 		options := make([]Option, 0)
 
-		if g.calendar.wheels[4].positions[position].cData.full {
+		if g.calendar.wheels[4].positions[position].cData.full || p.resources[Skull] == 0 {
 			return options 
 		}
 
@@ -49,9 +57,12 @@ func ChichenX(temple int, points int, block bool, position int) Options {
 				if p.resources[i] > 0 {
 					for _, o := range ChichenHelper() {
 						// add "spend block for temple" to each option
-						options = append(options, g.temples.GainTempleStep(p.color, func() {
-							p.resources[i] -= 1
-							o()
+						options = append(options, g.temples.GainTempleStep(p.color, Option {
+							Execute: func() {
+								p.resources[i] -= 1
+								o.Execute()
+							},
+							description: fmt.Sprintf("%s, [theo] pay 1 %s", o.description, string(ResourceDebug[i])),
 						}, 1)...)
 					}
 				}
