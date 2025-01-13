@@ -23,6 +23,22 @@ type Player struct {
 	Monuments []Monument
 }
 
+// -- MARK -- Basic methods
+func (p *Player) Clone() *Player {
+	return &Player {
+		Resources: p.Resources,
+		Corn: p.Corn,
+		Color: p.Color,
+		Points: p.Points,
+		CornTiles: p.CornTiles,
+		WoodTiles: p.WoodTiles,
+		FreeWorkers: p.FreeWorkers,
+		WorkerDeduction: p.WorkerDeduction,
+		LightSide: p.LightSide,
+		Buildings: p.Buildings,
+		Monuments: p.Monuments,
+	}
+}
 
 func (p *Player) String() string {
 	var br strings.Builder
@@ -45,18 +61,13 @@ func (p *Player) String() string {
 	return br.String()
 }
 
-func (p *Player) Clone() *Player {
-	return &Player {
-		Resources: p.Resources,
-		Corn: p.Corn,
-		Color: p.Color,
-		Points: p.Points,
-		CornTiles: p.CornTiles,
-		WoodTiles: p.WoodTiles,
-		FreeWorkers: p.FreeWorkers,
-		WorkerDeduction: p.WorkerDeduction,
-		LightSide: p.LightSide,
-		Buildings: p.Buildings,
-		Monuments: p.Monuments,
+// -- MARK -- Unique methods
+func (p *Player) CanPay(cost [4]int) bool {
+	for i := 0; i < 4; i++ {
+		if p.Resources[i] < cost[i] {
+			return false
+		}
 	}
+	
+	return true
 }

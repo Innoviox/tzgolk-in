@@ -7,6 +7,7 @@ type Monument struct {
     Color Color
 }
 
+// -- MARK -- Basic methods
 func MakeMonument(id int, cost [4]int, getPoints func (g *Game, p *Player) int, color Color) *Monument {
     return &Monument {
         Id: id,
@@ -14,14 +15,4 @@ func MakeMonument(id int, cost [4]int, getPoints func (g *Game, p *Player) int, 
         GetPoints: getPoints,
         Color: color,
     }
-}
-
-func (m *Monument) CanBuild(player *Player) bool {
-    for i := 0; i < 4; i++ {
-        if player.Resources[i] < m.Cost[i] {
-            return false
-        }
-    }
-
-    return true
 }

@@ -6,10 +6,11 @@ type Worker struct {
 	Color Color
 
 	Available bool
-	Wheel_id int// | nil // use -1's
-	Position int// | nil
+	Wheel_id int // use -1's for off wheel
+	Position int 
 }
 
+// -- MARK -- Basic methods
 func MakeWorker(id int, color Color) *Worker {
 	return &Worker {
 		Id: id,
@@ -20,15 +21,6 @@ func MakeWorker(id int, color Color) *Worker {
 	}
 }
 
-func (w *Worker) ReturnFrom(wheel *Wheel) {
-	w.Available = true
-	w.Wheel_id = -1
-	w.Position = -1
-
-	
-	wheel.RemoveWorker(w.Id)
-}
-
 func (w *Worker) Clone() *Worker {
 	return &Worker {
 		Id: w.Id,
@@ -37,4 +29,14 @@ func (w *Worker) Clone() *Worker {
 		Wheel_id: w.Wheel_id,
 		Position: w.Position,
 	}
+}
+
+// -- MARK -- Unique methods
+
+func (w *Worker) ReturnFrom(wheel *Wheel) {
+	w.Available = true
+	w.Wheel_id = -1
+	w.Position = -1
+
+	wheel.RemoveWorker(w.Id)
 }

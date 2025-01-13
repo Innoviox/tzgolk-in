@@ -11,20 +11,11 @@ type Building struct {
 	Color Color
 }
 
-func (b *Building) CanBuild(player *Player) bool {
-	for i := 0; i < 4; i++ {
-		if player.Resources[i] < b.Cost[i] {
-			return false
-		}
-	}
-
-	return true
-}
 
 func (b *Building) GetCosts(game *Game, player *Player) [][4]int {
 	options := make([][4]int, 0)
 
-	if b.CanBuild(player) {
+	if player.CanPay(b.Cost) {
 		options = append(options, b.Cost)
 	}
 
@@ -97,7 +88,7 @@ func (g *Game) GetMonumentOptions(p *Player) []Option {
 	options := make([]Option, 0)
 
 	for _, m := range g.CurrentMonuments {
-		if m.CanBuild(p) {
+		if p.CanPay(m.Cost) {
 			options = append(options, Option{
 				Execute: func(g *Game, p *Player) {
 					for i := 0; i < 4; i++ {

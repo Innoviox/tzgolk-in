@@ -416,8 +416,6 @@ func (g *Game) GetOptions(worker *Worker) []Option {
 		return make_retrieval_moves(m, r)
 */
 func (g *Game) MakeRetrievalMoves(moves []Move, retrieval []int) []Move {
-	// fmt.Fprintf(os.Stdout, "MakeRetrievalMoves %v %v\n", len(moves), retrieval)
-// 
 	if len(retrieval) == 0 {
 		return moves
 	}

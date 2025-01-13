@@ -11,39 +11,16 @@ type Calendar struct {
 	Rotation int
 	FirstPlayer int
 	IsClone bool
-	// tojm9 do food days & such
 }
 
-// func (c *Calendar) Init() {
+// -- MARK -- Basic methods
 func MakeCalendar(wheels []*Wheel) *Calendar {
-	// c.Wheels = make([]*Wheel, 0)
 	return &Calendar {
 		Rotation: 0,
 		Wheels: wheels,
 		FirstPlayer: -1,
 		IsClone: false,
 	}
-	// c.Rotation = 0
-
-	// // c.Wheels = []*Wheel {
-	// // 	MakePalenque(),
-	// // 	MakeYaxchilan(),
-	// // 	MakeTikal(),
-	// // 	MakeUxmal(),
-	// // 	MakeChichen(),
-	// // }
-	// c.Wheels = wheels
-
-	// c.FirstPlayer = -1
-	// c.Clone = false
-
-	// for i := 0; i < 5; i++ {
-	// 	c.AddWheel(&Wheel {
-	// 		Id: i,
-	// 		Size: 5,
-	// 		Occupied: make([]int, 0),
-	// 	})
-	// }
 }
 
 func (c *Calendar) Clone() *Calendar {
@@ -60,6 +37,35 @@ func (c *Calendar) Clone() *Calendar {
 	}
 }
 
+func (c *Calendar) String(workers []*Worker) string {
+	var br strings.Builder
+
+	fmt.Fprintf(&br, "----Calendar------------\n")
+	for _, wheel := range c.Wheels {
+		fmt.Fprintf(&br, "| %s: ", wheel.Name)
+
+		out := make([]string, wheel.Size)
+
+		for k, v := range wheel.Occupied {
+			out[k] = workers[v].Color.String()
+		}
+
+		for _, o := range out {
+			if len(o) > 0 {
+				fmt.Fprintf(&br, "%s", o)
+			} else {
+				fmt.Fprintf(&br, "_")
+			}
+		}
+		fmt.Fprintf(&br, "(%v)\n", wheel.Occupied)
+	}
+	fmt.Fprintf(&br, "------------------------\n")
+
+	return br.String()
+}
+
+
+// -- MARK -- Unique methods
 func (c *Calendar) Execute(move Move, game *Game) {
 	if !c.IsClone { fmt.Fprintf(os.Stdout, "Executing move %s\n", move.String()) }
 	if (move.Placing) {
@@ -122,45 +128,9 @@ func (c *Calendar) LegalPositions() []*SpecificPosition {
 	return positions
 }
 
-// func (c *Calendar) Rotate(g *Game) {
-// 	c.Rotation = rotation
-// 	for i := 0; i < len(c.Wheels); i++ {
-// 		c.Wheels[i].SetRotation(rotation)
-// 	}
-// }
-
 // todo rework when days are implemented?
-
 func (c *Calendar) Rotate(g *Game) {
-	// c.SetRotation(c.Rotation + 1);
 	for i := 0; i < len(c.Wheels); i++ {
 		c.Wheels[i].Rotate(g)
 	}
-}
-
-func (c *Calendar) String(workers []*Worker) string {
-	var br strings.Builder
-
-	fmt.Fprintf(&br, "----Calendar------------\n")
-	for _, wheel := range c.Wheels {
-		fmt.Fprintf(&br, "| %s: ", wheel.Name)
-
-		out := make([]string, wheel.Size)
-
-		for k, v := range wheel.Occupied {
-			out[k] = workers[v].Color.String()
-		}
-
-		for _, o := range out {
-			if len(o) > 0 {
-				fmt.Fprintf(&br, "%s", o)
-			} else {
-				fmt.Fprintf(&br, "_")
-			}
-		}
-		fmt.Fprintf(&br, "(%v)\n", wheel.Occupied)
-	}
-	fmt.Fprintf(&br, "------------------------\n")
-
-	return br.String()
 }

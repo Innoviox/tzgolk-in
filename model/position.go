@@ -20,13 +20,16 @@ type SpecificPosition struct {
 	FirstPlayer bool
 }
 
+func (p *SpecificPosition) String() string {
+	var br strings.Builder
+
+	fmt.Fprintf(&br, "%d %d", p.Wheel_id, p.Corn)
+	return br.String()
+}
+
 type PalenqueData struct {
 	CornTiles int
 	WoodTiles int
-}
-
-type ChichenData struct {
-	Full bool
 }
 
 func MakePData(hasWood bool) *PalenqueData {
@@ -48,30 +51,13 @@ func (pd *PalenqueData) HasCornShowing() bool {
 	return pd.CornTiles > pd.WoodTiles
 }
 
+
+type ChichenData struct {
+	Full bool
+}
+
 func MakeCData() *ChichenData {
 	return &ChichenData {
 		Full: false,
 	}
 }
-
-func (p *SpecificPosition) String() string {
-	var br strings.Builder
-
-	fmt.Fprintf(&br, "%d %d", p.Wheel_id, p.Corn)
-	return br.String()
-}
-
-// func PlayerOption(f func (*Player)) Option {
-// 	return func(g *Game, c Color) {
-// 		p := g.GetPlayerByColor(c)
-// 		f(p)
-// 	}
-// }
-
-// func SimpleOption(f func (*Player)) Options {
-// 	return func(g *Game) []Option {
-// 		return []Option{
-// 			PlayerOption(f),
-// 		}
-// 	}
-// }
