@@ -12,7 +12,7 @@ func Age2Building1() Building {
         GetEffects: func (g *Game, p *Player) []Option {
             return []Option {Option{
                 Execute: func() {
-                    g.temples.Step(p.color, 2, 2)
+                    g.temples.Step(p, 2, 2)
                     p.points += 3
                 },
                 description: "2 GT, 3 points",
@@ -28,7 +28,7 @@ func Age2Building2() Building {
         GetEffects: func (g *Game, p *Player) []Option {
             return []Option {Option{
                 Execute: func() {
-                    g.temples.Step(p.color, 0, 2)
+                    g.temples.Step(p, 0, 2)
                     p.points += 2
                 },
                 description: "2 BT, 2 points",
@@ -44,7 +44,7 @@ func Age2Building3() Building {
         GetEffects: func (g *Game, p *Player) []Option {
             return []Option {Option{
                 Execute: func() {
-                    g.temples.Step(p.color, 1, 2)
+                    g.temples.Step(p, 1, 2)
                 },
                 description: "2 YT, 4 points",
             }}
@@ -70,8 +70,8 @@ func Age2Building5() Building {
             return []Option {Option{
                 Execute: func() {
                     g.research.FreeResearch(p.color, Theology)
-                    g.temples.Step(p.color, 0, 1)
-                    g.temples.Step(p.color, 2, 1)
+                    g.temples.Step(p, 0, 1)
+                    g.temples.Step(p, 2, 1)
                 },
                 description: "free theo, 1 BT, 1 GT",
             }}
@@ -182,7 +182,7 @@ func Age2Building11() Building {
             return []Option {Option{
                 Execute: func() {
                     for i := 0; i < 3; i++ {
-                        g.temples.Step(p.color, i, 1)
+                        g.temples.Step(p, i, 1)
                     }
                     p.points += 3
                 },

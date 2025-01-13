@@ -38,8 +38,8 @@ func Tikal5(g *Game, p *Player) []Option {
 					options = append(options, Option{
 						Execute: func() {
 							p.resources[i] -= 1
-							g.temples.Step(p.color, j, 1)
-							g.temples.Step(p.color, k, 1)
+							g.temples.Step(p, j, 1)
+							g.temples.Step(p, k, 1)
 						},
 						description: fmt.Sprintf("pay 1 %s, 1 %sT, 1 %sT", string(ResourceDebug[i]), string(TempleDebug[j]), string(TempleDebug[k])),
 					})

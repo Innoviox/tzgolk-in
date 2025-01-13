@@ -55,7 +55,7 @@ func Jungle(corn int, wood int, position int) Options {
 				description: fmt.Sprintf("%d + %d wood", wood, g.research.ResourceBonus(p.color, Wood)),
 			})
 	
-			options = append(options, g.temples.GainTempleStep(p.color, Option{
+			options = append(options, g.temples.GainTempleStep(p, Option{
 				Execute: func () {
 					p.corn += corn + g.research.CornBonus(p.color, Green)
 					p.cornTiles += 1

@@ -16,6 +16,8 @@ type Player struct {
 
 	freeWorkers int
 	workerDeduction int
+
+	lightSide bool
 }
 
 func (p *Player) String() string {
@@ -32,6 +34,7 @@ func (p *Player) String() string {
 	fmt.Fprintf(&br, "| Wood Tiles: %d\n", p.woodTiles)
 	fmt.Fprintf(&br, "| Free Workers: %d\n", p.freeWorkers)
 	fmt.Fprintf(&br, "| Worker Deduction: %d\n", p.workerDeduction)
+	fmt.Fprintf(&br, "| Light Side: %t\n", p.lightSide)
 	fmt.Fprintf(&br, "------------------------\n")
 
 

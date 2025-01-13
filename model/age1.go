@@ -26,8 +26,8 @@ func Building2() Building {
         GetEffects: func (g *Game, p *Player) []Option {
             return []Option {Option{
                 Execute: func() {
-                    g.temples.Step(p.color, 0, 1)
-                    g.temples.Step(p.color, 2, 1)
+                    g.temples.Step(p, 0, 1)
+                    g.temples.Step(p, 2, 1)
                 },
                 description: "1 BT, 1 GT",
             }}
@@ -97,7 +97,7 @@ func Building7() Building {
             options := make([]Option, 0)
             
             for _, o := range g.GetBuildingOptions(p, 7) {
-                options = append(options, g.temples.GainTempleStep(p.color, o, 1)...)
+                options = append(options, g.temples.GainTempleStep(p, o, 1)...)
             }
 
             return options
@@ -112,8 +112,8 @@ func Building8() Building {
         GetEffects: func (g *Game, p *Player) []Option {
             return []Option {Option{
                 Execute: func() {
-                    g.temples.Step(p.color, 0, 1)
-                    g.temples.Step(p.color, 1, 1)
+                    g.temples.Step(p, 0, 1)
+                    g.temples.Step(p, 1, 1)
                 },
                 description: "1 BT 1 YT",
             }}
@@ -145,7 +145,7 @@ func Building10() Building {
             return []Option {Option{
                 Execute: func() {
                     g.research.FreeResearch(p.color, Theology)
-                    g.temples.Step(p.color, 2, 1)
+                    g.temples.Step(p, 2, 1)
                 },
                 description: "free theo, 1 GT",
             }}

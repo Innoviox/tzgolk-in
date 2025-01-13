@@ -40,20 +40,20 @@ func Tile5(g *Game, p *Player) {
 
 func Tile6(g *Game, p *Player) {
 	p.resources[Wood] += 1
-	g.temples.Step(p.color, 2, 1)
+	g.temples.Step(p, 2, 1)
 	g.research.FreeResearch(p.color, Resources)
 }
 
 func Tile7(g *Game, p *Player) {
 	p.corn += 2
 	p.resources[Wood] += 2
-	g.temples.Step(p.color, 2, 1)
+	g.temples.Step(p, 2, 1)
 }
 
 func Tile8(g *Game, p *Player) {
 	p.corn += 5
 	p.resources[Stone] += 1
-	g.temples.Step(p.color, 0, 1)
+	g.temples.Step(p, 0, 1)
 }
 
 func Tile9(g *Game, p *Player) {
@@ -69,7 +69,7 @@ func Tile10(g *Game, p *Player) {
 
 func Tile11(g *Game, p *Player) {
 	p.corn += 2
-	g.temples.Step(p.color, 0, 1)
+	g.temples.Step(p, 0, 1)
 	g.research.FreeResearch(p.color, Construction)
 }
 
@@ -102,12 +102,12 @@ func Tile16(g *Game, p *Player) {
 func Tile17(g *Game, p *Player) {
 	p.corn += 5
 	p.resources[Gold] += 1
-	g.temples.Step(p.color, 1, 1)
+	g.temples.Step(p, 1, 1)
 }
 
 func Tile18(g *Game, p *Player) {
 	p.corn += 3
-	g.temples.Step(p.color, 1, 1)
+	g.temples.Step(p, 1, 1)
 	g.research.FreeResearch(p.color, Agriculture)
 }
 

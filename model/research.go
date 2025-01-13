@@ -165,7 +165,7 @@ func (r *Research) GetOptionsHelper(g *Game, p *Player, resources [4]int, levels
 			for _, newResources := range possResources {
 				switch Science(s) {
 				case Agriculture:
-					advancedOptions = append(advancedOptions, g.temples.GainTempleStep(p.color, Option{
+					advancedOptions = append(advancedOptions, g.temples.GainTempleStep(p, Option{
 						Execute: func() {
 							p.resources = newResources
 						},

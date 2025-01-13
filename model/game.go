@@ -91,23 +91,56 @@ func (g *Game) TileSetup() {
 func (g *Game) Round() {
 	g.currPlayer = g.firstPlayer
 	for i := 0; i < len(g.players); i++ {
-		// g.players[g.currPlayer].play()
 		g.TakeTurn()
 		g.currPlayer = (g.currPlayer + 1) % len(g.players)
 	}
 
 	// todo first player nonsense
+	if g.calendar.firstPlayer != -1 {
+		worker := g.GetWorker(g.calendar.firstPlayer)
+		worker.available = true
+		g.calendar.firstPlayer = -1
+		player := g.GetPlayerByColor(worker.color)
+		player.corn += g.accumulatedCorn
+		g.accumulatedCorn = 0
+
+		playerIdx := 0
+		for i := 0; i < len(g.players); i++ {
+			if g.players[i].color == player.color {
+				playerIdx = i
+				break
+			}
+		}
+
+		if g.firstPlayer == playerIdx {
+			g.firstPlayer = (g.firstPlayer + 1) % len(g.players)
+		} else {
+			g.firstPlayer = playerIdx
+		}
+
+		if player.lightSide && rand.Intn(2) == 0 {
+			// todo actually decide
+			player.lightSide = false
+			fmt.Fprintf(os.Stdout, "Player %s has gone dark\n", player.color)
+			g.Rotate()
+		}
+	}
+
 	// todo food days
 	fmt.Fprintf(os.Stdout, "Rotating Calendar\n")
-	g.calendar.Rotate(g)
-
-	g.accumulatedCorn += 1
+	g.Rotate()
 
 	fmt.Fprintf(os.Stdout, "Calendar State: \n%s\n", g.calendar.String(g.workers))
 
 	for i := 0; i < len(g.players); i++ {
 		fmt.Fprintf(os.Stdout, "%s", g.players[i].String())
 	}
+	fmt.Fprintf(os.Stdout, "Accumulated corn: %d\n", g.accumulatedCorn)
+}
+
+func (g *Game) Rotate() {
+	g.calendar.Rotate(g)
+	g.accumulatedCorn += 1
 }
 
 func (g *Game) TakeTurn() {

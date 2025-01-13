@@ -12,7 +12,7 @@ func Uxmal1(g *Game, p *Player) []Option {
 	options := make([]Option, 0)
 
 	if p.corn > 3 {
-		options = append(options, g.temples.GainTempleStep(p.color, Option{
+		options = append(options, g.temples.GainTempleStep(p, Option{
 			Execute: func() {
 				p.corn -= 3
 			},

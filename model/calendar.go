@@ -9,6 +9,7 @@ import (
 type Calendar struct {
 	wheels []*Wheel
 	rotation int
+	firstPlayer int
 	// tojm9 do food days & such
 }
 
@@ -23,6 +24,8 @@ func (c *Calendar) Init() {
 		MakeUxmal(),
 		MakeChichen(),
 	}
+
+	c.firstPlayer = -1
 
 	// for i := 0; i < 5; i++ {
 	// 	c.AddWheel(&Wheel {
@@ -49,12 +52,18 @@ func (c *Calendar) Execute(move Move, game *Game) {
 	if (move.placing) {
 		for i := 0; i < len(move.workers); i++ {
 			p := move.positions[i]
-			c.wheels[p.wheel_id].AddWorker(p.corn, move.workers[i])
-
 			worker := game.GetWorker(move.workers[i])
-			worker.available = false
-			worker.wheel_id = p.wheel_id
-			worker.position = p.corn
+
+			if p.firstPlayer {
+				c.firstPlayer = move.workers[i]
+				worker.available = false
+			} else {
+				c.wheels[p.wheel_id].AddWorker(p.corn, move.workers[i])
+
+				worker.available = false
+				worker.wheel_id = p.wheel_id
+				worker.position = p.corn
+			}
 		}
 	} else {
 		for i := 0; i < len(move.workers); i++ {
@@ -88,6 +97,14 @@ func (c *Calendar) LegalPositions() []*SpecificPosition {
 		positions = append(positions, &SpecificPosition{
 			wheel_id: wheel.id,
 			corn: i,
+		})
+	}
+
+	if c.firstPlayer == -1 {
+		positions = append(positions, &SpecificPosition{
+			wheel_id: -1,
+			corn: 0,
+			firstPlayer: true,
 		})
 	}
 

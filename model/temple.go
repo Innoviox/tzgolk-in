@@ -82,31 +82,39 @@ func MakeTemples() *Temples {
 	}
 }
 
-func (t *Temples) Step(c Color, temple int, dir int) {
-	t.temples[temple].playerLocations[c] += dir
+func (t *Temples) Step(p *Player, temple int, dir int) {
+	t.temples[temple].playerLocations[p.color] += dir
+	if t.temples[temple].playerLocations[p.color] < 0 {
+		t.temples[temple].playerLocations[p.color] = 0
+	}
+
+	if t.temples[temple].playerLocations[p.color] >= t.temples[temple].steps {
+		t.temples[temple].playerLocations[p.color] = t.temples[temple].steps - 1
+		p.lightSide = true
+	}
 }
 
-func (t *Temples) CanStep(c Color, temple int, dir int) bool {
+func (t *Temples) CanStep(p *Player, temple int, dir int) bool {
 	if dir == -1 {
-		return t.temples[temple].playerLocations[c] > 0
+		return t.temples[temple].playerLocations[p.color] > 0
 	} else if dir == 1 {
-		return t.temples[temple].playerLocations[c] < t.temples[temple].steps - 1
+		return t.temples[temple].playerLocations[p.color] < t.temples[temple].steps - 1
 	} else {
 		return false 
 	}
 }
 
-func (t *Temples) GainTempleStep(c Color, o Option, dir int) []Option {
+func (t *Temples) GainTempleStep(p *Player, o Option, dir int) []Option {
 	options := make([]Option, 0)
 
 	for i := 0; i < 3; i++ {
-		if t.CanStep(c, i, dir) {
+		if t.CanStep(p, i, dir) {
 			options = append(options, Option{
 				Execute: func() {
-					t.Step(c, i, dir)
+					t.Step(p, i, dir)
 					o.Execute()
 				},
-				description: fmt.Sprintf("%s, %s temple %d", o.description, c.String(), dir),
+				description: fmt.Sprintf("%s, %s temple %d", o.description, p.color.String(), dir),
 			})
 		}
 	}

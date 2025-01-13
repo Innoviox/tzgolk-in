@@ -10,8 +10,8 @@ Things left to do
 - [x] Add age 1 buildings
 - [x] add age 2 buildings
 - [x] add free research to getoptions
-- [ ] Add first player space
-- [ ] add light side / dark side
+- [x] Add first player space
+- [x] add light side / dark side
 - [ ] add monuments
 - [ ] add corn exchange
 - [ ] add pay corn to get less
@@ -24,10 +24,6 @@ Things left to do
 - [ ] display templs
 - [ ] add building color
 - [ ]  confirm all of research is there
-
-errors
-
-- [ ] temples out of bounds errors
 
 ## AI 
 

@@ -17,6 +17,7 @@ type SpecificPosition struct {
 	wheel_id int
 	corn int
 	Execute Option
+	firstPlayer bool
 }
 
 type PalenqueData struct {

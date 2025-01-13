@@ -18,7 +18,7 @@ func ChichenX(temple int, points int, block bool, position int) Options {
 				for i := 0; i < 3; i++ {
 					options = append(options, Option{
 						Execute: func() {
-							g.temples.Step(p.color, temple, 1)
+							g.temples.Step(p, temple, 1)
 							p.points += points
 							p.resources[i] += 1
 							p.resources[Skull] -= 1
@@ -32,7 +32,7 @@ func ChichenX(temple int, points int, block bool, position int) Options {
 				// just generate option for points
 				options = append(options, Option{
 					Execute: func() {
-						g.temples.Step(p.color, temple, 1)
+						g.temples.Step(p, temple, 1)
 						p.points += points
 						p.resources[Skull] -= 1
 			
@@ -57,7 +57,7 @@ func ChichenX(temple int, points int, block bool, position int) Options {
 				if p.resources[i] > 0 {
 					for _, o := range ChichenHelper() {
 						// add "spend block for temple" to each option
-						options = append(options, g.temples.GainTempleStep(p.color, Option {
+						options = append(options, g.temples.GainTempleStep(p, Option {
 							Execute: func() {
 								p.resources[i] -= 1
 								o.Execute()
