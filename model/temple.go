@@ -4,8 +4,16 @@ import (
 	"fmt"
 	"os"
 	"strings"
-	"github.com/innoviox/tzgolkin/model/types"
 )
+
+type Temple struct {
+	steps int
+	playerLocations map[Color]int
+	age1Prize int
+	age2Prize int
+	points []int
+	resources map[int]Resource
+}
 
 func (t *Temple) Clone() *Temple {
 	newLocations := make(map[Color]int)
@@ -21,6 +29,10 @@ func (t *Temple) Clone() *Temple {
 		points: t.points,
 		resources: t.resources,
 	}
+}
+
+type Temples struct {
+	temples []*Temple
 }
 
 func (t *Temples) Clone() *Temples {

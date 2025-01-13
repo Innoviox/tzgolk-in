@@ -2,8 +2,14 @@ package model
 
 import (
 	"fmt"
-	"github.com/innoviox/tzgolkin/model/types"
 )
+
+type Building struct {
+	id int
+	cost [4]int
+	GetEffects Options
+	color Color
+}
 
 func (b *Building) CanBuild(player *Player) bool {
 	for i := 0; i < 4; i++ {

@@ -1,3 +1,3 @@
-module github.com/innoviox/tzgolkin
+module tzgolkin
 
 go 1.23.1

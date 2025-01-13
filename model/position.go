@@ -3,8 +3,31 @@ package model
 import (
 	"fmt"
 	"strings"
-	"github.com/innoviox/tzgolkin/model/types"
 )
+
+type Position struct {
+	wheel_id int
+	corn int
+	GetOptions Options
+	pData *PalenqueData
+	cData *ChichenData
+}
+
+type SpecificPosition struct {
+	wheel_id int
+	corn int
+	Execute Option
+	firstPlayer bool
+}
+
+type PalenqueData struct {
+	cornTiles int
+	woodTiles int
+}
+
+type ChichenData struct {
+	full bool
+}
 
 func MakePData(hasWood bool) *PalenqueData {
 	// todo based on player count
@@ -37,3 +60,18 @@ func (p *SpecificPosition) String() string {
 	fmt.Fprintf(&br, "%d %d", p.wheel_id, p.corn)
 	return br.String()
 }
+
+// func PlayerOption(f func (*Player)) Option {
+// 	return func(g *Game, c Color) {
+// 		p := g.GetPlayerByColor(c)
+// 		f(p)
+// 	}
+// }
+
+// func SimpleOption(f func (*Player)) Options {
+// 	return func(g *Game) []Option {
+// 		return []Option{
+// 			PlayerOption(f),
+// 		}
+// 	}
+// }

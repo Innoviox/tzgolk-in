@@ -3,7 +3,6 @@ package model
 import (
 	"fmt"
 	// "os"
-	"github.com/innoviox/tzgolkin/model/types"
 )
 
 // https://stackoverflow.com/questions/37334119/how-to-delete-an-element-from-a-slice-in-golang
@@ -11,6 +10,36 @@ func remove[T any](slice []T, s int) []T {
 	// fmt.Fprintf(os.Stderr, "removing %d from %v\n", s, slice)
     return append(slice[:s], slice[s+1:]...)
 }
+
+type Option struct {
+	Execute func(*Game, *Player)
+	description string
+	buildingNum int
+}
+
+type Options func(*Game, *Player) []Option
+
+
+type Resource int
+
+const ResourceDebug = "WSGC"
+const TempleDebug = "BYG"
+
+const (
+	Wood Resource = iota
+	Stone
+	Gold
+	Skull
+)
+
+type Color int
+
+const (
+	Red Color = iota
+	Green
+	Blue
+	Yellow
+)
 
 func (c Color) String() string {
 	switch c {

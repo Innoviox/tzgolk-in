@@ -4,8 +4,22 @@ import (
 	// "fmt"
 	// "os"
 	// "sort"
-	"github.com/innoviox/tzgolkin/model/types"
 )
+
+type Wheel struct {
+	// this is all todo
+	id int
+	size int
+
+	// occupied []int
+	// workers []int
+	// map from position => worker id
+	occupied map[int]int
+
+
+	positions []*Position
+	name string
+}
 
 func (w *Wheel) Clone() *Wheel {
 	// new_occupied := make([]int, 0)
