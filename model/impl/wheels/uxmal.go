@@ -12,12 +12,12 @@ func Uxmal0(g *Game, p *Player) []Option {
 func Uxmal1(g *Game, p *Player) []Option {
 	options := make([]Option, 0)
 
-	if p.corn > 3 {
-		options = append(options, g.temples.GainTempleStep(p, Option{
+	if p.Corn > 3 {
+		options = append(options, g.Temples.GainTempleStep(p, Option{
 			Execute: func(g *Game, p *Player) {
-				p.corn -= 3
+				p.Corn -= 3
 			},
-			description: "pay 3 corn",
+			Description: "pay 3 Corn",
 		}, 1)...,)
 	}
 
@@ -25,21 +25,21 @@ func Uxmal1(g *Game, p *Player) []Option {
 }
 
 func Uxmal2(g *Game, p *Player) []Option {
-	// corn := TotalCorn(p)
+	// Corn := TotalCorn(p)
 
-	// cornOptions := GenerateCornExchanges(corn, []CornOption{CornOption{
-	// 	corn: p.corn,
-	// 	resources: p.resources,
+	// CornOptions := GenerateCornExchanges(Corn, []CornOption{CornOption{
+	// 	Corn: p.Corn,
+	// 	resources: p.Resources,
 	// }})
 
 	options := make([]Option, 0)
-	// for _, o := range cornOptions {
+	// for _, o := range CornOptions {
 	// 	options = append(options, Option{
 	// 		Execute: func(g *Game, p *Player) {
-	// 			p.corn = o.corn
-	// 			p.resources = o.resources
+	// 			p.Corn = o.Corn
+	// 			p.Resources = o.Resources
 	// 		},
-	// 		description: fmt.Sprintf("exchange to %d corn, %v", o.corn, o.resources),
+	// 		Description: fmt.Sprintf("exchange to %d Corn, %v", o.Corn, o.Resources),
 	// 	})
 	// }
 
@@ -47,40 +47,40 @@ func Uxmal2(g *Game, p *Player) []Option {
 }
 
 type CornOption struct {
-	corn int
-	resources [4]int
+	Corn int
+	Resources [4]int
 }
 
-func GenerateCornExchanges(corn int, base []CornOption) []CornOption {
-	if (corn < 2) {
+func GenerateCornExchanges(Corn int, base []CornOption) []CornOption {
+	if (Corn < 2) {
 		return base
 	}
 
 	options := make([]CornOption, 0)
 	
-	if (corn >= 2) {
-		for _, o := range GenerateCornExchanges(corn - 2, base) {
+	if (Corn >= 2) {
+		for _, o := range GenerateCornExchanges(Corn - 2, base) {
 			options = append(options, CornOption{
-				corn: o.corn - 2,
-				resources: [4]int{ o.resources[0] + 1, o.resources[1], o.resources[2], o.resources[3] },
+				Corn: o.Corn - 2,
+				Resources: [4]int{ o.Resources[0] + 1, o.Resources[1], o.Resources[2], o.Resources[3] },
 			})
 		}
 	}
 
-	if (corn >= 3) {
-		for _, o := range GenerateCornExchanges(corn - 3, base) {
+	if (Corn >= 3) {
+		for _, o := range GenerateCornExchanges(Corn - 3, base) {
 			options = append(options, CornOption{
-				corn: o.corn - 3,
-				resources: [4]int{ o.resources[0], o.resources[1] + 1, o.resources[2], o.resources[3] },
+				Corn: o.Corn - 3,
+				Resources: [4]int{ o.Resources[0], o.Resources[1] + 1, o.Resources[2], o.Resources[3] },
 			})
 		}
 	}
 
-	if (corn >= 4) {
-		for _, o := range GenerateCornExchanges(corn - 4, base) {
+	if (Corn >= 4) {
+		for _, o := range GenerateCornExchanges(Corn - 4, base) {
 			options = append(options, CornOption{
-				corn: o.corn - 4,
-				resources: [4]int{ o.resources[0], o.resources[1], o.resources[2] + 1, o.resources[3] },
+				Corn: o.Corn - 4,
+				Resources: [4]int{ o.Resources[0], o.Resources[1], o.Resources[2] + 1, o.Resources[3] },
 			})
 		}
 	}
@@ -91,30 +91,30 @@ func GenerateCornExchanges(corn int, base []CornOption) []CornOption {
 func Uxmal3(g *Game, p *Player) []Option {
 	return []Option{Option{
 		Execute: func(g *Game, p *Player) {
-			g.UnlockWorker(p.color)
+			g.UnlockWorker(p.Color)
 		},
-		description: "unlock worker",
+		Description: "unlock worker",
 	}}
 }
 
 func Uxmal4(g *Game, p *Player) []Option {
 	options := make([]Option, 0)
 
-	for _, b := range g.currentBuildings {
+	for _, b := range g.CurrentBuildings {
 		cost := b.CornCost(g, p) 
-		if p.corn >= cost {
+		if p.Corn >= cost {
 			for _, effect := range b.GetEffects(g, p) {
 				options = append(options, Option{
 					Execute: func(g *Game, p *Player) {
-						p.corn -= cost
+						p.Corn -= cost
 						effect.Execute(g, p)
 
-						g.research.Built(p)
+						g.Research.Built(p)
 						
-						p.buildings = append(p.buildings, b)
+						p.Buildings = append(p.Buildings, b)
 						// g.RemoveBuilding(b)
 					},
-					description: fmt.Sprintf("[build %d] pay %d corn, %s", b.id, cost, effect.description),
+					Description: fmt.Sprintf("[build %d] pay %d Corn, %s", b.Id, cost, effect.Description),
 				})
 			}
 		}
@@ -126,7 +126,7 @@ func Uxmal4(g *Game, p *Player) []Option {
 func Uxmal5(g *Game, p *Player) []Option {
 	options := make([]Option, 0)
 
-	if p.corn == 0 {
+	if p.Corn == 0 {
 		return options
 	}
 
@@ -145,10 +145,10 @@ func Uxmal5(g *Game, p *Player) []Option {
 	for _, option := range allOptions {
 		options = append(options, Option{
 			Execute: func(g *Game, p *Player) {
-				p.corn -= 1
+				p.Corn -= 1
 				option.Execute(g, p)
 			},
-			description: fmt.Sprintf("[mirror] pay 1 corn, %s", option.description),
+			Description: fmt.Sprintf("[mirror] pay 1 Corn, %s", option.Description),
 		})
 	}
 

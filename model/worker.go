@@ -12,29 +12,29 @@ type Worker struct {
 
 func MakeWorker(id int, color Color) *Worker {
 	return &Worker {
-		id: id,
-		color: color,
-		available: true,
-		wheel_id: -1,
-		position: -1,
+		Id: id,
+		Color: color,
+		Available: true,
+		Wheel_id: -1,
+		Position: -1,
 	}
 }
 
 func (w *Worker) ReturnFrom(wheel *Wheel) {
-	w.available = true
-	w.wheel_id = -1
-	w.position = -1
+	w.Available = true
+	w.Wheel_id = -1
+	w.Position = -1
 
 	
-	wheel.RemoveWorker(w.id)
+	wheel.RemoveWorker(w.Id)
 }
 
 func (w *Worker) Clone() *Worker {
 	return &Worker {
-		id: w.id,
-		color: w.color,
-		available: w.available,
-		wheel_id: w.wheel_id,
-		position: w.position,
+		Id: w.Id,
+		Color: w.Color,
+		Available: w.Available,
+		Wheel_id: w.Wheel_id,
+		Position: w.Position,
 	}
 }

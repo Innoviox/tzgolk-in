@@ -6,122 +6,122 @@ import (
 )
 
 func Tile1(g *Game, p *Player) {
-	p.corn += 6
-	p.resources[Stone] += 2
+	p.Corn += 6
+	p.Resources[Stone] += 2
 }
 
 func Tile2(g *Game, p *Player) {
-	p.corn += 3
-	p.resources[Wood] += 1
-	p.freeWorkers += 1
+	p.Corn += 3
+	p.Resources[Wood] += 1
+	p.FreeWorkers += 1
 }
 
 func Tile3(g *Game, p *Player) {
-	p.resources[Stone] += 1
-	p.resources[Gold] += 1
-	g.research.FreeResearch(p.color, Agriculture)
+	p.Resources[Stone] += 1
+	p.Resources[Gold] += 1
+	g.Research.FreeResearch(p.Color, Agriculture)
 }
 
 func Tile4(g *Game, p *Player) {
-	p.corn += 3
-	p.resources[Gold] += 1
-	g.research.FreeResearch(p.color, Construction)
+	p.Corn += 3
+	p.Resources[Gold] += 1
+	g.Research.FreeResearch(p.Color, Construction)
 }
 
 func Tile5(g *Game, p *Player) {
-	p.corn += 5
-	p.resources[Stone] += 1
-	g.research.FreeResearch(p.color, Theology)
+	p.Corn += 5
+	p.Resources[Stone] += 1
+	g.Research.FreeResearch(p.Color, Theology)
 }
 
 func Tile6(g *Game, p *Player) {
-	p.resources[Wood] += 1
-	g.temples.Step(p, 2, 1)
-	g.research.FreeResearch(p.color, Resources)
+	p.Resources[Wood] += 1
+	g.Temples.Step(p, 2, 1)
+	g.Research.FreeResearch(p.Color, Resources)
 }
 
 func Tile7(g *Game, p *Player) {
-	p.corn += 2
-	p.resources[Wood] += 2
-	g.temples.Step(p, 2, 1)
+	p.Corn += 2
+	p.Resources[Wood] += 2
+	g.Temples.Step(p, 2, 1)
 }
 
 func Tile8(g *Game, p *Player) {
-	p.corn += 5
-	p.resources[Stone] += 1
-	g.temples.Step(p, 0, 1)
+	p.Corn += 5
+	p.Resources[Stone] += 1
+	g.Temples.Step(p, 0, 1)
 }
 
 func Tile9(g *Game, p *Player) {
-	p.corn += 7
-	p.resources[Wood] += 2
+	p.Corn += 7
+	p.Resources[Wood] += 2
 }
 
 func Tile10(g *Game, p *Player) {
-	p.corn += 4
-	p.resources[Wood] += 1
-	g.research.FreeResearch(p.color, Resources)
+	p.Corn += 4
+	p.Resources[Wood] += 1
+	g.Research.FreeResearch(p.Color, Resources)
 }
 
 func Tile11(g *Game, p *Player) {
-	p.corn += 2
-	g.temples.Step(p, 0, 1)
-	g.research.FreeResearch(p.color, Construction)
+	p.Corn += 2
+	g.Temples.Step(p, 0, 1)
+	g.Research.FreeResearch(p.Color, Construction)
 }
 
 func Tile12(g *Game, p *Player) {
-	p.corn += 4
-	p.resources[Wood] += 1
-	p.resources[Skull] += 1
+	p.Corn += 4
+	p.Resources[Wood] += 1
+	p.Resources[Skull] += 1
 }
 
 func Tile13(g *Game, p *Player) {
-	p.corn += 9
-	p.resources[Stone] += 1
+	p.Corn += 9
+	p.Resources[Stone] += 1
 }
 
 func Tile14(g *Game, p *Player) {
-	g.UnlockWorker(p.color)
+	g.UnlockWorker(p.Color)
 }
 
 func Tile15(g *Game, p *Player) {
-	p.corn += 2
-	p.resources[Wood] += 2
-	g.research.FreeResearch(p.color, Theology)
+	p.Corn += 2
+	p.Resources[Wood] += 2
+	g.Research.FreeResearch(p.Color, Theology)
 }
 
 func Tile16(g *Game, p *Player) {
-	p.corn += 4
-	p.resources[Wood] += 3
+	p.Corn += 4
+	p.Resources[Wood] += 3
 }
 
 func Tile17(g *Game, p *Player) {
-	p.corn += 5
-	p.resources[Gold] += 1
-	g.temples.Step(p, 1, 1)
+	p.Corn += 5
+	p.Resources[Gold] += 1
+	g.Temples.Step(p, 1, 1)
 }
 
 func Tile18(g *Game, p *Player) {
-	p.corn += 3
-	g.temples.Step(p, 1, 1)
-	g.research.FreeResearch(p.color, Agriculture)
+	p.Corn += 3
+	g.Temples.Step(p, 1, 1)
+	g.Research.FreeResearch(p.Color, Agriculture)
 }
 
 func Tile19(g *Game, p *Player) {
-	p.corn += 3
-	p.resources[Wood] += 2
-	p.resources[Stone] += 1
+	p.Corn += 3
+	p.Resources[Wood] += 2
+	p.Resources[Stone] += 1
 }
 
 func Tile20(g *Game, p *Player) {
-	p.corn += 8
-	p.resources[Gold] += 1
+	p.Corn += 8
+	p.Resources[Gold] += 1
 }
 
 func Tile21(g *Game, p *Player) {
-	p.corn += 6
-	p.resources[Wood] += 1
-	p.resources[Stone] += 1
+	p.Corn += 6
+	p.Resources[Wood] += 1
+	p.Resources[Stone] += 1
 }
 
 func MakeWealthTiles(r *rand.Rand) []Tile {

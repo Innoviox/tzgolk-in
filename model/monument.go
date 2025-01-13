@@ -9,16 +9,16 @@ type Monument struct {
 
 func MakeMonument(id int, cost [4]int, getPoints func (g *Game, p *Player) int, color Color) *Monument {
     return &Monument {
-        id: id,
-        cost: cost,
+        Id: id,
+        Cost: cost,
         GetPoints: getPoints,
-        color: color,
+        Color: color,
     }
 }
 
 func (m *Monument) CanBuild(player *Player) bool {
     for i := 0; i < 4; i++ {
-        if player.resources[i] < m.cost[i] {
+        if player.Resources[i] < m.Cost[i] {
             return false
         }
     }

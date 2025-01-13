@@ -10,91 +10,91 @@ type Calendar struct {
 	Wheels []*Wheel
 	Rotation int
 	FirstPlayer int
-	Clone bool
+	IsClone bool
 	// tojm9 do food days & such
 }
 
 // func (c *Calendar) Init() {
 func MakeCalendar(wheels []*Wheel) *Calendar {
-	// c.wheels = make([]*Wheel, 0)
+	// c.Wheels = make([]*Wheel, 0)
 	return &Calendar {
-		rotation: 0,
-		wheels: wheels,
-		firstPlayer: -1,
-		clone: false,
+		Rotation: 0,
+		Wheels: wheels,
+		FirstPlayer: -1,
+		IsClone: false,
 	}
-	// c.rotation = 0
+	// c.Rotation = 0
 
-	// // c.wheels = []*Wheel {
+	// // c.Wheels = []*Wheel {
 	// // 	MakePalenque(),
 	// // 	MakeYaxchilan(),
 	// // 	MakeTikal(),
 	// // 	MakeUxmal(),
 	// // 	MakeChichen(),
 	// // }
-	// c.wheels = wheels
+	// c.Wheels = wheels
 
-	// c.firstPlayer = -1
-	// c.clone = false
+	// c.FirstPlayer = -1
+	// c.Clone = false
 
 	// for i := 0; i < 5; i++ {
 	// 	c.AddWheel(&Wheel {
-	// 		id: i,
-	// 		size: 5,
-	// 		occupied: make([]int, 0),
+	// 		Id: i,
+	// 		Size: 5,
+	// 		Occupied: make([]int, 0),
 	// 	})
 	// }
 }
 
 func (c *Calendar) Clone() *Calendar {
 	new_wheels := make([]*Wheel, 0) // todo map method?
-	for _, wheel := range c.wheels {
+	for _, wheel := range c.Wheels {
 		new_wheels = append(new_wheels, wheel.Clone())
 	}
 
 	return &Calendar {
-		wheels: new_wheels,
-		rotation: c.rotation,
-		firstPlayer: c.firstPlayer,
-		clone: true,
+		Wheels: new_wheels,
+		Rotation: c.Rotation,
+		FirstPlayer: c.FirstPlayer,
+		IsClone: true,
 	}
 }
 
 func (c *Calendar) Execute(move Move, game *Game) {
-	if !c.clone { fmt.Fprintf(os.Stdout, "Executing move %s\n", move.String()) }
-	if (move.placing) {
-		if !c.clone { fmt.Fprintf(os.Stdout, "Placing workers %s\n", move.String()) }
-		for i := 0; i < len(move.workers); i++ {
-			p := move.positions[i]
-			worker := game.GetWorker(move.workers[i])
+	if !c.IsClone { fmt.Fprintf(os.Stdout, "Executing move %s\n", move.String()) }
+	if (move.Placing) {
+		if !c.IsClone { fmt.Fprintf(os.Stdout, "Placing workers %s\n", move.String()) }
+		for i := 0; i < len(move.Workers); i++ {
+			p := move.Positions[i]
+			worker := game.GetWorker(move.Workers[i])
 
-			if p.firstPlayer {
-				if !c.clone { fmt.Fprintf(os.Stdout, "First playering!\n") }
-				c.firstPlayer = move.workers[i]
-				worker.available = false
+			if p.FirstPlayer {
+				if !c.IsClone { fmt.Fprintf(os.Stdout, "First playering!\n") }
+				c.FirstPlayer = move.Workers[i]
+				worker.Available = false
 			} else {
-				if !c.clone { fmt.Fprintf(os.Stdout, "Placing worker %d on %s position %d\n", move.workers[i], c.wheels[p.wheel_id].name, p.corn) }
-				c.wheels[p.wheel_id].AddWorker(p.corn, move.workers[i])
+				if !c.IsClone { fmt.Fprintf(os.Stdout, "Placing worker %d on %s position %d\n", move.Workers[i], c.Wheels[p.Wheel_id].Name, p.Corn) }
+				c.Wheels[p.Wheel_id].AddWorker(p.Corn, move.Workers[i])
 
-				worker.available = false
-				worker.wheel_id = p.wheel_id
-				worker.position = p.corn
+				worker.Available = false
+				worker.Wheel_id = p.Wheel_id
+				worker.Position = p.Corn
 			}
 		}
 	} else {
-		for i := 0; i < len(move.workers); i++ {
+		for i := 0; i < len(move.Workers); i++ {
 			// steps:
 			// - call the position's function on the game & player id
 			// - return the worker to the player
-			w := game.GetWorker(move.workers[i])
-			p := move.positions[i]
+			w := game.GetWorker(move.Workers[i])
+			p := move.Positions[i]
 
-			player := game.GetPlayerByColor(w.color)
+			player := game.GetPlayerByColor(w.Color)
 
-			if !c.clone { fmt.Fprintf(os.Stdout, "Retrieving worker %d from %s position %d, executing %s\n", 
-						w.id, c.wheels[p.wheel_id].name, p.corn, p.Execute.description) }
+			if !c.IsClone { fmt.Fprintf(os.Stdout, "Retrieving worker %d from %s position %d, executing %s\n", 
+						w.Id, c.Wheels[p.Wheel_id].Name, p.Corn, p.Execute.Description) }
 			p.Execute.Execute(game, player)
-			w.ReturnFrom(c.wheels[p.wheel_id])
+			w.ReturnFrom(c.Wheels[p.Wheel_id])
 		}
 	}
 }
@@ -102,20 +102,20 @@ func (c *Calendar) Execute(move Move, game *Game) {
 func (c *Calendar) LegalPositions() []*SpecificPosition {
 	positions := make([]*SpecificPosition, 0)
 
-	for _, wheel := range c.wheels {
+	for _, wheel := range c.Wheels {
 		i := wheel.LowestUnoccupied()
 		
 		positions = append(positions, &SpecificPosition{
-			wheel_id: wheel.id,
-			corn: i,
+			Wheel_id: wheel.Id,
+			Corn: i,
 		})
 	}
 
-	if c.firstPlayer == -1 {
+	if c.FirstPlayer == -1 {
 		positions = append(positions, &SpecificPosition{
-			wheel_id: -2,
-			corn: 0,
-			firstPlayer: true,
+			Wheel_id: -2,
+			Corn: 0,
+			FirstPlayer: true,
 		})
 	}
 
@@ -123,18 +123,18 @@ func (c *Calendar) LegalPositions() []*SpecificPosition {
 }
 
 // func (c *Calendar) Rotate(g *Game) {
-// 	c.rotation = rotation
-// 	for i := 0; i < len(c.wheels); i++ {
-// 		c.wheels[i].SetRotation(rotation)
+// 	c.Rotation = rotation
+// 	for i := 0; i < len(c.Wheels); i++ {
+// 		c.Wheels[i].SetRotation(rotation)
 // 	}
 // }
 
 // todo rework when days are implemented?
 
 func (c *Calendar) Rotate(g *Game) {
-	// c.SetRotation(c.rotation + 1);
-	for i := 0; i < len(c.wheels); i++ {
-		c.wheels[i].Rotate(g)
+	// c.SetRotation(c.Rotation + 1);
+	for i := 0; i < len(c.Wheels); i++ {
+		c.Wheels[i].Rotate(g)
 	}
 }
 
@@ -142,13 +142,13 @@ func (c *Calendar) String(workers []*Worker) string {
 	var br strings.Builder
 
 	fmt.Fprintf(&br, "----Calendar------------\n")
-	for _, wheel := range c.wheels {
-		fmt.Fprintf(&br, "| %s: ", wheel.name)
+	for _, wheel := range c.Wheels {
+		fmt.Fprintf(&br, "| %s: ", wheel.Name)
 
-		out := make([]string, wheel.size)
+		out := make([]string, wheel.Size)
 
-		for k, v := range wheel.occupied {
-			out[k] = workers[v].color.String()
+		for k, v := range wheel.Occupied {
+			out[k] = workers[v].Color.String()
 		}
 
 		for _, o := range out {
@@ -158,7 +158,7 @@ func (c *Calendar) String(workers []*Worker) string {
 				fmt.Fprintf(&br, "_")
 			}
 		}
-		fmt.Fprintf(&br, "(%v)\n", wheel.occupied)
+		fmt.Fprintf(&br, "(%v)\n", wheel.Occupied)
 	}
 	fmt.Fprintf(&br, "------------------------\n")
 

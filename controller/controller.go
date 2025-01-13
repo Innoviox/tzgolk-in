@@ -4,6 +4,8 @@ import (
     "math/rand"
     . "tzgolkin/model"
     . "tzgolkin/model/impl"
+    . "tzgolkin/model/impl/wheels"
+    . "tzgolkin/model/impl/buildings"
 )
 
 type Controller struct {
@@ -19,21 +21,21 @@ func MakeController(rand *rand.Rand) *Controller {
     }
 
     temples := []*Temple{
-        []*Temple{Brown(), YellowT(), GreenT()},
+        Brown(), YellowT(), GreenT(),
     }
 
-    age1Buildings := MakeAge1Buildings(g.rand)
-    age2Buildings := MakeAge2Buildings(g.rand)
-    monuments := MakeMonuments(g.rand)
-    tiles := MakeWealthTiles(g.rand)
+    age1Buildings := MakeAge1Buildings(rand)
+    age2Buildings := MakeAge2Buildings(rand)
+    monuments := MakeMonuments(rand)
+    tiles := MakeWealthTiles(rand)
 
     game := &Game {
-        calendar: MakeCalendar(wheels),
-        temples: MakeTemples(temples),
-        age1Buildings: age1Buildings,
-        age2Buildings: age2Buildings,
-        monuments: monuments,
-        tiles: tiles,
+        Calendar: MakeCalendar(wheels),
+        Temples: MakeTemples(temples),
+        Age1Buildings: age1Buildings,
+        Age2Buildings: age2Buildings,
+        AllMonuments: monuments,
+        Tiles: tiles,
     }
 
     game.Init()
@@ -41,5 +43,11 @@ func MakeController(rand *rand.Rand) *Controller {
     return &Controller {
         rand: rand,
         game: game,
+    }
+}
+
+func (c *Controller) RunGame() {
+    for !c.game.IsOver() {
+        c.game.Round()
     }
 }

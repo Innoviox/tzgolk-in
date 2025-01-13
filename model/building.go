@@ -11,18 +11,9 @@ type Building struct {
 	Color Color
 }
 
-func MakeBuilding(id int, cost [4]int, getEffects Options, color Color) Building {
-	return Building {
-		id: id,
-		cost: cost,
-		GetEffects: getEffects,
-		color: color,
-	}
-}
-
 func (b *Building) CanBuild(player *Player) bool {
 	for i := 0; i < 4; i++ {
-		if player.resources[i] < b.cost[i] {
+		if player.Resources[i] < b.Cost[i] {
 			return false
 		}
 	}
@@ -34,13 +25,13 @@ func (b *Building) GetCosts(game *Game, player *Player) [][4]int {
 	options := make([][4]int, 0)
 
 	if b.CanBuild(player) {
-		options = append(options, b.cost)
+		options = append(options, b.Cost)
 	}
 
-	if game.research.Builder(player.color) {
+	if game.Research.Builder(player.Color) {
 		for i := 0; i < 4; i++ {
-			if b.cost[i] > 0 {
-				cost := b.cost
+			if b.Cost[i] > 0 {
+				cost := b.Cost
 				cost[i] -= 1
 				options = append(options, cost)
 			}
@@ -54,11 +45,11 @@ func (b *Building) CornCost(game *Game, player *Player) int {
 	cost := 0
 
 	for i := 0; i < 4; i++ {
-		cost += b.cost[i] * 2
+		cost += b.Cost[i] * 2
 	}
 
 	// todo does research interact with this
-	if game.research.Builder(player.color) {
+	if game.Research.Builder(player.Color) {
 		cost -= 2
 	}
 
@@ -68,8 +59,8 @@ func (b *Building) CornCost(game *Game, player *Player) int {
 func (g *Game) GetBuildingOptions(p *Player, exclude int, useResearch bool) []Option {
 	options := make([]Option, 0)
 
-	for _, b := range g.currentBuildings {
-		if b.id == exclude {
+	for _, b := range g.CurrentBuildings {
+		if b.Id == exclude {
 			continue
 		}
 
@@ -79,21 +70,21 @@ func (g *Game) GetBuildingOptions(p *Player, exclude int, useResearch bool) []Op
 				options = append(options, Option{
 					Execute: func(g *Game, p *Player) {
 						for i := 0; i < 4; i++ {
-							p.resources[i] -= cost[i]
+							p.Resources[i] -= cost[i]
 						}
 
 						effect.Execute(g, p)
 
 						if useResearch {
-							g.research.Built(p)
+							g.Research.Built(p)
 						}
 
-						p.buildings = append(p.buildings, b)
+						p.Buildings = append(p.Buildings, b)
 
 						// g.RemoveBuilding(b)
 					},
-					description: fmt.Sprintf("[build %d] pay %s, %s +%s", b.id, CostString(cost), effect.description, g.research.BuiltString(p)),
-					buildingNum: b.id,
+					Description: fmt.Sprintf("[build %d] pay %s, %s +%s", b.Id, CostString(cost), effect.Description, g.Research.BuiltString(p)),
+					BuildingNum: b.Id,
 				})
 			}
 		}
@@ -105,19 +96,19 @@ func (g *Game) GetBuildingOptions(p *Player, exclude int, useResearch bool) []Op
 func (g *Game) GetMonumentOptions(p *Player) []Option {
 	options := make([]Option, 0)
 
-	for _, m := range g.currentMonuments {
+	for _, m := range g.CurrentMonuments {
 		if m.CanBuild(p) {
 			options = append(options, Option{
 				Execute: func(g *Game, p *Player) {
 					for i := 0; i < 4; i++ {
-						p.resources[i] -= m.cost[i]
+						p.Resources[i] -= m.Cost[i]
 					}
 
-					p.monuments = append(p.monuments, m)
+					p.Monuments = append(p.Monuments, m)
 
 					// g.RemoveMonument(m)
 				},
-				description: fmt.Sprintf("[build %d] pay %s, get monument %d", m.id, CostString(m.cost), m.id),
+				Description: fmt.Sprintf("[build %d] pay %s, get monument %d", m.Id, CostString(m.Cost), m.Id),
 			})
 		}
 	}

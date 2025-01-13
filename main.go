@@ -1,17 +1,14 @@
 package main
 
 import (
-	"tzgolkin/model"
+	. "tzgolkin/controller"
 	"math/rand"
 )
 
 func main() {
 	r := rand.New(rand.NewSource(1))
 
-	game := new(model.Game)
-	game.Init(r)
+	ctrl := MakeController(r)
 
-	for !game.Over() {
-		game.Round()
-	}
+	ctrl.RunGame()
 }

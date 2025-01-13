@@ -10,7 +10,7 @@ func Tikal0(g *Game, p *Player) []Option {
 }
 
 func Tikal1(g *Game, p *Player) []Option {
-	return g.research.GetOptions(g, p, 1, false)
+	return g.Research.GetOptions(g, p, 1, false)
 }
 
 func Tikal2(g *Game, p *Player) []Option {
@@ -18,7 +18,7 @@ func Tikal2(g *Game, p *Player) []Option {
 }
 
 func Tikal3(g *Game, p *Player) []Option {
-	return g.research.GetOptions(g, p, 2, false)
+	return g.Research.GetOptions(g, p, 2, false)
 }
 
 func Tikal4(g *Game, p *Player) []Option {
@@ -27,13 +27,13 @@ func Tikal4(g *Game, p *Player) []Option {
 	for _, o := range g.GetBuildingOptions(p, -1, true) {
 		options = append(options, o)
 
-		for _, o2 := range g.GetBuildingOptions(p, o.buildingNum, false) {
+		for _, o2 := range g.GetBuildingOptions(p, o.BuildingNum, false) {
 			options = append(options, Option{
 				Execute: func(g *Game, p *Player) {
 					o.Execute(g, p)
 					o2.Execute(g, p)
 				},
-				description: fmt.Sprintf("%s, %s [no res]", o.description, o2.description),
+				Description: fmt.Sprintf("%s, %s [no res]", o.Description, o2.Description),
 			})
 		}
 	}
@@ -47,7 +47,7 @@ func Tikal5(g *Game, p *Player) []Option {
 	options := make([]Option, 0)
 
 	for i := 0; i < 3; i++ {
-		if p.resources[i] > 0 {
+		if p.Resources[i] > 0 {
 			for j := 0; j < 3; j++ {
 				for k := 0; k < 3; k++ {
 					if (j == k) {
@@ -55,11 +55,11 @@ func Tikal5(g *Game, p *Player) []Option {
 					}
 					options = append(options, Option{
 						Execute: func(g *Game, p *Player) {
-							p.resources[i] -= 1
-							g.temples.Step(p, j, 1)
-							g.temples.Step(p, k, 1)
+							p.Resources[i] -= 1
+							g.Temples.Step(p, j, 1)
+							g.Temples.Step(p, k, 1)
 						},
-						description: fmt.Sprintf("pay 1 %s, 1 %sT, 1 %sT", string(ResourceDebug[i]), string(TempleDebug[j]), string(TempleDebug[k])),
+						Description: fmt.Sprintf("pay 1 %s, 1 %sT, 1 %sT", string(ResourceDebug[i]), string(TempleDebug[j]), string(TempleDebug[k])),
 					})
 				}
 			}

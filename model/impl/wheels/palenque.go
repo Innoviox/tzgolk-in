@@ -12,78 +12,78 @@ func Palenque0(g *Game, p *Player) []Option {
 func Palenque1(g *Game, p *Player) []Option {
 	return []Option{Option{
 		Execute: func (g *Game, p *Player) {
-			p.corn += 3 + g.research.CornBonus(p.color, Blue)
+			p.Corn += 3 + g.Research.CornBonus(p.Color, Blue)
 		},
-		description: fmt.Sprintf("3 + %d corn", g.research.CornBonus(p.color, Blue)),
+		Description: fmt.Sprintf("3 + %d Corn", g.Research.CornBonus(p.Color, Blue)),
 	}}
 }
 
 func Palenque2(g *Game, p *Player) []Option {
 	options := make([]Option, 0)
 
-	if g.calendar.wheels[0].positions[2].pData.cornTiles > 0 {
+	if g.Calendar.Wheels[0].Positions[2].PData.CornTiles > 0 {
 		options = append(options, Option{
 			Execute: func(g *Game, p *Player) {
-				p.corn += 4 + g.research.CornBonus(p.color, Green)
-				p.cornTiles += 1
-				g.calendar.wheels[0].positions[2].pData.cornTiles -= 1
+				p.Corn += 4 + g.Research.CornBonus(p.Color, Green)
+				p.CornTiles += 1
+				g.Calendar.Wheels[0].Positions[2].PData.CornTiles -= 1
 			},
-			description: fmt.Sprintf("4 + %d corn", g.research.CornBonus(p.color, Green)),
+			Description: fmt.Sprintf("4 + %d Corn", g.Research.CornBonus(p.Color, Green)),
 		})
-	} else if g.research.Irrigation(p.color) {
+	} else if g.Research.Irrigation(p.Color) {
 		options = append(options, Option{
 			Execute: func(g *Game, p *Player) {
-				p.corn += 4 + g.research.CornBonus(p.color, Green)
+				p.Corn += 4 + g.Research.CornBonus(p.Color, Green)
 			},
-			description: fmt.Sprintf("4 + %d corn (irrigation)", g.research.CornBonus(p.color, Green)),
+			Description: fmt.Sprintf("4 + %d Corn (irrigation)", g.Research.CornBonus(p.Color, Green)),
 		})
 	}
 
 	return options
 }
 
-func Jungle(corn int, wood int, position int) Options {
+func Jungle(Corn int, wood int, position int) Options {
 	return func (g *Game, p *Player) []Option {
 		options := make([]Option, 0)
 
-		if g.calendar.wheels[0].positions[position].pData.woodTiles > 0 {
+		if g.Calendar.Wheels[0].Positions[position].PData.WoodTiles > 0 {
 			options = append(options, Option{
 				Execute: func (g *Game, p *Player) {
-					p.resources[Wood] += wood + g.research.ResourceBonus(p.color, Wood)
-					p.woodTiles += 1
-					g.calendar.wheels[0].positions[3].pData.woodTiles -= 1
+					p.Resources[Wood] += wood + g.Research.ResourceBonus(p.Color, Wood)
+					p.WoodTiles += 1
+					g.Calendar.Wheels[0].Positions[3].PData.WoodTiles -= 1
 				},
-				description: fmt.Sprintf("%d + %d wood", wood, g.research.ResourceBonus(p.color, Wood)),
+				Description: fmt.Sprintf("%d + %d wood", wood, g.Research.ResourceBonus(p.Color, Wood)),
 			})
 	
-			options = append(options, g.temples.GainTempleStep(p, Option{
+			options = append(options, g.Temples.GainTempleStep(p, Option{
 				Execute: func (g *Game, p *Player) {
-					p.corn += corn + g.research.CornBonus(p.color, Green)
-					p.cornTiles += 1
-					g.calendar.wheels[0].positions[3].pData.woodTiles -= 1
-					g.calendar.wheels[0].positions[3].pData.cornTiles -= 1
+					p.Corn += Corn + g.Research.CornBonus(p.Color, Green)
+					p.CornTiles += 1
+					g.Calendar.Wheels[0].Positions[3].PData.WoodTiles -= 1
+					g.Calendar.Wheels[0].Positions[3].PData.CornTiles -= 1
 				},
-				description: fmt.Sprintf("%d + %d corn, anger", corn, g.research.CornBonus(p.color, Green)),
+				Description: fmt.Sprintf("%d + %d Corn, anger", Corn, g.Research.CornBonus(p.Color, Green)),
 			}, -1)...)
 		} 
 		
-		if g.calendar.wheels[0].positions[position].pData.HasCornShowing() {
+		if g.Calendar.Wheels[0].Positions[position].PData.HasCornShowing() {
 			options = append(options, Option{
 				Execute: func (g *Game, p *Player) {
-					p.corn += corn + g.research.CornBonus(p.color, Green)
-					p.cornTiles += 1
-					g.calendar.wheels[0].positions[3].pData.cornTiles -= 1
+					p.Corn += Corn + g.Research.CornBonus(p.Color, Green)
+					p.CornTiles += 1
+					g.Calendar.Wheels[0].Positions[3].PData.CornTiles -= 1
 				},
-				description: fmt.Sprintf("%d + %d corn", corn, g.research.CornBonus(p.color, Green)),
+				Description: fmt.Sprintf("%d + %d Corn", Corn, g.Research.CornBonus(p.Color, Green)),
 			})
 		}
 
-		if g.research.Irrigation(p.color) {
+		if g.Research.Irrigation(p.Color) {
 			options = append(options, Option{
 				Execute: func(g *Game, p *Player) {
-					p.corn += corn + g.research.CornBonus(p.color, Green)
+					p.Corn += Corn + g.Research.CornBonus(p.Color, Green)
 				},
-				description: fmt.Sprintf("%d + %d corn (irrigation)", corn, g.research.CornBonus(p.color, Green)),
+				Description: fmt.Sprintf("%d + %d Corn (irrigation)", Corn, g.Research.CornBonus(p.Color, Green)),
 			})
 		}
 
@@ -109,26 +109,26 @@ func MakePalenque() *Wheel {
 
 	for i := 0; i < len(options); i++ {
 		positions = append(positions, &Position{
-			wheel_id: 0,
-			corn: i,
+			Wheel_id: 0,
+			Corn: i,
 			GetOptions: options[i],
-			pData: MakePData(i > 2),
+			PData: MakePData(i > 2),
 		})
 	}
 
 	for i := 6; i < 8; i++ {
 		positions = append(positions, &Position{
-			wheel_id: 0,
-			corn: i,
-			GetOptions: flatten(options),
+			Wheel_id: 0,
+			Corn: i,
+			GetOptions: Flatten(options),
 		})
 	}
 
 	return &Wheel{
-		id: 0,
-		size: len(positions),
-		occupied: make(map[int]int),
-		positions: positions, 
-		name: "Palenque",
+		Id: 0,
+		Size: len(positions),
+		Occupied: make(map[int]int),
+		Positions: positions, 
+		Name: "Palenque",
 	}
 }

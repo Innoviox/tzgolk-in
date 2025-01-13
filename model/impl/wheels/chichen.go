@@ -10,10 +10,10 @@ func Chichen0(g *Game, p *Player) []Option {
 }
 
 type ChichenSpot struct {
-	temple int
-	points int
-	block bool
-	position int
+	Temple int
+	Points int
+	Block bool
+	Position int
 }
 
 func ChichenSpots() []ChichenSpot {
@@ -37,32 +37,32 @@ func ChichenX(n int, canForesight bool) Options {
 		ChichenHelper := func () []Option {
 			options := make([]Option, 0)
 		
-			if spot.block {
+			if spot.Block {
 				// if blocK: generate option for gaining each block
 				for i := 0; i < 3; i++ {
 					options = append(options, Option{
 						Execute: func(g *Game, p *Player) {
-							g.temples.Step(p, spot.temple, 1)
-							p.points += spot.points
-							p.resources[i] += 1
-							p.resources[Skull] -= 1
+							g.Temples.Step(p, spot.Temple, 1)
+							p.Points += spot.Points
+							p.Resources[i] += 1
+							p.Resources[Skull] -= 1
 			
-							g.calendar.wheels[4].positions[spot.position].cData.full = true
+							g.Calendar.Wheels[4].Positions[spot.Position].CData.Full = true
 						},
-						description: fmt.Sprintf("%s temple, %d points, 1 %sT", string(ResourceDebug[i]), spot.points, string(TempleDebug[spot.temple])),
+						Description: fmt.Sprintf("%s temple, %d points, 1 %sT", string(ResourceDebug[i]), spot.Points, string(TempleDebug[spot.Temple])),
 					})
 				}
 			} else {
 				// just generate option for points
 				options = append(options, Option{
 					Execute: func(g *Game, p *Player) {
-						g.temples.Step(p, spot.temple, 1)
-						p.points += spot.points
-						p.resources[Skull] -= 1
+						g.Temples.Step(p, spot.Temple, 1)
+						p.Points += spot.Points
+						p.Resources[Skull] -= 1
 			
-						g.calendar.wheels[4].positions[spot.position].cData.full = true
+						g.Calendar.Wheels[4].Positions[spot.Position].CData.Full = true
 					},
-					description: fmt.Sprintf("%s temple, %d points", string(TempleDebug[spot.temple]), spot.points),
+					Description: fmt.Sprintf("%s temple, %d points", string(TempleDebug[spot.Temple]), spot.Points),
 				})
 			}
 		
@@ -75,10 +75,10 @@ func ChichenX(n int, canForesight bool) Options {
 			Execute: func(g *Game, p *Player) {
 
 			},
-			description: "skip",
+			Description: "skip",
 		})
 
-		if canForesight && g.research.Foresight(p.color) {
+		if canForesight && g.Research.Foresight(p.Color) {
 			if n < 8 {
 				options = append(options, ChichenX(n + 1, false)(g, p)...)
 			} else {
@@ -89,22 +89,22 @@ func ChichenX(n int, canForesight bool) Options {
 			}
 		}
 
-		if g.calendar.wheels[4].positions[spot.position].cData.full || p.resources[Skull] == 0 {
+		if g.Calendar.Wheels[4].Positions[spot.Position].CData.Full || p.Resources[Skull] == 0 {
 			return options 
 		}
 
-		if g.research.Devout(p.color) {
+		if g.Research.Devout(p.Color) {
 			// for each block
 			for i := 0; i < 3; i++ {
-				if p.resources[i] > 0 {
+				if p.Resources[i] > 0 {
 					for _, o := range ChichenHelper() {
 						// add "spend block for temple" to each option
-						options = append(options, g.temples.GainTempleStep(p, Option {
+						options = append(options, g.Temples.GainTempleStep(p, Option {
 							Execute: func(g *Game, p *Player) {
-								p.resources[i] -= 1
+								p.Resources[i] -= 1
 								o.Execute(g, p)
 							},
-							description: fmt.Sprintf("%s, [theo] pay 1 %s", o.description, string(ResourceDebug[i])),
+							Description: fmt.Sprintf("%s, [theo] pay 1 %s", o.Description, string(ResourceDebug[i])),
 						}, 1)...)
 					}
 				}
@@ -136,24 +136,24 @@ func MakeChichen() *Wheel {
 
 	for i := 0; i < len(options); i++ {
 		positions = append(positions, &Position{
-			wheel_id: 4,
-			corn: i,
+			Wheel_id: 4,
+			Corn: i,
 			GetOptions: options[i],
-			cData: MakeCData(),
+			CData: MakeCData(),
 		})
 	}
 
 	positions = append(positions, &Position {
-		wheel_id: 4, 
-		corn: 10,
-		GetOptions: flatten(options),
+		Wheel_id: 4, 
+		Corn: 10,
+		GetOptions: Flatten(options),
 	})
 
 	return &Wheel {
-		id: 4,
-		size: len(positions),
-		occupied: make(map[int]int),
-		positions: positions,
-		name: "Chichen Itza",
+		Id: 4,
+		Size: len(positions),
+		Occupied: make(map[int]int),
+		Positions: positions,
+		Name: "Chichen Itza",
 	}
 }

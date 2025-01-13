@@ -5,7 +5,7 @@ import (
 	// "os"
 )
 
-// https://stackoverflow.com/questions/37334119/how-to-delete-an-element-from-a-slice-in-golang
+// https://stackoverflow.Com/questions/37334119/how-to-delete-an-element-from-a-slice-in-golang
 func remove[T any](slice []T, s int) []T {
 	// fmt.Fprintf(os.Stderr, "removing %d from %v\n", s, slice)
     return append(slice[:s], slice[s+1:]...)
@@ -57,24 +57,24 @@ func (c Color) String() string {
 
 func MakeEmptyRetrievalMove() Move {
 	return Move {
-		placing: false,
-		workers: make([]int, 0),
-		positions: make([]*SpecificPosition, 0),
-		corn: 0,
+		Placing: false,
+		Workers: make([]int, 0),
+		Positions: make([]*SpecificPosition, 0),
+		Corn: 0,
 	}
 }
 
 func MakeEmptyPlacementMove() Move {
 	return Move {
-		placing: true,
-		workers: make([]int, 0),
-		positions: make([]*SpecificPosition, 0),
-		corn: 0,
+		Placing: true,
+		Workers: make([]int, 0),
+		Positions: make([]*SpecificPosition, 0),
+		Corn: 0,
 	}
 }
 
-func flatten(options []Options) Options {
-	// todo add "mirror" to description?
+func Flatten(options []Options) Options {
+	// todo add "mirror" to Description?
 	return func (g *Game, p *Player) []Option {
 		result := make([]Option, 0)
 		for _, o := range options {
@@ -124,15 +124,15 @@ func CostString(cost [4]int) string {
 }
 
 func TotalCorn(p *Player) int {
-	corn := p.corn
-	corn += 2 * p.resources[Wood]
-	corn += 3 * p.resources[Stone]
-	corn += 4 * p.resources[Gold]
+	Corn := p.Corn
+	Corn += 2 * p.Resources[Wood]
+	Corn += 3 * p.Resources[Stone]
+	Corn += 4 * p.Resources[Gold]
 	
-	return corn
+	return Corn
 }
 
 type Tile struct {
-	n int
+	N int
 	Execute func(*Game, *Player) // todo color type
 }

@@ -7,214 +7,214 @@ import (
 
 func Building1() Building {
     return Building {
-        id: 1,
-        cost: [4]int{1, 0, 0, 0},
+        Id: 1,
+        Cost: [4]int{1, 0, 0, 0},
         GetEffects: func (g *Game, p *Player) []Option {
             return []Option {Option{
                 Execute: func(g *Game, p *Player) {
-                    p.freeWorkers += 1
+                    p.FreeWorkers += 1
                 },
-                description: "1 free worker",
+                Description: "1 free worker",
             }}
         },
-        color: Yellow,
+        Color: Yellow,
     }
 }
 
 func Building2() Building {
     return Building {
-        id: 2,
-        cost: [4]int{1, 2, 0, 0},
+        Id: 2,
+        Cost: [4]int{1, 2, 0, 0},
         GetEffects: func (g *Game, p *Player) []Option {
             return []Option {Option{
                 Execute: func(g *Game, p *Player) {
-                    g.temples.Step(p, 0, 1)
-                    g.temples.Step(p, 2, 1)
+                    g.Temples.Step(p, 0, 1)
+                    g.Temples.Step(p, 2, 1)
                 },
-                description: "1 BT, 1 GT",
+                Description: "1 BT, 1 GT",
             }}
         },
-        color: Red,
+        Color: Red,
     }
 }
 
 func Building3() Building {
     b := Building1()
     return Building {
-        id: 3,
-        cost: b.cost,
+        Id: 3,
+        Cost: b.Cost,
         GetEffects: b.GetEffects,
-        color: b.color,
+        Color: b.Color,
     }
 }
 
 func Building4() Building {
     return Building {
-        id: 4,
-        cost: [4]int{2, 0, 0, 0},
+        Id: 4,
+        Cost: [4]int{2, 0, 0, 0},
         GetEffects: func (g *Game, p *Player) []Option {
             return []Option {Option{
                 Execute: func(g *Game, p *Player) {
-                    g.research.FreeResearch(p.color, Agriculture)
+                    g.Research.FreeResearch(p.Color, Agriculture)
                 },
-                description: "free agr",
+                Description: "free agr",
             }}
         },
-        color: Green,
+        Color: Green,
     }
 }
 
 func Building5() Building {
     return Building {
-        id: 5,
-        cost: [4]int{4, 0, 0, 0},
+        Id: 5,
+        Cost: [4]int{4, 0, 0, 0},
         GetEffects: func (g *Game, p *Player) []Option {
             return []Option {Option{
                 Execute: func(g *Game, p *Player) {
-                    p.workerDeduction += 1
+                    p.WorkerDeduction += 1
                 }, 
-                description: "1 worker deduction",
+                Description: "1 worker deduction",
             }}
         },
-        color: Yellow,
+        Color: Yellow,
     }
 }
 
 func Building6() Building {
     return Building {
-        id: 6,
-        cost: [4]int{0, 0, 1, 0},
+        Id: 6,
+        Cost: [4]int{0, 0, 1, 0},
         GetEffects: func (g *Game, p *Player) []Option {
             return []Option {Option{
                 Execute: func(g *Game, p *Player) {
-                   g.research.FreeResearch(p.color, Construction)
+                   g.Research.FreeResearch(p.Color, Construction)
                 },
-                description: "free const",
+                Description: "free const",
             }}
         },
-        color: Blue,
+        Color: Blue,
     }
 }
 
 func Building7() Building {
     return Building {
-        id: 7,
-        cost: [4]int{1, 0, 1, 0},
+        Id: 7,
+        Cost: [4]int{1, 0, 1, 0},
         GetEffects: func (g *Game, p *Player) []Option {
             options := make([]Option, 0)
             
             for _, o := range g.GetBuildingOptions(p, 7, true) {
-                options = append(options, g.temples.GainTempleStep(p, o, 1)...)
+                options = append(options, g.Temples.GainTempleStep(p, o, 1)...)
             }
 
             return options
         },
-        color: Red,
+        Color: Red,
     }
 }
 
 func Building8() Building {
     return Building {
-        id: 8,
-        cost: [4]int{2, 1, 0, 0},
+        Id: 8,
+        Cost: [4]int{2, 1, 0, 0},
         GetEffects: func (g *Game, p *Player) []Option {
             return []Option {Option{
                 Execute: func(g *Game, p *Player) {
-                    g.temples.Step(p, 0, 1)
-                    g.temples.Step(p, 1, 1)
+                    g.Temples.Step(p, 0, 1)
+                    g.Temples.Step(p, 1, 1)
                 },
-                description: "1 BT 1 YT",
+                Description: "1 BT 1 YT",
             }}
         },
-        color: Red,
+        Color: Red,
     }
 }
 
 func Building9() Building {
     return Building {
-        id: 9,
-        cost: [4]int{1, 1, 0, 0},
+        Id: 9,
+        Cost: [4]int{1, 1, 0, 0},
         GetEffects: func (g *Game, p *Player) []Option {
             return []Option {Option{
                 Execute: func(g *Game, p *Player) {
-                    g.research.FreeResearch(p.color, Resources)
-                    p.corn += 1
+                    g.Research.FreeResearch(p.Color, Resources)
+                    p.Corn += 1
                 },
-                description: "free res, 1 corn",
+                Description: "free res, 1 Corn",
             }}
         },
-        color: Green,
+        Color: Green,
     }
 }
 
 func Building10() Building {
     return Building {
-        id: 10,
-        cost: [4]int{0, 1, 1, 0},
+        Id: 10,
+        Cost: [4]int{0, 1, 1, 0},
         GetEffects: func (g *Game, p *Player) []Option {
             return []Option {Option{
                 Execute: func(g *Game, p *Player) {
-                    g.research.FreeResearch(p.color, Theology)
-                    g.temples.Step(p, 2, 1)
+                    g.Research.FreeResearch(p.Color, Theology)
+                    g.Temples.Step(p, 2, 1)
                 },
-                description: "free theo, 1 GT",
+                Description: "free theo, 1 GT",
             }}
         },
-        color: Blue,
+        Color: Blue,
     }
 }
 
 func Building11() Building {
     b := Building5()
     return Building {
-        id: 11,
-        cost: b.cost,
+        Id: 11,
+        Cost: b.Cost,
         GetEffects: b.GetEffects,
-        color: b.color,
+        Color: b.Color,
     }
 }
 
 func Building12() Building {
     return Building {
-        id: 12,
-        cost: [4]int{2, 1, 0, 0},
+        Id: 12,
+        Cost: [4]int{2, 1, 0, 0},
         GetEffects: func (g *Game, p *Player) []Option {
             return []Option {Option{
                 Execute: func(g *Game, p *Player) {
-                    g.research.FreeResearch(p.color, Resources)
-                    p.resources[Gold] += 1
+                    g.Research.FreeResearch(p.Color, Resources)
+                    p.Resources[Gold] += 1
                 },
-                description: "free res, 1 G",
+                Description: "free res, 1 G",
             }}
         },
-        color: Green,
+        Color: Green,
     }
 }
 
 func Building13() Building {
     return Building {
-        id: 13,
-        cost: [4]int{3, 0, 0, 0},
+        Id: 13,
+        Cost: [4]int{3, 0, 0, 0},
         GetEffects: func (g *Game, p *Player) []Option {
             return []Option {Option{
                 Execute: func(g *Game, p *Player) {
-                    g.research.FreeResearch(p.color, Agriculture)
-                    p.resources[Stone] += 1
+                    g.Research.FreeResearch(p.Color, Agriculture)
+                    p.Resources[Stone] += 1
                 },
-                description: "free agr, 1 S",
+                Description: "free agr, 1 S",
             }}
         },
-        color: Green,
+        Color: Green,
     }
 }
 
 func Building14() Building {
     b := Building1()
     return Building {
-        id: 14,
-        cost: b.cost,
+        Id: 14,
+        Cost: b.Cost,
         GetEffects: b.GetEffects,
-        color: Yellow,
+        Color: Yellow,
     }
 }
 
