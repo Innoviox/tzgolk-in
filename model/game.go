@@ -361,19 +361,26 @@ func (g *Game) MakeRetrievalMoves(moves []Move, retrieval []int) []Move {
 
 		for i := 0; i < len(moves); i++ {
 			for _, option := range g.GetOptions(worker) {
-				// fmt.Fprintf(os.Stdout, "\t\tOption %v\n", option)
-				// todo pay corn to go lower
+				if worker.wheel_id != 4 {
+					for j := 1; j < worker.position; j++ {
+						m = append(m, moves[i].Retrieve(w, &SpecificPosition {
+							wheel_id: worker.wheel_id,
+							corn: j,
+							Execute: option,
+						}, worker.position - j))
+					}
+				}
 				m = append(m, moves[i].Retrieve(w, &SpecificPosition {
 					wheel_id: worker.wheel_id,
 					corn: worker.position,
 					Execute: option,
-				}))
+				}, 0))
 			}
 		}
 
 		out = append(out, g.MakeRetrievalMoves(m, rest)...)
 	}
-	return out // g.MakeRetrievalMoves(out, rest)
+	return out
 }
 
 /*

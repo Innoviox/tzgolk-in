@@ -16,12 +16,12 @@ type Move struct {
 	Execute func()
 }
 
-func (m *Move) Retrieve(worker int, position *SpecificPosition) Move {
+func (m *Move) Retrieve(worker int, position *SpecificPosition, cornBack int) Move {
 	return Move {
 		placing: m.placing,
 		workers: append(m.workers, worker),
 		positions: append(m.positions, position),
-		corn: m.corn,
+		corn: m.corn + cornBack,
 	}
 }
 

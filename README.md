@@ -16,11 +16,12 @@ Things left to do
 - [x] set up currentBuildings
 - [x] deal out age 2 buildings
 - [x] add corn exchange
-- [ ] add pay corn to get less
+- [x] add pay corn to get less
+- [ ] pay corn for moves (and only generate playable moves)
+- [ ] workers that fall off come back
 - [ ] add theo 1
 - [ ] add second building
 - [ ] add "player doesn't pay for 1 worker" and "player pays 1 food for worker" effects
-- [ ] pay corn for moves (and only generate playable moves)123
 - [ ] display research 
 - [ ] display templs
 - [ ]  confirm all of research is there
