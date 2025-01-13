@@ -42,6 +42,7 @@ type Game struct {
 	Tiles []Tile
 }
 
+// -- MARK -- Basic methods
 func (g *Game) Init() {
 	g.Players = make([]*Player, 4)
 	g.Workers = make([]*Worker, 0)
@@ -93,6 +94,67 @@ func (g *Game) Init() {
 	fmt.Fprintf(os.Stdout, "%s", g.String())
 }
 
+func (g *Game) Clone() *Game {
+	players := make([]*Player, 0)
+	for _, p := range g.Players {
+		players = append(players, p.Clone())
+	}
+
+	workers := make([]*Worker, 0)
+	for _, w := range g.Workers {
+		workers = append(workers, w.Clone())
+	}
+
+	new_calendar := g.Calendar.Clone()
+	new_temples := g.Temples.Clone()
+	new_research := g.Research.Clone()
+
+	currentBuildings := make([]Building, 0)
+	currentBuildings = append(currentBuildings, g.CurrentBuildings...)
+
+	currentMonuments := make([]Monument, 0)
+	currentMonuments = append(currentMonuments, g.CurrentMonuments...)
+
+	return &Game {
+		Players: players,
+		Workers: workers,
+		Calendar: new_calendar,
+		Temples: new_temples,
+		Research: new_research,
+		NMonuments: g.NMonuments,
+		CurrentMonuments: currentMonuments,
+		AllMonuments: g.AllMonuments,
+		NBuildings: g.NBuildings,
+		CurrentBuildings: currentBuildings,
+		Age1Buildings: g.Age1Buildings,
+		Age2Buildings: g.Age2Buildings,
+		CurrPlayer: g.CurrPlayer,
+		FirstPlayer: g.FirstPlayer,
+		AccumulatedCorn: g.AccumulatedCorn,
+		Age: g.Age,
+		Day: g.Day,
+		ResDays: g.ResDays,
+		PointDays: g.PointDays,
+		Over: g.Over,
+	}
+}
+
+func (g *Game) String() string {
+	var br strings.Builder
+
+	fmt.Fprintf(&br, "Calendar State: \n%s\n", g.Calendar.String(g.Workers))
+
+	for i := 0; i < len(g.Players); i++ {
+		fmt.Fprintf(&br, "%s", g.Players[i].String())
+	}
+	fmt.Fprintf(&br, "Accumulated Corn: %d\n", g.AccumulatedCorn)
+
+	fmt.Fprintf(&br, "%s\n%s", g.Research.String(), g.Temples.String())
+
+	return br.String()
+}
+
+// -- MARK -- Setup methods
 func (g *Game) TileSetup() {
 	// todo: 4 choose 2
 	t := 0
@@ -105,6 +167,7 @@ func (g *Game) TileSetup() {
 	}
 }
 
+// -- MARK -- Flow methods
 func (g *Game) Round() {
 	if g.Over {
 		return 
@@ -230,21 +293,6 @@ func (g *Game) EndGame() {
 	g.Over = true
 }
 
-func (g *Game) String() string {
-	var br strings.Builder
-
-	fmt.Fprintf(&br, "Calendar State: \n%s\n", g.Calendar.String(g.Workers))
-
-	for i := 0; i < len(g.Players); i++ {
-		fmt.Fprintf(&br, "%s", g.Players[i].String())
-	}
-	fmt.Fprintf(&br, "Accumulated Corn: %d\n", g.AccumulatedCorn)
-
-	fmt.Fprintf(&br, "%s\n%s", g.Research.String(), g.Temples.String())
-
-	return br.String()
-}
-
 func (g *Game) FoodDay() {
 	for _, player := range g.Players {
 		paid := 0
@@ -281,6 +329,7 @@ func (g *Game) TakeTurn() {
 	g.DealBuildings()
 }
 
+// -- MARK -- Getters
 func (g *Game) DealBuildings() {
 	for len(g.CurrentBuildings) < g.NBuildings {
 		g.CurrentBuildings = append(g.CurrentBuildings, g.DealBuilding())
@@ -296,17 +345,6 @@ func (g *Game) DealBuildings() {
 			}
 		}
 	}
-
-	// for len(g.CurrentBuildings) < g.NBuildings {
-	// 	var b Building
-	// 	if g.Age == 1 {
-	// 		b, g.Age1Buildings = g.Age1Buildings[0], g.Age1Buildings[1:]
-	// 		g.CurrentBuildings = append(g.CurrentBuildings, b)
-	// 	} else {
-	// 		b, g.Age2Buildings = g.Age2Buildings[0], g.Age2Buildings[1:]
-	// 		g.CurrentBuildings = append(g.CurrentBuildings, b)
-	// 	}
-	// }
 }
 
 func (g *Game) DealBuilding() Building {
@@ -325,222 +363,6 @@ func (g *Game) DealMonuments() {
 		var m Monument
 		m, g.AllMonuments = g.AllMonuments[0], g.AllMonuments[1:]
 		g.CurrentMonuments = append(g.CurrentMonuments, m)
-	}
-}
-
-func (g *Game) GenerateMoves(p *Player) []Move {
-	// all possible moves are:
-	// - retrieve any combination of workers
-	// - place any legal combination of workers
-	
-	/*
-	how to store workers?
-	- option 1: game has a list of workers[]
-		each worker stores its position and its player, as well as if it's off the board or not
-		to retrieve workers, we go
-
-		moves = []
-		make a list for retrieval
-		make a list for placement
-		for each worker
-			if that worker is on a wheel
-				add its id (?) to the retrieval list
-			else
-				add its id to the placement list
-
-		moves += call mrm([empty_move], retrieval)
-
-		moves += call mpm([empty_move], placement, wheels[:])
-		moves -= empty_move
-		return moves
-	*/
-
-	moves := make([]Move, 0)
-
-	// worker ids
-	retrieval := make([]int, 0)
-	placement := make([]int, 0)
-
-	for _, w := range g.Workers {
-		if w.Color == p.Color {
-			if w.Wheel_id != -1 {
-				retrieval = append(retrieval, w.Id)
-			} else if w.Available {
-				placement = append(placement, w.Id)
-			}
-		}
-	}
-
-	fmt.Fprintf(os.Stdout, "\t%s R %v P %v\n", p.Color, retrieval, placement)
-
-	retrieval_moves := append(make([]Move, 0), MakeEmptyRetrievalMove())
-	moves = append(moves, g.MakeRetrievalMoves(retrieval_moves, retrieval)...)
-	
-	placement_moves := append(make([]Move, 0), MakeEmptyPlacementMove())
-	moves = append(moves, g.MakePlacementMoves(placement_moves, placement)...)
-
-	// todo find filter method
-	out := make([]Move, 0)
-	for _, move := range moves {
-		if len(move.Workers) > 0 && move.Corn <= p.Corn {
-			out = append(out, move)
-		}
-	}
-
-	// todo filter by Corn cost
-
-	return out
-}
-
-func (g *Game) GetOptions(worker *Worker) []Option {
-	wheel := g.Calendar.Wheels[worker.Wheel_id]
-	position := wheel.Positions[worker.Position]
-	player := g.GetPlayerByColor(worker.Color)
-
-	options := position.GetOptions(g, player)
-
-	// fmt.Fprintf(os.Stdout, "\tOptions for worker on wheel %s position %d: %v\n", wheel.Name, worker.Position, len(options))
-
-	return options
-}
-
-/*
-	make_retrieval_moves(moves, retrieval)
-		if retrieval = []:
-			return moves
-		i = retrieval[0]
-		r = retrieval[1:]
-		m = moves[:]
-		for j in moves:
-			m.Append(j + i)
-		return make_retrieval_moves(m, r)
-*/
-func (g *Game) MakeRetrievalMoves(moves []Move, retrieval []int) []Move {
-	if len(retrieval) == 0 {
-		return moves
-	}
-
-	out := make([]Move, 0)
-	out = append(out, moves...)
-	
-	for _, w := range retrieval {
-		worker := g.GetWorker(w)
-
-		m := make([]Move, 0)
-		m = append(m, moves...)
-
-		// fmt.Fprintf(os.Stdout, "\t\tR %v W %v\n", retrieval, w)
-		rest := except(retrieval, w)
-		// fmt.Fprintf(os.Stdout, "\t\tRest %v\n", rest)
-
-		for i := 0; i < len(moves); i++ {
-			new_game := g.Clone()
-			new_game.Calendar.Execute(moves[i], new_game)
-			for _, option := range new_game.GetOptions(worker) {
-				// if worker.Wheel_id != 4 {
-				// 	for j := 1; j < worker.Position; j++ {
-
-				// 		m = append(m, moves[i].Retrieve(w, &SpecificPosition {
-				// 			Wheel_id: worker.Wheel_id,
-				// 			Corn: j,
-				// 			Execute: option,
-				// 		}, worker.Position - j))
-				// 	}
-				// }
-				m = append(m, moves[i].Retrieve(w, &SpecificPosition {
-					Wheel_id: worker.Wheel_id,
-					Corn: worker.Position,
-					Execute: option,
-				}, 0))
-			}
-		}
-
-		out = append(out, g.MakeRetrievalMoves(m, rest)...)
-	}
-	return out
-}
-
-/*
-	make_placement_moves(moves, placement, wheels)
-		if placement = []:
-			return moves
-		
-		i = placement[0]
-		p = placement[1:]
-		m = moves[:]
-
-		for j in moves:
-			ws = wheels[:]
-			ws.Execute(j)
-			for p in ws.Legal_places()
-				m.Append(j + place(p, i))
-
-		return mpm(m, p, wheels)
-*/
-func (g *Game) MakePlacementMoves(moves []Move, placement []int) []Move {
-	// fmt.Fprintf(os.Stdout, "\nMakePlacementMoves %v %v\n", len(moves), placement)
-	if len(placement) == 0 {
-		return moves
-	}
-
-	worker := placement[0]
-	rest := placement[1:]
-
-	l := len(moves)
-	for i := 0; i < l; i++ {
-		new_game := g.Clone()
-		new_game.Calendar.Execute(moves[i], new_game)
-
-		for _, position := range new_game.Calendar.LegalPositions() {
-			moves = append(moves, moves[i].Place(worker, position))
-		}
-	}
-
-	return g.MakePlacementMoves(moves, rest)
-}
-
-func (g *Game) Clone() *Game {
-	players := make([]*Player, 0)
-	for _, p := range g.Players {
-		players = append(players, p.Clone())
-	}
-
-	workers := make([]*Worker, 0)
-	for _, w := range g.Workers {
-		workers = append(workers, w.Clone())
-	}
-
-	new_calendar := g.Calendar.Clone()
-	new_temples := g.Temples.Clone()
-	new_research := g.Research.Clone()
-
-	currentBuildings := make([]Building, 0)
-	currentBuildings = append(currentBuildings, g.CurrentBuildings...)
-
-	currentMonuments := make([]Monument, 0)
-	currentMonuments = append(currentMonuments, g.CurrentMonuments...)
-
-	return &Game {
-		Players: players,
-		Workers: workers,
-		Calendar: new_calendar,
-		Temples: new_temples,
-		Research: new_research,
-		NMonuments: g.NMonuments,
-		CurrentMonuments: currentMonuments,
-		AllMonuments: g.AllMonuments,
-		NBuildings: g.NBuildings,
-		CurrentBuildings: currentBuildings,
-		Age1Buildings: g.Age1Buildings,
-		Age2Buildings: g.Age2Buildings,
-		CurrPlayer: g.CurrPlayer,
-		FirstPlayer: g.FirstPlayer,
-		AccumulatedCorn: g.AccumulatedCorn,
-		Age: g.Age,
-		Day: g.Day,
-		ResDays: g.ResDays,
-		PointDays: g.PointDays,
-		Over: g.Over,
 	}
 }
 
