@@ -237,6 +237,7 @@ func (g *Game) TakeTurn() {
 	fmt.Fprintf(os.Stdout, "Playing move %s for %s\n", move.String(), player.color)
 	
 	g.calendar.Execute(move, g)
+	player.corn -= move.corn
 }
 
 func (g *Game) DealBuildings() {
@@ -306,7 +307,7 @@ func (g *Game) GenerateMoves(p *Player) []Move {
 	// todo find filter method
 	out := make([]Move, 0)
 	for _, move := range moves {
-		if len(move.workers) > 0 {
+		if len(move.workers) > 0 && move.corn <= p.corn {
 			out = append(out, move)
 		}
 	}

@@ -17,7 +17,7 @@ Things left to do
 - [x] deal out age 2 buildings
 - [x] add corn exchange
 - [x] add pay corn to get less
-- [ ] pay corn for moves (and only generate playable moves)
+- [x] pay corn for moves (and only generate playable moves)
 - [ ] workers that fall off come back
 - [ ] add theo 1
 - [ ] add second building
