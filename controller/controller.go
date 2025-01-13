@@ -36,6 +36,7 @@ func MakeController(rand *rand.Rand) *Controller {
         Age2Buildings: age2Buildings,
         AllMonuments: monuments,
         Tiles: tiles,
+        Rand: rand,
     }
 
     game.Init()
