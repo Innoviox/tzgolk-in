@@ -168,28 +168,6 @@ func (g *Game) TileSetup() {
 }
 
 // -- MARK -- Flow methods
-func (g *Game) Round() {
-	if g.Over {
-		return 
-	}
-
-	g.CurrPlayer = g.FirstPlayer
-	for i := 0; i < len(g.Players); i++ {
-		g.TakeTurn()
-		g.CurrPlayer = (g.CurrPlayer + 1) % len(g.Players)
-	}
-
-	if g.Calendar.FirstPlayer != -1 {
-		g.FirstPlayerSpace()
-	}
-
-	// todo food days
-	g.Rotate()
-
-	fmt.Fprintf(os.Stdout, "End of round\n")
-	fmt.Fprintf(os.Stdout, "%s", g.String())
-}
-
 func (g *Game) FirstPlayerSpace() {
 	fmt.Fprintf(os.Stdout, "Firstplayering");
 	worker := g.GetWorker(g.Calendar.FirstPlayer)

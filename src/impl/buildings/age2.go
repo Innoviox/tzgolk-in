@@ -4,7 +4,7 @@ import (
     "fmt"
     "math/rand"
     . "tzgolkin/model"
-    . "tzgolkin/model/impl/wheels"
+    . "tzgolkin/impl/wheels"
 )
 
 func Age2Building1() Building {

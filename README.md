@@ -1,5 +1,19 @@
 # tzgolk-in
 
+# Needed for Complete Gameplay 
+
+- [ ] beg for corn
+- [ ] pay corn to go lower (first attempt broke)
+- [ ] uxmal exchange (first attempt broke)
+
+# Current Goal: Full-screeen display
+
+- [ ] 
+
+
+
+
+
 Goals
 
 Things left to do
