@@ -22,8 +22,8 @@ Things left to do
 - [x] add theo 1
 - [x] add second building
 - [x] add "player doesn't pay for 1 worker" and "player pays 1 food for worker" effects
-- [ ] display research 
-- [ ] display temples
+- [x] display research 
+- [x] display temples
 - [ ]  confirm all of research is there
 - [ ] add building color
 - [ ] add monuments and set up currentMonuments

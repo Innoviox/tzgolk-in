@@ -3,6 +3,7 @@ package model
 import (
 	"fmt"
 	"os"
+	"strings"
 )
 
 type Temple struct {
@@ -173,4 +174,60 @@ func (t *Temple) IsHighest(p *Player) int {
 	}
 
 	return highest
+}
+
+func (t *Temples) String() string {
+	var br strings.Builder
+
+	fmt.Fprintf(&br, "----Temples------------\n")
+
+	mostSteps := 0
+	for _, temple := range t.temples {
+		if temple.steps > mostSteps {
+			mostSteps = temple.steps
+		}
+	}
+
+	var steps [][]strings.Builder
+	for i := 0; i < mostSteps + 1; i++ {
+		row := make([]strings.Builder, 0)
+		for j := 0; j < 3; j++ {
+			row = append(row, strings.Builder{})
+		}
+
+		steps = append(steps, row)
+	}
+
+	for i, temple := range t.temples {
+		for c, step := range temple.playerLocations {
+			fmt.Fprintf(&steps[step][i], "%s", c.String())
+		}
+	}
+
+	for i := mostSteps; i >= 0; i-- {
+		for j := 0; j < 3; j++ {
+			if i == t.temples[j].steps {
+				fmt.Fprintf(&br, " %s---------- ", string(TempleDebug[j]))
+			} else if i > t.temples[j].steps {
+				fmt.Fprintf(&br, "             ")
+			} else {
+				res, ok := t.temples[j].resources[i]
+				if ok {
+					fmt.Fprintf(&br, " |%s|", string(ResourceDebug[int(res)]))
+				} else {
+					fmt.Fprintf(&br, " | |")
+				}
+
+				fmt.Fprintf(&br, "%-4s|", steps[i][j].String())
+
+				pts := t.temples[j].points[i]
+				fmt.Fprintf(&br, "%2d| ", pts)
+			}
+		}
+		fmt.Fprintf(&br, "\n")
+	}
+
+	steps = nil
+
+	return br.String()
 }

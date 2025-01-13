@@ -30,7 +30,7 @@ func ChichenSpots() []ChichenSpot {
 }
 
 
-func ChichenX(n int) Options {
+func ChichenX(n int, canForesight bool) Options {
 	spot := ChichenSpots()[n]
 	return func(g *Game, p *Player) []Option {
 		ChichenHelper := func () []Option {
@@ -70,13 +70,13 @@ func ChichenX(n int) Options {
 
 		options := make([]Option, 0)
 
-		if g.research.Foresight(p.color) {
+		if canForesight && g.research.Foresight(p.color) {
 			if n < 8 {
-				options = append(options, ChichenX(n + 1)(g, p)...)
+				options = append(options, ChichenX(n + 1, false)(g, p)...)
 			} else {
 				// mimic mirror
 				for i := 0; i < 8; i++ {
-					options = append(options, ChichenX(i)(g, p)...)
+					options = append(options, ChichenX(i, false)(g, p)...)
 				}
 			}
 		}
@@ -115,7 +115,7 @@ func Chichen() []Options {
 	options = append(options, Chichen0)
 
 	for i := range ChichenSpots() {
-		options = append(options, ChichenX(i))
+		options = append(options, ChichenX(i, true))
 	}
 
 	return options

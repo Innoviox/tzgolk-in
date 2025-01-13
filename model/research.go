@@ -246,3 +246,41 @@ func (r *Research) GetOptionsHelper(g *Game, p *Player, resources [4]int, levels
 func (r *Research) FreeResearch(c Color, s Science) {
 	r.levels[c][s] += 1
 }
+
+func (r *Research) String() string {
+	var br strings.Builder
+
+	fmt.Fprintf(&br, "----Research------------\n")
+
+	var matrix [][]strings.Builder
+
+	for j := 0; j < 4; j++ {
+		row := make([]strings.Builder, 0)
+		for k := 0; k < 4; k++ {
+			row = append(row, strings.Builder{})
+		}
+		matrix = append(matrix, row)
+	}
+
+	for c, l := range r.levels {
+		for s, n := range l {
+			fmt.Fprintf(&matrix[int(s)][n], "%s", c.String())
+		}
+	}
+	
+	for i := 0; i < 4; i++ {
+		fmt.Fprintf(&br, "|%s |", string(ResearchDebug[i]))
+
+		for j := 0; j < 4; j++ {
+			fmt.Fprintf(&br, "%-4s|", matrix[i][j].String())
+		}
+
+		fmt.Fprintf(&br, "\n")
+	}
+
+	fmt.Fprintf(&br, "------------------------\n")
+
+	matrix = nil
+
+	return br.String()
+}

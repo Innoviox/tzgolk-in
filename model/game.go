@@ -123,6 +123,8 @@ func (g *Game) Round() {
 		fmt.Fprintf(os.Stdout, "%s", g.players[i].String())
 	}
 	fmt.Fprintf(os.Stdout, "Accumulated corn: %d\n", g.accumulatedCorn)
+
+	fmt.Fprintf(os.Stdout, "%s\n%s", g.research.String(), g.temples.String())
 }
 
 func (g *Game) FirstPlayer() {
