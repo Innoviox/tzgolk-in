@@ -96,7 +96,7 @@ func (r *Research) Irrigation(c Color) bool {
 }
 
 func (r *Research) ResourceBonus(c Color, res Resource) int {
-	if r.HasLevel(c, Resources, int(res)) {
+	if r.HasLevel(c, Resources, int(res) + 1) {
 		return 1
 	} else {
 		return 0
@@ -182,9 +182,9 @@ func (r *Research) GetOptionsHelper(g *Game, p *Player, resources [4]int, levels
 
 				if n == 1 {
 					options = append(options, Option{
-						Execute: func() {
+						Execute: func(g *Game, p *Player) {
 							p.resources = newResources
-							r.levels[p.color] = newLevels
+							g.research.levels[p.color] = newLevels
 						},
 						description: GenerateResearchDescription(resources, newResources, levels, newLevels),
 					})
@@ -201,7 +201,7 @@ func (r *Research) GetOptionsHelper(g *Game, p *Player, resources [4]int, levels
 				switch Science(s) {
 				case Agriculture:
 					advancedOptions = append(advancedOptions, g.temples.GainTempleStep(p, Option{
-						Execute: func() {
+						Execute: func(g *Game, p *Player) {
 							p.resources = newResources
 						},
 						description: fmt.Sprintf("[agr tier 4] pay %s", GeneratePaymentDescription(resources, newResources)),
@@ -210,7 +210,7 @@ func (r *Research) GetOptionsHelper(g *Game, p *Player, resources [4]int, levels
 					for i := 0; i < 3; i++ {
 						for j := 0; j < 3; j++ {
 							advancedOptions = append(advancedOptions, Option{
-								Execute: func() {
+								Execute: func(g *Game, p *Player) {
 									p.resources = newResources
 									p.resources[i] += 1
 									p.resources[j] += 1
@@ -221,7 +221,7 @@ func (r *Research) GetOptionsHelper(g *Game, p *Player, resources [4]int, levels
 					}
 				case Construction:
 					advancedOptions = append(advancedOptions, Option{
-						Execute: func() {
+						Execute: func(g *Game, p *Player) {
 							p.resources = newResources
 							p.points += 3
 						},
@@ -229,7 +229,7 @@ func (r *Research) GetOptionsHelper(g *Game, p *Player, resources [4]int, levels
 					})
 				case Theology:
 					advancedOptions = append(advancedOptions, Option{
-						Execute: func() {
+						Execute: func(g *Game, p *Player) {
 							p.resources = newResources
 							p.resources[Skull] += 1
 						},
@@ -244,9 +244,9 @@ func (r *Research) GetOptionsHelper(g *Game, p *Player, resources [4]int, levels
 				for _, o1 := range advancedOptions {
 					for _, o2 := range r.GetOptionsHelper(g, p, resources, levels, n - 1, free) {
 						options = append(options, Option{
-							Execute: func() {
-								o1.Execute()
-								o2.Execute()
+							Execute: func(g *Game, p *Player) {
+								o1.Execute(g, p)
+								o2.Execute(g, p)
 							},
 							description: fmt.Sprintf("%s; %s", o1.description, o2.description),
 						})

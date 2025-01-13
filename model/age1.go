@@ -10,7 +10,7 @@ func Building1() Building {
         cost: [4]int{1, 0, 0, 0},
         GetEffects: func (g *Game, p *Player) []Option {
             return []Option {Option{
-                Execute: func() {
+                Execute: func(g *Game, p *Player) {
                     p.freeWorkers += 1
                 },
                 description: "1 free worker",
@@ -26,7 +26,7 @@ func Building2() Building {
         cost: [4]int{1, 2, 0, 0},
         GetEffects: func (g *Game, p *Player) []Option {
             return []Option {Option{
-                Execute: func() {
+                Execute: func(g *Game, p *Player) {
                     g.temples.Step(p, 0, 1)
                     g.temples.Step(p, 2, 1)
                 },
@@ -53,7 +53,7 @@ func Building4() Building {
         cost: [4]int{2, 0, 0, 0},
         GetEffects: func (g *Game, p *Player) []Option {
             return []Option {Option{
-                Execute: func() {
+                Execute: func(g *Game, p *Player) {
                     g.research.FreeResearch(p.color, Agriculture)
                 },
                 description: "free agr",
@@ -69,7 +69,7 @@ func Building5() Building {
         cost: [4]int{4, 0, 0, 0},
         GetEffects: func (g *Game, p *Player) []Option {
             return []Option {Option{
-                Execute: func() {
+                Execute: func(g *Game, p *Player) {
                     p.workerDeduction += 1
                 }, 
                 description: "1 worker deduction",
@@ -85,7 +85,7 @@ func Building6() Building {
         cost: [4]int{0, 0, 1, 0},
         GetEffects: func (g *Game, p *Player) []Option {
             return []Option {Option{
-                Execute: func() {
+                Execute: func(g *Game, p *Player) {
                    g.research.FreeResearch(p.color, Construction)
                 },
                 description: "free const",
@@ -118,7 +118,7 @@ func Building8() Building {
         cost: [4]int{2, 1, 0, 0},
         GetEffects: func (g *Game, p *Player) []Option {
             return []Option {Option{
-                Execute: func() {
+                Execute: func(g *Game, p *Player) {
                     g.temples.Step(p, 0, 1)
                     g.temples.Step(p, 1, 1)
                 },
@@ -135,7 +135,7 @@ func Building9() Building {
         cost: [4]int{1, 1, 0, 0},
         GetEffects: func (g *Game, p *Player) []Option {
             return []Option {Option{
-                Execute: func() {
+                Execute: func(g *Game, p *Player) {
                     g.research.FreeResearch(p.color, Resources)
                     p.corn += 1
                 },
@@ -152,7 +152,7 @@ func Building10() Building {
         cost: [4]int{0, 1, 1, 0},
         GetEffects: func (g *Game, p *Player) []Option {
             return []Option {Option{
-                Execute: func() {
+                Execute: func(g *Game, p *Player) {
                     g.research.FreeResearch(p.color, Theology)
                     g.temples.Step(p, 2, 1)
                 },
@@ -179,7 +179,7 @@ func Building12() Building {
         cost: [4]int{2, 1, 0, 0},
         GetEffects: func (g *Game, p *Player) []Option {
             return []Option {Option{
-                Execute: func() {
+                Execute: func(g *Game, p *Player) {
                     g.research.FreeResearch(p.color, Resources)
                     p.resources[Gold] += 1
                 },
@@ -196,7 +196,7 @@ func Building13() Building {
         cost: [4]int{3, 0, 0, 0},
         GetEffects: func (g *Game, p *Player) []Option {
             return []Option {Option{
-                Execute: func() {
+                Execute: func(g *Game, p *Player) {
                     g.research.FreeResearch(p.color, Agriculture)
                     p.resources[Stone] += 1
                 },

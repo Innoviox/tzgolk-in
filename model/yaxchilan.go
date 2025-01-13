@@ -10,7 +10,7 @@ func Yaxchilan0(g *Game, p *Player) []Option {
 
 func Yaxchilan1(g *Game, p *Player) []Option {
 	return []Option {Option{
-		Execute: func() {
+		Execute: func(g *Game, p *Player) {
 			p.resources[Wood] += 1 + g.research.ResourceBonus(p.color, Wood)
 		},
 		description: fmt.Sprintf("1 + %d wood", g.research.ResourceBonus(p.color, Wood)),
@@ -19,7 +19,7 @@ func Yaxchilan1(g *Game, p *Player) []Option {
 
 func Yaxchilan2(g *Game, p *Player) []Option {
 	return []Option {Option{
-		Execute: func () {
+		Execute: func (g *Game, p *Player) {
 			p.resources[Stone] += 1 + g.research.ResourceBonus(p.color, Stone)
 			p.corn += 1
 		},
@@ -29,7 +29,7 @@ func Yaxchilan2(g *Game, p *Player) []Option {
 
 func Yaxchilan3(g *Game, p *Player) []Option {
 	return []Option {Option{
-		Execute: func () {
+		Execute: func (g *Game, p *Player) {
 			p.resources[Gold] += 1 + g.research.ResourceBonus(p.color, Gold)
 			p.corn += 1
 		},
@@ -39,7 +39,7 @@ func Yaxchilan3(g *Game, p *Player) []Option {
 
 func Yaxchilan4(g *Game, p *Player) []Option {
 	return []Option {Option{
-		Execute: func () {
+		Execute: func (g *Game, p *Player) {
 			p.resources[Skull] += 1 + g.research.ResourceBonus(p.color, Skull)
 		},
 		description: fmt.Sprintf("1 + %d skull", g.research.ResourceBonus(p.color, Skull)),
@@ -48,7 +48,7 @@ func Yaxchilan4(g *Game, p *Player) []Option {
 
 func Yaxchilan5(g *Game, p *Player) []Option {
 	return []Option {Option{
-		Execute: func () {
+		Execute: func (g *Game, p *Player) {
 			p.resources[Gold] += 1 + g.research.ResourceBonus(p.color, Gold)
 			p.resources[Stone] += 1 + g.research.ResourceBonus(p.color, Stone)
 			p.corn += 2

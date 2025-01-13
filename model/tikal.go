@@ -28,9 +28,9 @@ func Tikal4(g *Game, p *Player) []Option {
 
 		for _, o2 := range g.GetBuildingOptions(p, o.buildingNum, false) {
 			options = append(options, Option{
-				Execute: func() {
-					o.Execute()
-					o2.Execute()
+				Execute: func(g *Game, p *Player) {
+					o.Execute(g, p)
+					o2.Execute(g, p)
 				},
 				description: fmt.Sprintf("%s, %s [no res]", o.description, o2.description),
 			})
@@ -53,7 +53,7 @@ func Tikal5(g *Game, p *Player) []Option {
 						continue
 					}
 					options = append(options, Option{
-						Execute: func() {
+						Execute: func(g *Game, p *Player) {
 							p.resources[i] -= 1
 							g.temples.Step(p, j, 1)
 							g.temples.Step(p, k, 1)

@@ -40,7 +40,7 @@ func ChichenX(n int, canForesight bool) Options {
 				// if blocK: generate option for gaining each block
 				for i := 0; i < 3; i++ {
 					options = append(options, Option{
-						Execute: func() {
+						Execute: func(g *Game, p *Player) {
 							g.temples.Step(p, spot.temple, 1)
 							p.points += spot.points
 							p.resources[i] += 1
@@ -54,7 +54,7 @@ func ChichenX(n int, canForesight bool) Options {
 			} else {
 				// just generate option for points
 				options = append(options, Option{
-					Execute: func() {
+					Execute: func(g *Game, p *Player) {
 						g.temples.Step(p, spot.temple, 1)
 						p.points += spot.points
 						p.resources[Skull] -= 1
@@ -71,7 +71,7 @@ func ChichenX(n int, canForesight bool) Options {
 		options := make([]Option, 0)
 
 		options = append(options, Option{
-			Execute: func() {
+			Execute: func(g *Game, p *Player) {
 
 			},
 			description: "skip",
@@ -99,9 +99,9 @@ func ChichenX(n int, canForesight bool) Options {
 					for _, o := range ChichenHelper() {
 						// add "spend block for temple" to each option
 						options = append(options, g.temples.GainTempleStep(p, Option {
-							Execute: func() {
+							Execute: func(g *Game, p *Player) {
 								p.resources[i] -= 1
-								o.Execute()
+								o.Execute(g, p)
 							},
 							description: fmt.Sprintf("%s, [theo] pay 1 %s", o.description, string(ResourceDebug[i])),
 						}, 1)...)

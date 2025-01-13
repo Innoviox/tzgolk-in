@@ -13,7 +13,7 @@ func Uxmal1(g *Game, p *Player) []Option {
 
 	if p.corn > 3 {
 		options = append(options, g.temples.GainTempleStep(p, Option{
-			Execute: func() {
+			Execute: func(g *Game, p *Player) {
 				p.corn -= 3
 			},
 			description: "pay 3 corn",
@@ -34,7 +34,7 @@ func Uxmal2(g *Game, p *Player) []Option {
 	options := make([]Option, 0)
 	// for _, o := range cornOptions {
 	// 	options = append(options, Option{
-	// 		Execute: func() {
+	// 		Execute: func(g *Game, p *Player) {
 	// 			p.corn = o.corn
 	// 			p.resources = o.resources
 	// 		},
@@ -89,7 +89,7 @@ func GenerateCornExchanges(corn int, base []CornOption) []CornOption {
 
 func Uxmal3(g *Game, p *Player) []Option {
 	return []Option{Option{
-		Execute: func() {
+		Execute: func(g *Game, p *Player) {
 			g.UnlockWorker(p.color)
 		},
 		description: "unlock worker",
@@ -104,9 +104,9 @@ func Uxmal4(g *Game, p *Player) []Option {
 		if p.corn >= cost {
 			for _, effect := range b.GetEffects(g, p) {
 				options = append(options, Option{
-					Execute: func() {
+					Execute: func(g *Game, p *Player) {
 						p.corn -= cost
-						effect.Execute()
+						effect.Execute(g, p)
 
 						g.research.Built(p)
 						
@@ -143,9 +143,9 @@ func Uxmal5(g *Game, p *Player) []Option {
 
 	for _, option := range allOptions {
 		options = append(options, Option{
-			Execute: func() {
+			Execute: func(g *Game, p *Player) {
 				p.corn -= 1
-				option.Execute()
+				option.Execute(g, p)
 			},
 			description: fmt.Sprintf("[mirror] pay 1 corn, %s", option.description),
 		})

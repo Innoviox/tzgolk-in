@@ -12,7 +12,7 @@ func remove[T any](slice []T, s int) []T {
 }
 
 type Option struct {
-	Execute func()
+	Execute func(*Game, *Player)
 	description string
 	buildingNum int
 }

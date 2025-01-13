@@ -11,7 +11,7 @@ func Age2Building1() Building {
         cost: [4]int{0, 0, 2, 0},
         GetEffects: func (g *Game, p *Player) []Option {
             return []Option {Option{
-                Execute: func() {
+                Execute: func(g *Game, p *Player) {
                     g.temples.Step(p, 2, 2)
                     p.points += 3
                 },
@@ -28,7 +28,7 @@ func Age2Building2() Building {
         cost: [4]int{0, 2, 0, 0},
         GetEffects: func (g *Game, p *Player) []Option {
             return []Option {Option{
-                Execute: func() {
+                Execute: func(g *Game, p *Player) {
                     g.temples.Step(p, 0, 2)
                     p.points += 2
                 },
@@ -45,7 +45,7 @@ func Age2Building3() Building {
         cost: [4]int{0, 0, 3, 0},
         GetEffects: func (g *Game, p *Player) []Option {
             return []Option {Option{
-                Execute: func() {
+                Execute: func(g *Game, p *Player) {
                     g.temples.Step(p, 1, 2)
                 },
                 description: "2 YT, 4 points",
@@ -72,7 +72,7 @@ func Age2Building5() Building {
         cost: [4]int{0, 2, 1, 0},
         GetEffects: func (g *Game, p *Player) []Option {
             return []Option {Option{
-                Execute: func() {
+                Execute: func(g *Game, p *Player) {
                     g.research.FreeResearch(p.color, Theology)
                     g.temples.Step(p, 0, 1)
                     g.temples.Step(p, 2, 1)
@@ -92,8 +92,8 @@ func Age2Building6() Building {
             options := make([]Option, 0)
             for _, o := range g.research.GetOptions(g, p, 1, true) {
                 options = append(options, Option{
-                    Execute: func() {
-                        o.Execute()
+                    Execute: func(g *Game, p *Player) {
+                        o.Execute(g, p)
                         p.resources[Stone] += 1
                     },
                     description: fmt.Sprintf("%s, 1 stone", o.description),
@@ -112,7 +112,7 @@ func Age2Building7() Building {
         cost: [4]int{1, 1, 1, 0},
         GetEffects: func (g *Game, p *Player) []Option {
             return []Option {Option{
-                Execute: func() {
+                Execute: func(g *Game, p *Player) {
                     g.UnlockWorker(p.color)
                     p.points += 6
                 },
@@ -132,8 +132,8 @@ func Age2Building8() Building {
             options := make([]Option, 0)
             for _, o := range Uxmal2(g, p) {
                 options = append(options, Option{
-                    Execute: func() {
-                        o.Execute()
+                    Execute: func(g *Game, p *Player) {
+                        o.Execute(g, p)
                         p.points += 6
                     },
                     description: fmt.Sprintf("%s, 6 points", o.description),
@@ -141,7 +141,7 @@ func Age2Building8() Building {
             }
 
             options = append(options, Option{
-                Execute: func() {
+                Execute: func(g *Game, p *Player) {
                     p.points += 6
                 },
                 description: "6 points",
@@ -159,7 +159,7 @@ func Age2Building9() Building {
         cost: [4]int{1, 0, 2, 0},
         GetEffects: func (g *Game, p *Player) []Option {
             return []Option {Option{
-                Execute: func() {
+                Execute: func(g *Game, p *Player) {
                     p.points += 8
                 },
                 description: "8 points",
@@ -175,7 +175,7 @@ func Age2Building10() Building {
         cost: [4]int{2, 0, 0, 0},
         GetEffects: func (g *Game, p *Player) []Option {
             return []Option {Option{
-                Execute: func() {
+                Execute: func(g *Game, p *Player) {
                     p.freeWorkers += 3
                 },
                 description: "3 free workers",
@@ -191,7 +191,7 @@ func Age2Building11() Building {
         cost: [4]int{1, 2, 1, 0},
         GetEffects: func (g *Game, p *Player) []Option {
             return []Option {Option{
-                Execute: func() {
+                Execute: func(g *Game, p *Player) {
                     for i := 0; i < 3; i++ {
                         g.temples.Step(p, i, 1)
                     }
@@ -212,8 +212,8 @@ func Age2Building12() Building {
             options := make([]Option, 0)
             for _, o := range g.research.GetOptions(g, p, 1, true) {
                 options = append(options, Option{
-                    Execute: func() {
-                        o.Execute()
+                    Execute: func(g *Game, p *Player) {
+                        o.Execute(g, p)
                         p.resources[Skull] += 1
                     },
                     description: fmt.Sprintf("%s, 1 skull", o.description),
@@ -231,7 +231,7 @@ func Age2Building13() Building {
         cost: [4]int{0, 1, 1, 0},
         GetEffects: func (g *Game, p *Player) []Option {
             return []Option {Option{
-                Execute: func() {
+                Execute: func(g *Game, p *Player) {
                     g.research.FreeResearch(p.color, Construction)
                     p.points += 3
                 },
@@ -270,8 +270,8 @@ func Age2Building16() Building {
             options := make([]Option, 0)
             // for _, o := range Uxmal5(g, p) {
             //     options = append(options, Option{
-            //         Execute: func() {
-            //             o.Execute()
+            //         Execute: func(g *Game, p *Player) {
+            //             o.Execute(g, p)
             //             p.points += 2
             //         },
             //         description: fmt.Sprintf("%s, 2 points", o.description),
@@ -291,8 +291,8 @@ func Age2Building17() Building {
             options := make([]Option, 0)
             for _, o := range g.research.GetOptions(g, p, 1, true) {
                 options = append(options, Option{
-                    Execute: func() {
-                        o.Execute()
+                    Execute: func(g *Game, p *Player) {
+                        o.Execute(g, p)
                         p.corn += 6
                     },
                     description: fmt.Sprintf("%s, 6 corn", o.description),
@@ -312,8 +312,8 @@ func Age2Building18() Building {
             options := make([]Option, 0)
             for _, o := range g.research.GetOptions(g, p, 1, true) {
                 options = append(options, Option{
-                    Execute: func() {
-                        o.Execute()
+                    Execute: func(g *Game, p *Player) {
+                        o.Execute(g, p)
                         p.resources[Gold] += 1
                     },
                     description: fmt.Sprintf("%s, 1 G", o.description),

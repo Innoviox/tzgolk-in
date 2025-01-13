@@ -68,12 +68,12 @@ func (g *Game) GetBuildingOptions(p *Player, exclude int, useResearch bool) []Op
 		for _, cost := range costs {
 			for _, effect := range b.GetEffects(g, p) {
 				options = append(options, Option{
-					Execute: func() {
+					Execute: func(g *Game, p *Player) {
 						for i := 0; i < 4; i++ {
 							p.resources[i] -= cost[i]
 						}
 
-						effect.Execute()
+						effect.Execute(g, p)
 
 						if useResearch {
 							g.research.Built(p)
@@ -99,7 +99,7 @@ func (g *Game) GetMonumentOptions(p *Player) []Option {
 	for _, m := range g.currentMonuments {
 		if m.CanBuild(p) {
 			options = append(options, Option{
-				Execute: func() {
+				Execute: func(g *Game, p *Player) {
 					for i := 0; i < 4; i++ {
 						p.resources[i] -= m.cost[i]
 					}
