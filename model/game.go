@@ -121,14 +121,11 @@ func (g *Game) Round() {
 		g.currPlayer = (g.currPlayer + 1) % len(g.players)
 	}
 
-	g.DealBuildings()
-
 	if g.calendar.firstPlayer != -1 {
 		g.FirstPlayer()
 	}
 
 	// todo food days
-	fmt.Fprintf(os.Stdout, "Rotating Calendar\n")
 	g.Rotate()
 
 	fmt.Fprintf(os.Stdout, "End of round\n")
@@ -136,10 +133,15 @@ func (g *Game) Round() {
 }
 
 func (g *Game) FirstPlayer() {
+	fmt.Fprintf(os.Stdout, "Firstplayering");
 	worker := g.GetWorker(g.calendar.firstPlayer)
+	fmt.Fprintf(os.Stdout, "Firstplayering %s\n", worker.color)
 	worker.available = true
+	worker.wheel_id = -1
+	worker.position = -1
 	g.calendar.firstPlayer = -1
 	player := g.GetPlayerByColor(worker.color)
+	fmt.Fprintf(os.Stdout, "giving player %d corn", player.corn)
 	player.corn += g.accumulatedCorn
 	g.accumulatedCorn = 0
 
@@ -180,6 +182,7 @@ func (g *Game) FirstPlayer() {
 }
 
 func (g *Game) Rotate() {
+	fmt.Fprintf(os.Stdout, "Rotating Calendar\n")
 	g.calendar.Rotate(g)
 	g.accumulatedCorn += 1
 	g.day += 1
@@ -280,19 +283,46 @@ func (g *Game) TakeTurn() {
 	
 	g.calendar.Execute(move, g)
 	player.corn -= move.corn
+	g.DealBuildings()
 }
 
 func (g *Game) DealBuildings() {
 	for len(g.currentBuildings) < g.nBuildings {
-		var b Building
-		if g.age == 1 {
-			b, g.age1Buildings = g.age1Buildings[0], g.age1Buildings[1:]
-			g.currentBuildings = append(g.currentBuildings, b)
-		} else {
-			b, g.age2Buildings = g.age2Buildings[0], g.age2Buildings[1:]
-			g.currentBuildings = append(g.currentBuildings, b)
+		g.currentBuildings = append(g.currentBuildings, g.DealBuilding())
+	}
+
+	for i := 0; i < g.nBuildings; i++ {
+		b := g.currentBuildings[i]
+		for _, p := range g.players {
+			for _, b2 := range p.buildings {
+				if b2.id == b.id {
+					g.currentBuildings[i] = g.DealBuilding()
+				}
+			}
 		}
 	}
+
+	// for len(g.currentBuildings) < g.nBuildings {
+	// 	var b Building
+	// 	if g.age == 1 {
+	// 		b, g.age1Buildings = g.age1Buildings[0], g.age1Buildings[1:]
+	// 		g.currentBuildings = append(g.currentBuildings, b)
+	// 	} else {
+	// 		b, g.age2Buildings = g.age2Buildings[0], g.age2Buildings[1:]
+	// 		g.currentBuildings = append(g.currentBuildings, b)
+	// 	}
+	// }
+}
+
+func (g *Game) DealBuilding() Building {
+	var b Building
+	if g.age == 1 {
+		b, g.age1Buildings = g.age1Buildings[0], g.age1Buildings[1:]
+	} else {
+		b, g.age2Buildings = g.age2Buildings[0], g.age2Buildings[1:]
+	}
+
+	return b
 }
 
 func (g *Game) DealMonuments() {
@@ -411,7 +441,9 @@ func (g *Game) MakeRetrievalMoves(moves []Move, retrieval []int) []Move {
 		// fmt.Fprintf(os.Stdout, "\t\tRest %v\n", rest)
 
 		for i := 0; i < len(moves); i++ {
-			for _, option := range g.GetOptions(worker) {
+			new_game := g.Clone()
+			new_game.calendar.Execute(moves[i], new_game)
+			for _, option := range new_game.GetOptions(worker) {
 				// if worker.wheel_id != 4 {
 				// 	for j := 1; j < worker.position; j++ {
 
@@ -489,17 +521,27 @@ func (g *Game) Clone() *Game {
 	new_temples := g.temples.Clone()
 	new_research := g.research.Clone()
 
+	currentBuildings := make([]Building, 0)
+	for _, b := range g.currentBuildings {
+		currentBuildings = append(currentBuildings, b)
+	}
+
+	currentMonuments := make([]Monument, 0)
+	for _, m := range g.currentMonuments {
+		currentMonuments = append(currentMonuments, m)
+	}
+
 	return &Game {
 		players: players,
 		workers: workers,
-		calendar: &new_calendar,
+		calendar: new_calendar,
 		temples: new_temples,
 		research: new_research,
 		nMonuments: g.nMonuments,
-		currentMonuments: g.currentMonuments,
+		currentMonuments: currentMonuments,
 		allMonuments: g.allMonuments,
 		nBuildings: g.nBuildings,
-		currentBuildings: g.currentBuildings,
+		currentBuildings: currentBuildings,
 		age1Buildings: g.age1Buildings,
 		age2Buildings: g.age2Buildings,
 		currPlayer: g.currPlayer,

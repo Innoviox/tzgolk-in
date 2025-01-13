@@ -81,9 +81,9 @@ func (g *Game) GetBuildingOptions(p *Player, exclude int, useResearch bool) []Op
 
 						p.buildings = append(p.buildings, b)
 
-						g.RemoveBuilding(b)
+						// g.RemoveBuilding(b)
 					},
-					description: fmt.Sprintf("[build] pay %s, %s +%s", CostString(cost), effect.description, g.research.BuiltString(p)),
+					description: fmt.Sprintf("[build %d] pay %s, %s +%s", b.id, CostString(cost), effect.description, g.research.BuiltString(p)),
 					buildingNum: b.id,
 				})
 			}
@@ -106,9 +106,9 @@ func (g *Game) GetMonumentOptions(p *Player) []Option {
 
 					p.monuments = append(p.monuments, m)
 
-					g.RemoveMonument(m)
+					// g.RemoveMonument(m)
 				},
-				description: fmt.Sprintf("[build] pay %s, get monument %d", CostString(m.cost), m.id),
+				description: fmt.Sprintf("[build %d] pay %s, get monument %d", m.id, CostString(m.cost), m.id),
 			})
 		}
 	}

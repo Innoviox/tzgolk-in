@@ -1,0 +1,2367 @@
+Last login: Mon Jan 13 10:10:40 on ttys004
+goAgent pid 10690
+-bash: thefuck: command not found
+ r
+The default interactive shell is now zsh.
+To update your account to use zsh, please run `chsh -s /bin/zsh`.
+For more details, please visit https://support.apple.com/kb/HT208050.
+ʃəɹvɛnæk [tzgolk-in] @main ! ➜  gorun .
+Placing tile 15 for player R
+Placing tile 19 for player R
+Placing tile 4 for player G
+Placing tile 1 for player G
+Placing tile 11 for player B
+Placing tile 3 for player B
+Placing tile 21 for player Y
+Placing tile 9 for player Y
+Calendar State: 
+----Calendar------------
+| Palenque: ________([] [])
+| Yaxchilan: ________([] [])
+| Tikal: ________([] [])
+| Uxmal: ________([] [])
+| Chichen Itza: ___________([] [])
+------------------------
+
+----Player R------------
+| Resources: 4W 1S 0G 0C 
+| Corn: 5
+| Points: 0
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: true
+------------------------
+----Player G------------
+| Resources: 0W 2S 1G 0C 
+| Corn: 9
+| Points: 0
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: true
+------------------------
+----Player B------------
+| Resources: 0W 1S 1G 0C 
+| Corn: 2
+| Points: 0
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: true
+------------------------
+----Player Y------------
+| Resources: 3W 1S 0G 0C 
+| Corn: 13
+| Points: 0
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: true
+------------------------
+Accumulated corn: 0
+----Research------------
+|A |RGY |B   |    |    |
+|R |RGBY|    |    |    |
+|C |RY  |GB  |    |    |
+|T |GBY |R   |    |    |
+------------------------
+
+----Temples------------
+              Y----------              
+              | |    |13|  G---------- 
+ B----------  | |    |12|  | |    |10| 
+ | |    | 8|  | |    | 9|  | |    | 9| 
+ | |    | 7|  |G|    | 6|  |C|    | 7| 
+ |S|    | 6|  | |    | 4|  |W|    | 5| 
+ | |    | 4|  |G|    | 2|  | |    | 3| 
+ |S|B   | 2|  | |    | 1|  |W|    | 1| 
+ | |YRG | 0|  | |RGBY| 0|  | |RGBY| 0| 
+ | |    |-1|  | |    |-2|  | |    |-3| 
+	R R [] P [0 1 2]
+Playing move Place (0, 3 0) (1, 1 0) (2, 1 1)  for R
+Executing move Place (0, 3 0) (1, 1 0) (2, 1 1) 
+Placing workers Place (0, 3 0) (1, 1 0) (2, 1 1) 
+Placing worker 0 on Uxmal position 0
+Placing worker 1 on Yaxchilan position 0
+Placing worker 2 on Yaxchilan position 1
+	G R [] P [6 7 8]
+Playing move Place (6, 2 0)  for G
+Executing move Place (6, 2 0) 
+Placing workers Place (6, 2 0) 
+Placing worker 6 on Tikal position 0
+	B R [] P [12 13 14]
+Playing move Place (13, 0 0) (14, 4 0)  for B
+Executing move Place (13, 0 0) (14, 4 0) 
+Placing workers Place (13, 0 0) (14, 4 0) 
+Placing worker 13 on Palenque position 0
+Placing worker 14 on Chichen Itza position 0
+	Y R [] P [18 19 20]
+Playing move Place (18, 3 1) (20, 3 2)  for Y
+Executing move Place (18, 3 1) (20, 3 2) 
+Placing workers Place (18, 3 1) (20, 3 2) 
+Placing worker 18 on Uxmal position 1
+Placing worker 20 on Uxmal position 2
+Rotating Calendar
+End of round
+Calendar State: 
+----Calendar------------
+| Palenque: _B______([1] [13])
+| Yaxchilan: _RR_____([1 2] [1 2])
+| Tikal: _G______([1] [6])
+| Uxmal: _RYY____([1 2 3] [0 18 20])
+| Chichen Itza: _B_________([1] [14])
+------------------------
+
+----Player R------------
+| Resources: 4W 1S 0G 0C 
+| Corn: 1
+| Points: 0
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: true
+------------------------
+----Player G------------
+| Resources: 0W 2S 1G 0C 
+| Corn: 9
+| Points: 0
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: true
+------------------------
+----Player B------------
+| Resources: 0W 1S 1G 0C 
+| Corn: 2
+| Points: 0
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: true
+------------------------
+----Player Y------------
+| Resources: 3W 1S 0G 0C 
+| Corn: 9
+| Points: 0
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: true
+------------------------
+Accumulated corn: 1
+----Research------------
+|A |YRG |B   |    |    |
+|R |YRGB|    |    |    |
+|C |YR  |GB  |    |    |
+|T |YGB |R   |    |    |
+------------------------
+
+----Temples------------
+              Y----------              
+              | |    |13|  G---------- 
+ B----------  | |    |12|  | |    |10| 
+ | |    | 8|  | |    | 9|  | |    | 9| 
+ | |    | 7|  |G|    | 6|  |C|    | 7| 
+ |S|    | 6|  | |    | 4|  |W|    | 5| 
+ | |    | 4|  |G|    | 2|  | |    | 3| 
+ |S|B   | 2|  | |    | 1|  |W|    | 1| 
+ | |RGY | 0|  | |RGBY| 0|  | |RGBY| 0| 
+ | |    |-1|  | |    |-2|  | |    |-3| 
+	R R [0 1 2] P []
+Playing move Retrieve (2, 1 2)  for R
+Executing move Retrieve (2, 1 2) 
+Retrieving worker 2 from Yaxchilan position 2, executing 1 + 0 stone, 1 corn
+	G R [6] P [7 8]
+Playing move Place (7, 2 0) (8, 1 0)  for G
+Executing move Place (7, 2 0) (8, 1 0) 
+Placing workers Place (7, 2 0) (8, 1 0) 
+Placing worker 7 on Tikal position 0
+Placing worker 8 on Yaxchilan position 0
+	B R [13 14] P [12]
+Playing move Place (12, 2 0)  for B
+Executing move Place (12, 2 0) 
+Placing workers Place (12, 2 0) 
+Placing worker 12 on Tikal position 0
+	Y R [18 20] P [19]
+Playing move Place (19, 3 0)  for Y
+Executing move Place (19, 3 0) 
+Placing workers Place (19, 3 0) 
+Placing worker 19 on Uxmal position 0
+Rotating Calendar
+End of round
+Calendar State: 
+----Calendar------------
+| Palenque: __B_____([2] [13])
+| Yaxchilan: _GR_____([2 1] [1 8])
+| Tikal: _BG_____([2 1 1] [6 7 12])
+| Uxmal: _YRYY___([2 3 4 1] [0 18 20 19])
+| Chichen Itza: __B________([2] [14])
+------------------------
+
+----Player R------------
+| Resources: 4W 1S 0G 0C 
+| Corn: 3
+| Points: 0
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: true
+------------------------
+----Player G------------
+| Resources: 0W 2S 1G 0C 
+| Corn: 8
+| Points: 0
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: true
+------------------------
+----Player B------------
+| Resources: 0W 1S 1G 0C 
+| Corn: 3
+| Points: 0
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: true
+------------------------
+----Player Y------------
+| Resources: 3W 1S 0G 0C 
+| Corn: 9
+| Points: 0
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: true
+------------------------
+Accumulated corn: 2
+----Research------------
+|A |RGY |B   |    |    |
+|R |RGBY|    |    |    |
+|C |RY  |GB  |    |    |
+|T |GBY |R   |    |    |
+------------------------
+
+----Temples------------
+              Y----------              
+              | |    |13|  G---------- 
+ B----------  | |    |12|  | |    |10| 
+ | |    | 8|  | |    | 9|  | |    | 9| 
+ | |    | 7|  |G|    | 6|  |C|    | 7| 
+ |S|    | 6|  | |    | 4|  |W|    | 5| 
+ | |    | 4|  |G|    | 2|  | |    | 3| 
+ |S|B   | 2|  | |    | 1|  |W|    | 1| 
+ | |RGY | 0|  | |RGBY| 0|  | |RGBY| 0| 
+ | |    |-1|  | |    |-2|  | |    |-3| 
+	R R [0 1] P [2]
+Playing move Retrieve (1, 1 2)  for R
+Executing move Retrieve (1, 1 2) 
+Retrieving worker 1 from Yaxchilan position 2, executing 1 + 0 stone, 1 corn
+	G R [6 7 8] P []
+Playing move Retrieve (7, 2 1) (8, 1 1) (6, 2 2)  for G
+Executing move Retrieve (7, 2 1) (8, 1 1) (6, 2 2) 
+Retrieving worker 7 from Tikal position 1, executing pay [1 S 1 G], gain [C 1]
+Retrieving worker 8 from Yaxchilan position 1, executing 1 + 1 wood
+Retrieving worker 6 from Tikal position 2, executing [build 17] pay 1G , pay [], gain [C 1], 6 corn +1 corn 
+	B R [12 13 14] P []
+Playing move Retrieve (12, 2 1)  for B
+Executing move Retrieve (12, 2 1) 
+Retrieving worker 12 from Tikal position 1, executing pay [1 S], gain [R 1]
+	Y R [18 19 20] P []
+Playing move Retrieve (19, 3 1) (20, 3 4)  for Y
+Executing move Retrieve (19, 3 1) (20, 3 4) 
+Retrieving worker 19 from Uxmal position 1, executing pay 3 corn, Y temple 1
+Retrieving worker 20 from Uxmal position 4, executing [build 12] pay 8 corn, pay [], gain [C 1], 1 skull
+Rotating Calendar
+End of round
+Calendar State: 
+----Calendar------------
+| Palenque: ___B____([3] [13])
+| Yaxchilan: ________([] [])
+| Tikal: ________([] [])
+| Uxmal: ___RY___([3 4] [0 18])
+| Chichen Itza: ___B_______([3] [14])
+------------------------
+
+----Player R------------
+| Resources: 4W 1S 0G 0C 
+| Corn: 3
+| Points: 0
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: true
+------------------------
+----Player G------------
+| Resources: 0W 2S 1G 0C 
+| Corn: 8
+| Points: 0
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: true
+------------------------
+----Player B------------
+| Resources: 0W 1S 1G 0C 
+| Corn: 3
+| Points: 0
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: true
+------------------------
+----Player Y------------
+| Resources: 3W 1S 0G 0C 
+| Corn: 9
+| Points: 0
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: true
+------------------------
+Accumulated corn: 3
+----Research------------
+|A |RGY |B   |    |    |
+|R |RGBY|    |    |    |
+|C |RY  |GB  |    |    |
+|T |GBY |R   |    |    |
+------------------------
+
+----Temples------------
+              Y----------              
+              | |    |13|  G---------- 
+ B----------  | |    |12|  | |    |10| 
+ | |    | 8|  | |    | 9|  | |    | 9| 
+ | |    | 7|  |G|    | 6|  |C|    | 7| 
+ |S|    | 6|  | |    | 4|  |W|    | 5| 
+ | |    | 4|  |G|    | 2|  | |    | 3| 
+ |S|B   | 2|  | |    | 1|  |W|    | 1| 
+ | |YRG | 0|  | |RGBY| 0|  | |RGBY| 0| 
+ | |    |-1|  | |    |-2|  | |    |-3| 
+	R R [0] P [1 2]
+Playing move Place (1, 3 0) (2, 2 0)  for R
+Executing move Place (1, 3 0) (2, 2 0) 
+Placing workers Place (1, 3 0) (2, 2 0) 
+Placing worker 1 on Uxmal position 0
+Placing worker 2 on Tikal position 0
+	G R [] P [6 7 8]
+Playing move Place (6, -2 0) (7, 3 0) (8, 2 1)  for G
+Executing move Place (6, -2 0) (7, 3 0) (8, 2 1) 
+Placing workers Place (6, -2 0) (7, 3 0) (8, 2 1) 
+First playering!
+Placing worker 7 on Uxmal position 0
+Placing worker 8 on Tikal position 1
+	B R [13 14] P [12]
+Playing move Retrieve (13, 0 3)  for B
+Executing move Retrieve (13, 0 3) 
+Retrieving worker 13 from Palenque position 3, executing 2 + 1 wood
+	Y R [18] P [19 20]
+Playing move Place (19, 1 0)  for Y
+Executing move Place (19, 1 0) 
+Placing workers Place (19, 1 0) 
+Placing worker 19 on Yaxchilan position 0
+FirstplayeringFirstplayering G
+giving player 4 cornPlayer G has gone dark
+Rotating Calendar
+Rotating Calendar
+End of round
+Calendar State: 
+----Calendar------------
+| Palenque: ________([] [])
+| Yaxchilan: __Y_____([2] [19])
+| Tikal: __RG____([2 3] [2 8])
+| Uxmal: __G__RY_([5 6 2 2] [0 18 1 7])
+| Chichen Itza: _____B_____([5] [14])
+------------------------
+
+----Player R------------
+| Resources: 4W 1S 0G 0C 
+| Corn: 2
+| Points: 0
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: true
+------------------------
+----Player G------------
+| Resources: 0W 2S 1G 0C 
+| Corn: 7
+| Points: 0
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: false
+------------------------
+----Player B------------
+| Resources: 0W 1S 1G 0C 
+| Corn: 3
+| Points: 0
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: true
+------------------------
+----Player Y------------
+| Resources: 3W 1S 0G 0C 
+| Corn: 9
+| Points: 0
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: true
+------------------------
+Accumulated corn: 2
+----Research------------
+|A |GYR |B   |    |    |
+|R |GBYR|    |    |    |
+|C |YR  |GB  |    |    |
+|T |GBY |R   |    |    |
+------------------------
+
+----Temples------------
+              Y----------              
+              | |    |13|  G---------- 
+ B----------  | |    |12|  | |    |10| 
+ | |    | 8|  | |    | 9|  | |    | 9| 
+ | |    | 7|  |G|    | 6|  |C|    | 7| 
+ |S|    | 6|  | |    | 4|  |W|    | 5| 
+ | |    | 4|  |G|    | 2|  | |    | 3| 
+ |S|B   | 2|  | |    | 1|  |W|    | 1| 
+ | |YRG | 0|  | |RGBY| 0|  | |BYRG| 0| 
+ | |    |-1|  | |    |-2|  | |    |-3| 
+	G R [7 8] P [6]
+Playing move Retrieve (8, 2 3)  for G
+Executing move Retrieve (8, 2 3) 
+Retrieving worker 8 from Tikal position 3, executing pay [1 S 1 G], gain [A 1]
+	B R [14] P [12 13]
+Playing move Place (12, 3 0) (13, -2 0)  for B
+Executing move Place (12, 3 0) (13, -2 0) 
+Placing workers Place (12, 3 0) (13, -2 0) 
+Placing worker 12 on Uxmal position 0
+First playering!
+	Y R [18 19] P [20]
+Playing move Retrieve (18, 3 6) (19, 1 2)  for Y
+Executing move Retrieve (18, 3 6) (19, 1 2) 
+Retrieving worker 18 from Uxmal position 6, executing [build 12] pay 8 corn, pay [], gain [C 1], 1 skull
+Retrieving worker 19 from Yaxchilan position 2, executing 1 + 0 stone, 1 corn
+	R R [0 1 2] P []
+Playing move Retrieve (2, 2 2) (0, 3 5)  for R
+Executing move Retrieve (2, 2 2) (0, 3 5) 
+Retrieving worker 2 from Tikal position 2, executing [build 18] pay 2W 1S , pay [], gain [C 1], 1 G +
+Retrieving worker 0 from Uxmal position 5, executing [mirror] pay 1 corn, pay 1 S, 1 BT, 1 YT
+FirstplayeringFirstplayering B
+giving player 2 cornRotating Calendar
+End of round
+Calendar State: 
+----Calendar------------
+| Palenque: ________([] [])
+| Yaxchilan: ________([] [])
+| Tikal: ________([] [])
+| Uxmal: _B_G____([3 3 1] [1 7 12])
+| Chichen Itza: ______B____([6] [14])
+------------------------
+
+----Player R------------
+| Resources: 4W 1S 0G 0C 
+| Corn: 3
+| Points: 0
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: true
+------------------------
+----Player G------------
+| Resources: 0W 2S 1G 0C 
+| Corn: 7
+| Points: 0
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: false
+------------------------
+----Player B------------
+| Resources: 0W 1S 1G 0C 
+| Corn: 4
+| Points: 0
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: true
+------------------------
+----Player Y------------
+| Resources: 3W 1S 0G 0C 
+| Corn: 9
+| Points: 0
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: true
+------------------------
+Accumulated corn: 1
+----Research------------
+|A |YRG |B   |    |    |
+|R |YRGB|    |    |    |
+|C |YR  |GB  |    |    |
+|T |YGB |R   |    |    |
+------------------------
+
+----Temples------------
+              Y----------              
+              | |    |13|  G---------- 
+ B----------  | |    |12|  | |    |10| 
+ | |    | 8|  | |    | 9|  | |    | 9| 
+ | |    | 7|  |G|    | 6|  |C|    | 7| 
+ |S|    | 6|  | |    | 4|  |W|    | 5| 
+ | |    | 4|  |G|    | 2|  | |    | 3| 
+ |S|B   | 2|  | |    | 1|  |W|    | 1| 
+ | |GYR | 0|  | |RGBY| 0|  | |YRGB| 0| 
+ | |    |-1|  | |    |-2|  | |    |-3| 
+	B R [12 14] P [13]
+Playing move Place (13, 3 0)  for B
+Executing move Place (13, 3 0) 
+Placing workers Place (13, 3 0) 
+Placing worker 13 on Uxmal position 0
+	Y R [] P [18 19 20]
+Playing move Place (18, 3 0) (19, 1 0) (20, 1 1)  for Y
+Executing move Place (18, 3 0) (19, 1 0) (20, 1 1) 
+Placing workers Place (18, 3 0) (19, 1 0) (20, 1 1) 
+Placing worker 18 on Uxmal position 0
+Placing worker 19 on Yaxchilan position 0
+Placing worker 20 on Yaxchilan position 1
+	R R [1] P [0 2]
+Playing move Place (0, 0 0)  for R
+Executing move Place (0, 0 0) 
+Placing workers Place (0, 0 0) 
+Placing worker 0 on Palenque position 0
+	G R [7] P [6 8]
+Playing move Place (6, 3 0) (8, 1 2)  for G
+Executing move Place (6, 3 0) (8, 1 2) 
+Placing workers Place (6, 3 0) (8, 1 2) 
+Placing worker 6 on Uxmal position 0
+Placing worker 8 on Yaxchilan position 2
+Rotating Calendar
+Player R paid 1 workers, didn't pay 0 workers
+Player G paid 2 workers, didn't pay 0 workers
+Player B paid 2 workers, didn't pay 0 workers
+Player Y paid 2 workers, didn't pay 0 workers
+giving S to B from temple 0
+End of round
+Calendar State: 
+----Calendar------------
+| Palenque: _R______([1] [0])
+| Yaxchilan: _YYG____([1 2 3] [19 20 8])
+| Tikal: ________([] [])
+| Uxmal: _GB_G___([4 4 2 1 1 1] [1 7 12 13 18 6])
+| Chichen Itza: _______B___([7] [14])
+------------------------
+
+----Player R------------
+| Resources: 4W 1S 0G 0C 
+| Corn: 1
+| Points: 0
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: true
+------------------------
+----Player G------------
+| Resources: 0W 2S 1G 0C 
+| Corn: 0
+| Points: 0
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: false
+------------------------
+----Player B------------
+| Resources: 0W 2S 1G 0C 
+| Corn: 0
+| Points: 0
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: true
+------------------------
+----Player Y------------
+| Resources: 3W 1S 0G 0C 
+| Corn: 1
+| Points: 0
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: true
+------------------------
+Accumulated corn: 2
+----Research------------
+|A |RGY |B   |    |    |
+|R |RGBY|    |    |    |
+|C |RY  |GB  |    |    |
+|T |GBY |R   |    |    |
+------------------------
+
+----Temples------------
+              Y----------              
+              | |    |13|  G---------- 
+ B----------  | |    |12|  | |    |10| 
+ | |    | 8|  | |    | 9|  | |    | 9| 
+ | |    | 7|  |G|    | 6|  |C|    | 7| 
+ |S|    | 6|  | |    | 4|  |W|    | 5| 
+ | |    | 4|  |G|    | 2|  | |    | 3| 
+ |S|B   | 2|  | |    | 1|  |W|    | 1| 
+ | |GYR | 0|  | |RGBY| 0|  | |GBYR| 0| 
+ | |    |-1|  | |    |-2|  | |    |-3| 
+	B R [12 13 14] P []
+Playing move Retrieve (14, 4 7)  for B
+Executing move Retrieve (14, 4 7) 
+Retrieving worker 14 from Chichen Itza position 7, executing skip
+	Y R [18 19 20] P []
+Playing move Retrieve (19, 1 1)  for Y
+Executing move Retrieve (19, 1 1) 
+Retrieving worker 19 from Yaxchilan position 1, executing 1 + 1 wood
+	R R [0 1] P [2]
+Playing move Retrieve (0, 0 1)  for R
+Executing move Retrieve (0, 0 1) 
+Retrieving worker 0 from Palenque position 1, executing 3 + 0 corn
+	G R [6 7 8] P []
+Playing move Retrieve (7, 3 4)  for G
+Executing move Retrieve (7, 3 4) 
+Retrieving worker 7 from Uxmal position 4, executing [build 17] pay 2 corn, pay [], gain [A 1], 6 corn
+Rotating Calendar
+End of round
+Calendar State: 
+----Calendar------------
+| Palenque: ________([] [])
+| Yaxchilan: ___YG___([3 4] [20 8])
+| Tikal: ________([] [])
+| Uxmal: __GB_R__([5 3 2 2 2] [1 12 13 18 6])
+| Chichen Itza: ___________([] [])
+------------------------
+
+----Player R------------
+| Resources: 4W 1S 0G 0C 
+| Corn: 3
+| Points: 0
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: true
+------------------------
+----Player G------------
+| Resources: 0W 2S 1G 0C 
+| Corn: 3
+| Points: 0
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: false
+------------------------
+----Player B------------
+| Resources: 0W 2S 1G 0C 
+| Corn: 3
+| Points: 0
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: true
+------------------------
+----Player Y------------
+| Resources: 3W 1S 0G 0C 
+| Corn: 3
+| Points: 0
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: true
+------------------------
+Accumulated corn: 3
+----Research------------
+|A |RGY |B   |    |    |
+|R |RGBY|    |    |    |
+|C |RY  |GB  |    |    |
+|T |GBY |R   |    |    |
+------------------------
+
+----Temples------------
+              Y----------              
+              | |    |13|  G---------- 
+ B----------  | |    |12|  | |    |10| 
+ | |    | 8|  | |    | 9|  | |    | 9| 
+ | |    | 7|  |G|    | 6|  |C|    | 7| 
+ |S|    | 6|  | |    | 4|  |W|    | 5| 
+ | |    | 4|  |G|    | 2|  | |    | 3| 
+ |S|B   | 2|  | |    | 1|  |W|    | 1| 
+ | |YRG | 0|  | |RGBY| 0|  | |BYRG| 0| 
+ | |    |-1|  | |    |-2|  | |    |-3| 
+	B R [12 13] P [14]
+Playing move Place (14, 4 0)  for B
+Executing move Place (14, 4 0) 
+Placing workers Place (14, 4 0) 
+Placing worker 14 on Chichen Itza position 0
+	Y R [18 20] P [19]
+Playing move Retrieve (20, 1 3)  for Y
+Executing move Retrieve (20, 1 3) 
+Retrieving worker 20 from Yaxchilan position 3, executing 1 + 0 gold, 1 corn
+	R R [1] P [0 2]
+Playing move Retrieve (1, 3 5)  for R
+Executing move Retrieve (1, 3 5) 
+Retrieving worker 1 from Uxmal position 5, executing [mirror] pay 1 corn, pay [2 W], gain [C 1]
+	G R [6 8] P [7]
+Playing move Retrieve (8, 1 4)  for G
+Executing move Retrieve (8, 1 4) 
+Retrieving worker 8 from Yaxchilan position 4, executing 1 + 0 skull
+Rotating Calendar
+End of round
+Calendar State: 
+----Calendar------------
+| Palenque: ________([] [])
+| Yaxchilan: ________([] [])
+| Tikal: ________([] [])
+| Uxmal: ___GB___([4 3 3 3] [12 13 18 6])
+| Chichen Itza: _B_________([1] [14])
+------------------------
+
+----Player R------------
+| Resources: 4W 1S 0G 0C 
+| Corn: 3
+| Points: 0
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: true
+------------------------
+----Player G------------
+| Resources: 0W 2S 1G 0C 
+| Corn: 3
+| Points: 0
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: false
+------------------------
+----Player B------------
+| Resources: 0W 2S 1G 0C 
+| Corn: 3
+| Points: 0
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: true
+------------------------
+----Player Y------------
+| Resources: 3W 1S 0G 0C 
+| Corn: 3
+| Points: 0
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: true
+------------------------
+Accumulated corn: 4
+----Research------------
+|A |RGY |B   |    |    |
+|R |RGBY|    |    |    |
+|C |RY  |GB  |    |    |
+|T |GBY |R   |    |    |
+------------------------
+
+----Temples------------
+              Y----------              
+              | |    |13|  G---------- 
+ B----------  | |    |12|  | |    |10| 
+ | |    | 8|  | |    | 9|  | |    | 9| 
+ | |    | 7|  |G|    | 6|  |C|    | 7| 
+ |S|    | 6|  | |    | 4|  |W|    | 5| 
+ | |    | 4|  |G|    | 2|  | |    | 3| 
+ |S|B   | 2|  | |    | 1|  |W|    | 1| 
+ | |RGY | 0|  | |RGBY| 0|  | |RGBY| 0| 
+ | |    |-1|  | |    |-2|  | |    |-3| 
+	B R [12 13 14] P []
+Playing move Retrieve (14, 4 1) (12, 3 4)  for B
+Executing move Retrieve (14, 4 1) (12, 3 4) 
+Retrieving worker 14 from Chichen Itza position 1, executing skip
+Retrieving worker 12 from Uxmal position 4, executing [build 17] pay 2 corn, pay [], gain [R 1], 6 corn
+	Y R [18] P [19 20]
+Playing move Place (19, 2 0) (20, 1 0)  for Y
+Executing move Place (19, 2 0) (20, 1 0) 
+Placing workers Place (19, 2 0) (20, 1 0) 
+Placing worker 19 on Tikal position 0
+Placing worker 20 on Yaxchilan position 0
+	R R [] P [0 1 2]
+Playing move Place (0, 1 1) (2, 4 0)  for R
+Executing move Place (0, 1 1) (2, 4 0) 
+Placing workers Place (0, 1 1) (2, 4 0) 
+Placing worker 0 on Yaxchilan position 1
+Placing worker 2 on Chichen Itza position 0
+	G R [6] P [7 8]
+Playing move Place (7, 3 0) (8, 4 1)  for G
+Executing move Place (7, 3 0) (8, 4 1) 
+Placing workers Place (7, 3 0) (8, 4 1) 
+Placing worker 7 on Uxmal position 0
+Placing worker 8 on Chichen Itza position 1
+Rotating Calendar
+End of round
+Calendar State: 
+----Calendar------------
+| Palenque: ________([] [])
+| Yaxchilan: _YR_____([1 2] [20 0])
+| Tikal: _Y______([1] [19])
+| Uxmal: _G__G___([4 4 4 1] [13 18 6 7])
+| Chichen Itza: _RG________([1 2] [2 8])
+------------------------
+
+----Player R------------
+| Resources: 4W 1S 0G 0C 
+| Corn: 1
+| Points: 0
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: true
+------------------------
+----Player G------------
+| Resources: 0W 2S 1G 0C 
+| Corn: 1
+| Points: 0
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: false
+------------------------
+----Player B------------
+| Resources: 0W 2S 1G 0C 
+| Corn: 3
+| Points: 0
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: true
+------------------------
+----Player Y------------
+| Resources: 3W 1S 0G 0C 
+| Corn: 2
+| Points: 0
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: true
+------------------------
+Accumulated corn: 5
+----Research------------
+|A |GYR |B   |    |    |
+|R |GBYR|    |    |    |
+|C |YR  |GB  |    |    |
+|T |GBY |R   |    |    |
+------------------------
+
+----Temples------------
+              Y----------              
+              | |    |13|  G---------- 
+ B----------  | |    |12|  | |    |10| 
+ | |    | 8|  | |    | 9|  | |    | 9| 
+ | |    | 7|  |G|    | 6|  |C|    | 7| 
+ |S|    | 6|  | |    | 4|  |W|    | 5| 
+ | |    | 4|  |G|    | 2|  | |    | 3| 
+ |S|B   | 2|  | |    | 1|  |W|    | 1| 
+ | |RGY | 0|  | |RGBY| 0|  | |RGBY| 0| 
+ | |    |-1|  | |    |-2|  | |    |-3| 
+	B R [13] P [12 14]
+Playing move Place (12, 1 0) (14, 0 0)  for B
+Executing move Place (12, 1 0) (14, 0 0) 
+Placing workers Place (12, 1 0) (14, 0 0) 
+Placing worker 12 on Yaxchilan position 0
+Placing worker 14 on Palenque position 0
+	Y R [18 19 20] P []
+Playing move Retrieve (20, 1 1) (18, 3 4) (19, 2 1)  for Y
+Executing move Retrieve (20, 1 1) (18, 3 4) (19, 2 1) 
+Retrieving worker 20 from Yaxchilan position 1, executing 1 + 1 wood
+Retrieving worker 18 from Uxmal position 4, executing [build 17] pay 2 corn, pay [], gain [C 1], 6 corn
+Retrieving worker 19 from Tikal position 1, executing pay [1 S], gain [R 1]
+	R R [0 2] P [1]
+Playing move Retrieve (0, 1 2)  for R
+Executing move Retrieve (0, 1 2) 
+Retrieving worker 0 from Yaxchilan position 2, executing 1 + 0 stone, 1 corn
+	G R [6 7 8] P []
+Playing move Retrieve (6, 3 4)  for G
+Executing move Retrieve (6, 3 4) 
+Retrieving worker 6 from Uxmal position 4, executing [build 17] pay 2 corn, pay [], gain [T 1], 6 corn
+Rotating Calendar
+End of round
+Calendar State: 
+----Calendar------------
+| Palenque: _B______([1] [14])
+| Yaxchilan: _B______([1] [12])
+| Tikal: ________([] [])
+| Uxmal: __G__B__([5 2] [13 7])
+| Chichen Itza: __RG_______([2 3] [2 8])
+------------------------
+
+----Player R------------
+| Resources: 4W 1S 0G 0C 
+| Corn: 3
+| Points: 0
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: true
+------------------------
+----Player G------------
+| Resources: 0W 2S 1G 0C 
+| Corn: 3
+| Points: 0
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: false
+------------------------
+----Player B------------
+| Resources: 0W 2S 1G 0C 
+| Corn: 2
+| Points: 0
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: true
+------------------------
+----Player Y------------
+| Resources: 3W 1S 0G 0C 
+| Corn: 3
+| Points: 0
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: true
+------------------------
+Accumulated corn: 6
+----Research------------
+|A |YRG |B   |    |    |
+|R |YRGB|    |    |    |
+|C |YR  |GB  |    |    |
+|T |YGB |R   |    |    |
+------------------------
+
+----Temples------------
+              Y----------              
+              | |    |13|  G---------- 
+ B----------  | |    |12|  | |    |10| 
+ | |    | 8|  | |    | 9|  | |    | 9| 
+ | |    | 7|  |G|    | 6|  |C|    | 7| 
+ |S|    | 6|  | |    | 4|  |W|    | 5| 
+ | |    | 4|  |G|    | 2|  | |    | 3| 
+ |S|B   | 2|  | |    | 1|  |W|    | 1| 
+ | |YRG | 0|  | |YRGB| 0|  | |YRGB| 0| 
+ | |    |-1|  | |    |-2|  | |    |-3| 
+	B R [12 13 14] P []
+Playing move Retrieve (14, 0 1) (13, 3 5)  for B
+Executing move Retrieve (14, 0 1) (13, 3 5) 
+Retrieving worker 14 from Palenque position 1, executing 3 + 0 corn
+Retrieving worker 13 from Uxmal position 5, executing [mirror] pay 1 corn, [build 17] pay 2 corn, pay [], gain [A 1], 6 corn
+	Y R [] P [18 19 20]
+Playing move Place (18, 3 0) (19, 1 0) (20, 3 0)  for Y
+Executing move Place (18, 3 0) (19, 1 0) (20, 3 0) 
+Placing workers Place (18, 3 0) (19, 1 0) (20, 3 0) 
+Placing worker 18 on Uxmal position 0
+Placing worker 19 on Yaxchilan position 0
+Placing worker 20 on Uxmal position 0
+	R R [2] P [0 1]
+Playing move Place (0, -2 0)  for R
+Executing move Place (0, -2 0) 
+Placing workers Place (0, -2 0) 
+First playering!
+	G R [7 8] P [6]
+Playing move Retrieve (8, 4 3)  for G
+Executing move Retrieve (8, 4 3) 
+Retrieving worker 8 from Chichen Itza position 3, executing skip
+FirstplayeringFirstplayering R
+giving player 3 cornPlayer R has gone dark
+Rotating Calendar
+Rotating Calendar
+Player R paid 3 workers, didn't pay 0 workers
+Player G paid 1 workers, didn't pay 0 workers
+Player B paid 1 workers, didn't pay 0 workers
+Player Y paid 0 workers, didn't pay 0 workers
+giving 0 points to R from temple 0
+giving 1 points to R from temple 1
+giving 2 points to R from temple 2
+giving 0 points to G from temple 0
+giving 1 points to G from temple 1
+giving 2 points to G from temple 2
+giving 8 points to B from temple 0
+giving 1 points to B from temple 1
+giving 2 points to B from temple 2
+giving 0 points to Y from temple 0
+giving 1 points to Y from temple 1
+giving 2 points to Y from temple 2
+End of round
+Calendar State: 
+----Calendar------------
+| Palenque: ________([] [])
+| Yaxchilan: __YB____([3 2] [12 19])
+| Tikal: ________([] [])
+| Uxmal: __Y_G___([4 2 2] [7 18 20])
+| Chichen Itza: ____R______([4] [2])
+------------------------
+
+----Player R------------
+| Resources: 4W 1S 0G 0C 
+| Corn: 3
+| Points: 3
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: false
+------------------------
+----Player G------------
+| Resources: 0W 2S 1G 0C 
+| Corn: 1
+| Points: 3
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: false
+------------------------
+----Player B------------
+| Resources: 0W 2S 1G 0C 
+| Corn: 1
+| Points: 11
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: true
+------------------------
+----Player Y------------
+| Resources: 3W 1S 0G 0C 
+| Corn: 0
+| Points: 3
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: true
+------------------------
+Accumulated corn: 2
+----Research------------
+|A |RGY |B   |    |    |
+|R |RGBY|    |    |    |
+|C |RY  |GB  |    |    |
+|T |GBY |R   |    |    |
+------------------------
+
+----Temples------------
+              Y----------              
+              | |    |13|  G---------- 
+ B----------  | |    |12|  | |    |10| 
+ | |    | 8|  | |    | 9|  | |    | 9| 
+ | |    | 7|  |G|    | 6|  |C|    | 7| 
+ |S|    | 6|  | |    | 4|  |W|    | 5| 
+ | |    | 4|  |G|    | 2|  | |    | 3| 
+ |S|B   | 2|  | |    | 1|  |W|    | 1| 
+ | |YRG | 0|  | |RGBY| 0|  | |RGBY| 0| 
+ | |    |-1|  | |    |-2|  | |    |-3| 
+	R R [2] P [0 1]
+Playing move Place (0, 0 0) (1, 4 0)  for R
+Executing move Place (0, 0 0) (1, 4 0) 
+Placing workers Place (0, 0 0) (1, 4 0) 
+Placing worker 0 on Palenque position 0
+Placing worker 1 on Chichen Itza position 0
+	G R [7] P [6 8]
+Playing move Place (6, 4 0) (8, 1 0)  for G
+Executing move Place (6, 4 0) (8, 1 0) 
+Placing workers Place (6, 4 0) (8, 1 0) 
+Placing worker 6 on Chichen Itza position 0
+Placing worker 8 on Yaxchilan position 0
+	B R [12] P [13 14]
+Playing move Place (13, 1 0) (14, 4 0)  for B
+Executing move Place (13, 1 0) (14, 4 0) 
+Placing workers Place (13, 1 0) (14, 4 0) 
+Placing worker 13 on Yaxchilan position 0
+Placing worker 14 on Chichen Itza position 0
+	Y R [18 19 20] P []
+Playing move Retrieve (19, 1 2)  for Y
+Executing move Retrieve (19, 1 2) 
+Retrieving worker 19 from Yaxchilan position 2, executing 1 + 0 stone, 1 corn
+Rotating Calendar
+End of round
+Calendar State: 
+----Calendar------------
+| Palenque: _R______([1] [0])
+| Yaxchilan: _B__B___([4 1 1] [12 8 13])
+| Tikal: ________([] [])
+| Uxmal: ___Y_G__([5 3 3] [7 18 20])
+| Chichen Itza: _B___R_____([5 1 1 1] [2 1 6 14])
+------------------------
+
+----Player R------------
+| Resources: 4W 1S 0G 0C 
+| Corn: 2
+| Points: 3
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: false
+------------------------
+----Player G------------
+| Resources: 0W 2S 1G 0C 
+| Corn: 2
+| Points: 3
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: false
+------------------------
+----Player B------------
+| Resources: 0W 2S 1G 0C 
+| Corn: 2
+| Points: 11
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: true
+------------------------
+----Player Y------------
+| Resources: 3W 1S 0G 0C 
+| Corn: 3
+| Points: 3
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: true
+------------------------
+Accumulated corn: 3
+----Research------------
+|A |RGY |B   |    |    |
+|R |RGBY|    |    |    |
+|C |RY  |GB  |    |    |
+|T |GBY |R   |    |    |
+------------------------
+
+----Temples------------
+              Y----------              
+              | |    |13|  G---------- 
+ B----------  | |    |12|  | |    |10| 
+ | |    | 8|  | |    | 9|  | |    | 9| 
+ | |    | 7|  |G|    | 6|  |C|    | 7| 
+ |S|    | 6|  | |    | 4|  |W|    | 5| 
+ | |    | 4|  |G|    | 2|  | |    | 3| 
+ |S|B   | 2|  | |    | 1|  |W|    | 1| 
+ | |RGY | 0|  | |RGBY| 0|  | |BYRG| 0| 
+ | |    |-1|  | |    |-2|  | |    |-3| 
+	R R [0 1 2] P []
+Playing move Retrieve (2, 4 5)  for R
+Executing move Retrieve (2, 4 5) 
+Retrieving worker 2 from Chichen Itza position 5, executing skip
+	G R [6 7 8] P []
+Playing move Retrieve (7, 3 5)  for G
+Executing move Retrieve (7, 3 5) 
+Retrieving worker 7 from Uxmal position 5, executing [mirror] pay 1 corn, pay 1 S, 1 YT, 1 BT
+	B R [12 13 14] P []
+Playing move Retrieve (12, 1 4)  for B
+Executing move Retrieve (12, 1 4) 
+Retrieving worker 12 from Yaxchilan position 4, executing 1 + 0 skull
+	Y R [18 20] P [19]
+Playing move Retrieve (18, 3 3) (20, 3 3)  for Y
+Executing move Retrieve (18, 3 3) (20, 3 3) 
+Retrieving worker 18 from Uxmal position 3, executing unlock worker
+Retrieving worker 20 from Uxmal position 3, executing unlock worker
+Rotating Calendar
+End of round
+Calendar State: 
+----Calendar------------
+| Palenque: __R_____([2] [0])
+| Yaxchilan: __B_____([2 2] [8 13])
+| Tikal: ________([] [])
+| Uxmal: ________([] [])
+| Chichen Itza: __B________([2 2 2] [1 6 14])
+------------------------
+
+----Player R------------
+| Resources: 4W 1S 0G 0C 
+| Corn: 3
+| Points: 3
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: false
+------------------------
+----Player G------------
+| Resources: 0W 2S 1G 0C 
+| Corn: 3
+| Points: 3
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: false
+------------------------
+----Player B------------
+| Resources: 0W 2S 1G 0C 
+| Corn: 3
+| Points: 11
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: true
+------------------------
+----Player Y------------
+| Resources: 3W 1S 0G 0C 
+| Corn: 3
+| Points: 3
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: true
+------------------------
+Accumulated corn: 4
+----Research------------
+|A |RGY |B   |    |    |
+|R |RGBY|    |    |    |
+|C |RY  |GB  |    |    |
+|T |GBY |R   |    |    |
+------------------------
+
+----Temples------------
+              Y----------              
+              | |    |13|  G---------- 
+ B----------  | |    |12|  | |    |10| 
+ | |    | 8|  | |    | 9|  | |    | 9| 
+ | |    | 7|  |G|    | 6|  |C|    | 7| 
+ |S|    | 6|  | |    | 4|  |W|    | 5| 
+ | |    | 4|  |G|    | 2|  | |    | 3| 
+ |S|B   | 2|  | |    | 1|  |W|    | 1| 
+ | |RGY | 0|  | |RGBY| 0|  | |RGBY| 0| 
+ | |    |-1|  | |    |-2|  | |    |-3| 
+	R R [0 1] P [2]
+Playing move Retrieve (1, 4 2)  for R
+Executing move Retrieve (1, 4 2) 
+Retrieving worker 1 from Chichen Itza position 2, executing skip
+	G R [6 8] P [7]
+Playing move Place (7, 2 0)  for G
+Executing move Place (7, 2 0) 
+Placing workers Place (7, 2 0) 
+Placing worker 7 on Tikal position 0
+	B R [13 14] P [12]
+Playing move Place (12, 2 1)  for B
+Executing move Place (12, 2 1) 
+Placing workers Place (12, 2 1) 
+Placing worker 12 on Tikal position 1
+	Y R [] P [18 19 20]
+Playing move Place (19, 4 0) (20, -2 0)  for Y
+Executing move Place (19, 4 0) (20, -2 0) 
+Placing workers Place (19, 4 0) (20, -2 0) 
+Placing worker 19 on Chichen Itza position 0
+First playering!
+FirstplayeringFirstplayering Y
+giving player 2 cornRotating Calendar
+End of round
+Calendar State: 
+----Calendar------------
+| Palenque: ___R____([3] [0])
+| Yaxchilan: ___B____([3 3] [8 13])
+| Tikal: _GB_____([1 2] [7 12])
+| Uxmal: ________([] [])
+| Chichen Itza: _Y_B_______([3 3 1] [6 14 19])
+------------------------
+
+----Player R------------
+| Resources: 4W 1S 0G 0C 
+| Corn: 3
+| Points: 3
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: false
+------------------------
+----Player G------------
+| Resources: 0W 2S 1G 0C 
+| Corn: 3
+| Points: 3
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: false
+------------------------
+----Player B------------
+| Resources: 0W 2S 1G 0C 
+| Corn: 2
+| Points: 11
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: true
+------------------------
+----Player Y------------
+| Resources: 3W 1S 0G 0C 
+| Corn: 6
+| Points: 3
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: true
+------------------------
+Accumulated corn: 1
+----Research------------
+|A |RGY |B   |    |    |
+|R |RGBY|    |    |    |
+|C |RY  |GB  |    |    |
+|T |GBY |R   |    |    |
+------------------------
+
+----Temples------------
+              Y----------              
+              | |    |13|  G---------- 
+ B----------  | |    |12|  | |    |10| 
+ | |    | 8|  | |    | 9|  | |    | 9| 
+ | |    | 7|  |G|    | 6|  |C|    | 7| 
+ |S|    | 6|  | |    | 4|  |W|    | 5| 
+ | |    | 4|  |G|    | 2|  | |    | 3| 
+ |S|B   | 2|  | |    | 1|  |W|    | 1| 
+ | |YRG | 0|  | |RGBY| 0|  | |RGBY| 0| 
+ | |    |-1|  | |    |-2|  | |    |-3| 
+	Y R [19] P [18 20]
+Playing move Place (18, 1 0) (20, 3 0)  for Y
+Executing move Place (18, 1 0) (20, 3 0) 
+Placing workers Place (18, 1 0) (20, 3 0) 
+Placing worker 18 on Yaxchilan position 0
+Placing worker 20 on Uxmal position 0
+	R R [0] P [1 2]
+Playing move Place (1, 1 0)  for R
+Executing move Place (1, 1 0) 
+Placing workers Place (1, 1 0) 
+Placing worker 1 on Yaxchilan position 0
+	G R [6 7 8] P []
+Playing move Retrieve (7, 2 1) (8, 1 3)  for G
+Executing move Retrieve (7, 2 1) (8, 1 3) 
+Retrieving worker 7 from Tikal position 1, executing pay [1 G], gain [A 1]
+Retrieving worker 8 from Yaxchilan position 3, executing 1 + 0 gold, 1 corn
+	B R [12 13 14] P []
+Playing move Retrieve (12, 2 2)  for B
+Executing move Retrieve (12, 2 2) 
+Retrieving worker 12 from Tikal position 2, executing [build 2] pay 2S , 2 BT, 2 points +1 corn 
+Rotating Calendar
+End of round
+Calendar State: 
+----Calendar------------
+| Palenque: ____R___([4] [0])
+| Yaxchilan: _R__B___([4 1 1] [13 18 1])
+| Tikal: ________([] [])
+| Uxmal: _Y______([1] [20])
+| Chichen Itza: __Y_B______([4 4 2] [6 14 19])
+------------------------
+
+----Player R------------
+| Resources: 4W 1S 0G 0C 
+| Corn: 3
+| Points: 3
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: false
+------------------------
+----Player G------------
+| Resources: 0W 2S 1G 0C 
+| Corn: 3
+| Points: 3
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: false
+------------------------
+----Player B------------
+| Resources: 0W 2S 1G 0C 
+| Corn: 3
+| Points: 11
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: true
+------------------------
+----Player Y------------
+| Resources: 3W 1S 0G 0C 
+| Corn: 5
+| Points: 3
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: true
+------------------------
+Accumulated corn: 2
+----Research------------
+|A |GYR |B   |    |    |
+|R |GBYR|    |    |    |
+|C |YR  |GB  |    |    |
+|T |GBY |R   |    |    |
+------------------------
+
+----Temples------------
+              Y----------              
+              | |    |13|  G---------- 
+ B----------  | |    |12|  | |    |10| 
+ | |    | 8|  | |    | 9|  | |    | 9| 
+ | |    | 7|  |G|    | 6|  |C|    | 7| 
+ |S|    | 6|  | |    | 4|  |W|    | 5| 
+ | |    | 4|  |G|    | 2|  | |    | 3| 
+ |S|B   | 2|  | |    | 1|  |W|    | 1| 
+ | |RGY | 0|  | |RGBY| 0|  | |RGBY| 0| 
+ | |    |-1|  | |    |-2|  | |    |-3| 
+	Y R [18 19 20] P []
+Playing move Retrieve (19, 4 2)  for Y
+Executing move Retrieve (19, 4 2) 
+Retrieving worker 19 from Chichen Itza position 2, executing skip
+	R R [0 1] P [2]
+Playing move Retrieve (0, 0 4)  for R
+Executing move Retrieve (0, 0 4) 
+Retrieving worker 0 from Palenque position 4, executing 7 + 0 corn, anger, R temple -1
+	G R [6] P [7 8]
+Playing move Place (8, 1 0)  for G
+Executing move Place (8, 1 0) 
+Placing workers Place (8, 1 0) 
+Placing worker 8 on Yaxchilan position 0
+	B R [13 14] P [12]
+Playing move Retrieve (13, 1 4)  for B
+Executing move Retrieve (13, 1 4) 
+Retrieving worker 13 from Yaxchilan position 4, executing 1 + 0 skull
+Rotating Calendar
+End of round
+Calendar State: 
+----Calendar------------
+| Palenque: ________([] [])
+| Yaxchilan: _GR_____([2 2 1] [18 1 8])
+| Tikal: ________([] [])
+| Uxmal: __Y_____([2] [20])
+| Chichen Itza: _____B_____([5 5] [6 14])
+------------------------
+
+----Player R------------
+| Resources: 4W 1S 0G 0C 
+| Corn: 3
+| Points: 3
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: false
+------------------------
+----Player G------------
+| Resources: 0W 2S 1G 0C 
+| Corn: 3
+| Points: 3
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: false
+------------------------
+----Player B------------
+| Resources: 0W 2S 1G 0C 
+| Corn: 3
+| Points: 11
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: true
+------------------------
+----Player Y------------
+| Resources: 3W 1S 0G 0C 
+| Corn: 5
+| Points: 3
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: true
+------------------------
+Accumulated corn: 3
+----Research------------
+|A |RGY |B   |    |    |
+|R |RGBY|    |    |    |
+|C |RY  |GB  |    |    |
+|T |GBY |R   |    |    |
+------------------------
+
+----Temples------------
+              Y----------              
+              | |    |13|  G---------- 
+ B----------  | |    |12|  | |    |10| 
+ | |    | 8|  | |    | 9|  | |    | 9| 
+ | |    | 7|  |G|    | 6|  |C|    | 7| 
+ |S|    | 6|  | |    | 4|  |W|    | 5| 
+ | |    | 4|  |G|    | 2|  | |    | 3| 
+ |S|B   | 2|  | |    | 1|  |W|    | 1| 
+ | |YRG | 0|  | |YRGB| 0|  | |YRGB| 0| 
+ | |    |-1|  | |    |-2|  | |    |-3| 
+	Y R [18 20] P [19]
+Playing move Place (19, 2 0)  for Y
+Executing move Place (19, 2 0) 
+Placing workers Place (19, 2 0) 
+Placing worker 19 on Tikal position 0
+	R R [1] P [0 2]
+Playing move Place (2, 1 0)  for R
+Executing move Place (2, 1 0) 
+Placing workers Place (2, 1 0) 
+Placing worker 2 on Yaxchilan position 0
+	G R [6 8] P [7]
+Playing move Place (7, 2 1)  for G
+Executing move Place (7, 2 1) 
+Placing workers Place (7, 2 1) 
+Placing worker 7 on Tikal position 1
+	B R [14] P [12 13]
+Playing move Place (12, 2 2) (13, 1 0)  for B
+Executing move Place (12, 2 2) (13, 1 0) 
+Placing workers Place (12, 2 2) (13, 1 0) 
+Placing worker 12 on Tikal position 2
+Placing worker 13 on Yaxchilan position 0
+Rotating Calendar
+End of round
+Calendar State: 
+----Calendar------------
+| Palenque: ________([] [])
+| Yaxchilan: _BGR____([3 3 2 1 1] [18 1 8 2 13])
+| Tikal: _YGB____([1 2 3] [19 7 12])
+| Uxmal: ___Y____([3] [20])
+| Chichen Itza: ______B____([6 6] [6 14])
+------------------------
+
+----Player R------------
+| Resources: 4W 1S 0G 0C 
+| Corn: 3
+| Points: 3
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: false
+------------------------
+----Player G------------
+| Resources: 0W 2S 1G 0C 
+| Corn: 2
+| Points: 3
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: false
+------------------------
+----Player B------------
+| Resources: 0W 2S 1G 0C 
+| Corn: 0
+| Points: 11
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: true
+------------------------
+----Player Y------------
+| Resources: 3W 1S 0G 0C 
+| Corn: 5
+| Points: 3
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: true
+------------------------
+Accumulated corn: 4
+----Research------------
+|A |YRG |B   |    |    |
+|R |YRGB|    |    |    |
+|C |YR  |GB  |    |    |
+|T |YGB |R   |    |    |
+------------------------
+
+----Temples------------
+              Y----------              
+              | |    |13|  G---------- 
+ B----------  | |    |12|  | |    |10| 
+ | |    | 8|  | |    | 9|  | |    | 9| 
+ | |    | 7|  |G|    | 6|  |C|    | 7| 
+ |S|    | 6|  | |    | 4|  |W|    | 5| 
+ | |    | 4|  |G|    | 2|  | |    | 3| 
+ |S|B   | 2|  | |    | 1|  |W|    | 1| 
+ | |RGY | 0|  | |RGBY| 0|  | |RGBY| 0| 
+ | |    |-1|  | |    |-2|  | |    |-3| 
+	Y R [18 19 20] P []
+Playing move Retrieve (19, 2 1) (18, 1 3) (20, 3 3)  for Y
+Executing move Retrieve (19, 2 1) (18, 1 3) (20, 3 3) 
+Retrieving worker 19 from Tikal position 1, executing pay [1 S], gain [R 1]
+Retrieving worker 18 from Yaxchilan position 3, executing 1 + 0 gold, 1 corn
+Retrieving worker 20 from Uxmal position 3, executing unlock worker
+	R R [1 2] P [0]
+Playing move Retrieve (2, 1 1)  for R
+Executing move Retrieve (2, 1 1) 
+Retrieving worker 2 from Yaxchilan position 1, executing 1 + 1 wood
+	G R [6 7 8] P []
+Playing move Retrieve (8, 1 2)  for G
+Executing move Retrieve (8, 1 2) 
+Retrieving worker 8 from Yaxchilan position 2, executing 1 + 0 stone, 1 corn
+	B R [12 13 14] P []
+Playing move Retrieve (12, 2 3)  for B
+Executing move Retrieve (12, 2 3) 
+Retrieving worker 12 from Tikal position 3, executing pay [2 S], gain [A 1]
+Rotating Calendar
+Player R paid 1 workers, didn't pay 0 workers
+Player G paid 1 workers, didn't pay 0 workers
+Player B paid 1 workers, didn't pay 0 workers
+Player Y paid 2 workers, didn't pay 0 workers
+giving S to B from temple 0
+End of round
+Calendar State: 
+----Calendar------------
+| Palenque: ________([] [])
+| Yaxchilan: __B_R___([4 2] [1 13])
+| Tikal: ___G____([3] [7])
+| Uxmal: ________([] [])
+| Chichen Itza: _______B___([7 7] [6 14])
+------------------------
+
+----Player R------------
+| Resources: 4W 1S 0G 0C 
+| Corn: 1
+| Points: 3
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: false
+------------------------
+----Player G------------
+| Resources: 0W 2S 1G 0C 
+| Corn: 1
+| Points: 3
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: false
+------------------------
+----Player B------------
+| Resources: 0W 3S 1G 0C 
+| Corn: 1
+| Points: 11
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: true
+------------------------
+----Player Y------------
+| Resources: 3W 1S 0G 0C 
+| Corn: 1
+| Points: 3
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: true
+------------------------
+Accumulated corn: 5
+----Research------------
+|A |RGY |B   |    |    |
+|R |RGBY|    |    |    |
+|C |RY  |GB  |    |    |
+|T |GBY |R   |    |    |
+------------------------
+
+----Temples------------
+              Y----------              
+              | |    |13|  G---------- 
+ B----------  | |    |12|  | |    |10| 
+ | |    | 8|  | |    | 9|  | |    | 9| 
+ | |    | 7|  |G|    | 6|  |C|    | 7| 
+ |S|    | 6|  | |    | 4|  |W|    | 5| 
+ | |    | 4|  |G|    | 2|  | |    | 3| 
+ |S|B   | 2|  | |    | 1|  |W|    | 1| 
+ | |RGY | 0|  | |YRGB| 0|  | |BYRG| 0| 
+ | |    |-1|  | |    |-2|  | |    |-3| 
+	Y R [] P [18 19 20]
+Playing move Place (18, 2 0) (19, 0 0)  for Y
+Executing move Place (18, 2 0) (19, 0 0) 
+Placing workers Place (18, 2 0) (19, 0 0) 
+Placing worker 18 on Tikal position 0
+Placing worker 19 on Palenque position 0
+	R R [1] P [0 2]
+Playing move Place (0, 2 0)  for R
+Executing move Place (0, 2 0) 
+Placing workers Place (0, 2 0) 
+Placing worker 0 on Tikal position 0
+	G R [6 7] P [8]
+Playing move Retrieve (7, 2 3) (6, 4 7)  for G
+Executing move Retrieve (7, 2 3) (6, 4 7) 
+Retrieving worker 7 from Tikal position 3, executing pay [1 S], gain [R 1]
+Retrieving worker 6 from Chichen Itza position 7, executing skip
+	B R [13 14] P [12]
+Playing move Place (12, 3 0)  for B
+Executing move Place (12, 3 0) 
+Placing workers Place (12, 3 0) 
+Placing worker 12 on Uxmal position 0
+Rotating Calendar
+End of round
+Calendar State: 
+----Calendar------------
+| Palenque: _Y______([1] [19])
+| Yaxchilan: ___B_R__([5 3] [1 13])
+| Tikal: _R______([1 1] [18 0])
+| Uxmal: _B______([1] [12])
+| Chichen Itza: ________B__([8] [14])
+------------------------
+
+----Player R------------
+| Resources: 4W 1S 0G 0C 
+| Corn: 3
+| Points: 3
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: false
+------------------------
+----Player G------------
+| Resources: 0W 2S 1G 0C 
+| Corn: 3
+| Points: 3
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: false
+------------------------
+----Player B------------
+| Resources: 0W 3S 1G 0C 
+| Corn: 3
+| Points: 11
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: true
+------------------------
+----Player Y------------
+| Resources: 3W 1S 0G 0C 
+| Corn: 2
+| Points: 3
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: true
+------------------------
+Accumulated corn: 6
+----Research------------
+|A |YRG |B   |    |    |
+|R |YRGB|    |    |    |
+|C |YR  |GB  |    |    |
+|T |YGB |R   |    |    |
+------------------------
+
+----Temples------------
+              Y----------              
+              | |    |13|  G---------- 
+ B----------  | |    |12|  | |    |10| 
+ | |    | 8|  | |    | 9|  | |    | 9| 
+ | |    | 7|  |G|    | 6|  |C|    | 7| 
+ |S|    | 6|  | |    | 4|  |W|    | 5| 
+ | |    | 4|  |G|    | 2|  | |    | 3| 
+ |S|B   | 2|  | |    | 1|  |W|    | 1| 
+ | |YRG | 0|  | |YRGB| 0|  | |RGBY| 0| 
+ | |    |-1|  | |    |-2|  | |    |-3| 
+	Y R [18 19] P [20]
+Playing move Retrieve (18, 2 1)  for Y
+Executing move Retrieve (18, 2 1) 
+Retrieving worker 18 from Tikal position 1, executing pay [1 S], gain [C 1]
+	R R [0 1] P [2]
+Playing move Retrieve (1, 1 5) (0, 2 1)  for R
+Executing move Retrieve (1, 1 5) (0, 2 1) 
+Retrieving worker 1 from Yaxchilan position 5, executing 1 + 0 gold, 1 + 0 stone, 2 corn
+Retrieving worker 0 from Tikal position 1, executing pay [1 S], gain [A 1]
+	G R [] P [6 7 8]
+Playing move Place (6, 3 0) (7, -2 0) (8, 1 0)  for G
+Executing move Place (6, 3 0) (7, -2 0) (8, 1 0) 
+Placing workers Place (6, 3 0) (7, -2 0) (8, 1 0) 
+Placing worker 6 on Uxmal position 0
+First playering!
+Placing worker 8 on Yaxchilan position 0
+	B R [12 13 14] P []
+Playing move Retrieve (14, 4 8)  for B
+Executing move Retrieve (14, 4 8) 
+Retrieving worker 14 from Chichen Itza position 8, executing skip
+FirstplayeringFirstplayering G
+giving player 0 cornRotating Calendar
+End of round
+Calendar State: 
+----Calendar------------
+| Palenque: __Y_____([2] [19])
+| Yaxchilan: _G__B___([4 1] [13 8])
+| Tikal: ________([] [])
+| Uxmal: _GB_____([2 1] [12 6])
+| Chichen Itza: ___________([] [])
+------------------------
+
+----Player R------------
+| Resources: 4W 1S 0G 0C 
+| Corn: 3
+| Points: 3
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: false
+------------------------
+----Player G------------
+| Resources: 0W 2S 1G 0C 
+| Corn: 6
+| Points: 3
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: false
+------------------------
+----Player B------------
+| Resources: 0W 3S 1G 0C 
+| Corn: 3
+| Points: 11
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: true
+------------------------
+----Player Y------------
+| Resources: 3W 1S 0G 0C 
+| Corn: 3
+| Points: 3
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: true
+------------------------
+Accumulated corn: 1
+----Research------------
+|A |RGY |B   |    |    |
+|R |RGBY|    |    |    |
+|C |RY  |GB  |    |    |
+|T |GBY |R   |    |    |
+------------------------
+
+----Temples------------
+              Y----------              
+              | |    |13|  G---------- 
+ B----------  | |    |12|  | |    |10| 
+ | |    | 8|  | |    | 9|  | |    | 9| 
+ | |    | 7|  |G|    | 6|  |C|    | 7| 
+ |S|    | 6|  | |    | 4|  |W|    | 5| 
+ | |    | 4|  |G|    | 2|  | |    | 3| 
+ |S|B   | 2|  | |    | 1|  |W|    | 1| 
+ | |RGY | 0|  | |RGBY| 0|  | |GBYR| 0| 
+ | |    |-1|  | |    |-2|  | |    |-3| 
+	G R [6 8] P [7]
+Playing move Retrieve (6, 3 1)  for G
+Executing move Retrieve (6, 3 1) 
+Retrieving worker 6 from Uxmal position 1, executing pay 3 corn, G temple 1
+	B R [12 13] P [14]
+Playing move Place (14, 4 0)  for B
+Executing move Place (14, 4 0) 
+Placing workers Place (14, 4 0) 
+Placing worker 14 on Chichen Itza position 0
+	Y R [19] P [18 20]
+Playing move Place (18, 4 1) (20, 2 0)  for Y
+Executing move Place (18, 4 1) (20, 2 0) 
+Placing workers Place (18, 4 1) (20, 2 0) 
+Placing worker 18 on Chichen Itza position 1
+Placing worker 20 on Tikal position 0
+	R R [] P [0 1 2]
+Playing move Place (0, 0 0) (1, 1 0)  for R
+Executing move Place (0, 0 0) (1, 1 0) 
+Placing workers Place (0, 0 0) (1, 1 0) 
+Placing worker 0 on Palenque position 0
+Placing worker 1 on Yaxchilan position 0
+Rotating Calendar
+End of round
+Calendar State: 
+----Calendar------------
+| Palenque: _R_Y____([3 1] [19 0])
+| Yaxchilan: _RG__B__([5 2 1] [13 8 1])
+| Tikal: _Y______([1] [20])
+| Uxmal: ___B____([3] [12])
+| Chichen Itza: _BY________([1 2] [14 18])
+------------------------
+
+----Player R------------
+| Resources: 4W 1S 0G 0C 
+| Corn: 2
+| Points: 3
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: false
+------------------------
+----Player G------------
+| Resources: 0W 2S 1G 0C 
+| Corn: 6
+| Points: 3
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: false
+------------------------
+----Player B------------
+| Resources: 0W 3S 1G 0C 
+| Corn: 3
+| Points: 11
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: true
+------------------------
+----Player Y------------
+| Resources: 3W 1S 0G 0C 
+| Corn: 1
+| Points: 3
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: true
+------------------------
+Accumulated corn: 2
+----Research------------
+|A |YRG |B   |    |    |
+|R |YRGB|    |    |    |
+|C |YR  |GB  |    |    |
+|T |YGB |R   |    |    |
+------------------------
+
+----Temples------------
+              Y----------              
+              | |    |13|  G---------- 
+ B----------  | |    |12|  | |    |10| 
+ | |    | 8|  | |    | 9|  | |    | 9| 
+ | |    | 7|  |G|    | 6|  |C|    | 7| 
+ |S|    | 6|  | |    | 4|  |W|    | 5| 
+ | |    | 4|  |G|    | 2|  | |    | 3| 
+ |S|B   | 2|  | |    | 1|  |W|    | 1| 
+ | |RGY | 0|  | |RGBY| 0|  | |BYRG| 0| 
+ | |    |-1|  | |    |-2|  | |    |-3| 
+	G R [8] P [6 7]
+Playing move Place (7, 2 0)  for G
+Executing move Place (7, 2 0) 
+Placing workers Place (7, 2 0) 
+Placing worker 7 on Tikal position 0
+	B R [12 13 14] P []
+Playing move Retrieve (13, 1 5) (14, 4 1)  for B
+Executing move Retrieve (13, 1 5) (14, 4 1) 
+Retrieving worker 13 from Yaxchilan position 5, executing 1 + 0 gold, 1 + 0 stone, 2 corn
+Retrieving worker 14 from Chichen Itza position 1, executing skip
+	Y R [18 19 20] P []
+Playing move Retrieve (20, 2 1) (19, 0 3)  for Y
+Executing move Retrieve (20, 2 1) (19, 0 3) 
+Retrieving worker 20 from Tikal position 1, executing pay [1 W], gain [C 1]
+Retrieving worker 19 from Palenque position 3, executing 5 + 0 corn
+	R R [0 1] P [2]
+Playing move Place (2, -2 0)  for R
+Executing move Place (2, -2 0) 
+Placing workers Place (2, -2 0) 
+First playering!
+FirstplayeringFirstplayering R
+giving player 3 cornRotating Calendar
+End of round
+Calendar State: 
+----Calendar------------
+| Palenque: __R_____([2] [0])
+| Yaxchilan: __RG____([3 2] [8 1])
+| Tikal: _G______([1] [7])
+| Uxmal: ____B___([4] [12])
+| Chichen Itza: ___Y_______([3] [18])
+------------------------
+
+----Player R------------
+| Resources: 4W 1S 0G 0C 
+| Corn: 5
+| Points: 3
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: false
+------------------------
+----Player G------------
+| Resources: 0W 2S 1G 0C 
+| Corn: 6
+| Points: 3
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: false
+------------------------
+----Player B------------
+| Resources: 0W 3S 1G 0C 
+| Corn: 3
+| Points: 11
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: true
+------------------------
+----Player Y------------
+| Resources: 3W 1S 0G 0C 
+| Corn: 3
+| Points: 3
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: true
+------------------------
+Accumulated corn: 1
+----Research------------
+|A |RGY |B   |    |    |
+|R |RGBY|    |    |    |
+|C |RY  |GB  |    |    |
+|T |GBY |R   |    |    |
+------------------------
+
+----Temples------------
+              Y----------              
+              | |    |13|  G---------- 
+ B----------  | |    |12|  | |    |10| 
+ | |    | 8|  | |    | 9|  | |    | 9| 
+ | |    | 7|  |G|    | 6|  |C|    | 7| 
+ |S|    | 6|  | |    | 4|  |W|    | 5| 
+ | |    | 4|  |G|    | 2|  | |    | 3| 
+ |S|B   | 2|  | |    | 1|  |W|    | 1| 
+ | |RGY | 0|  | |YRGB| 0|  | |BYRG| 0| 
+ | |    |-1|  | |    |-2|  | |    |-3| 
+	R R [0 1] P [2]
+Playing move Place (2, 2 0)  for R
+Executing move Place (2, 2 0) 
+Placing workers Place (2, 2 0) 
+Placing worker 2 on Tikal position 0
+	G R [7 8] P [6]
+Playing move Retrieve (7, 2 1)  for G
+Executing move Retrieve (7, 2 1) 
+Retrieving worker 7 from Tikal position 1, executing pay [1 S], gain [T 1]
+	B R [12] P [13 14]
+Playing move Place (13, 3 0) (14, 3 0)  for B
+Executing move Place (13, 3 0) (14, 3 0) 
+Placing workers Place (13, 3 0) (14, 3 0) 
+Placing worker 13 on Uxmal position 0
+Placing worker 14 on Uxmal position 0
+	Y R [18] P [19 20]
+Playing move Place (19, 2 1)  for Y
+Executing move Place (19, 2 1) 
+Placing workers Place (19, 2 1) 
+Placing worker 19 on Tikal position 1
+Rotating Calendar
+End of round
+Calendar State: 
+----Calendar------------
+| Palenque: ___R____([3] [0])
+| Yaxchilan: ___RG___([4 3] [8 1])
+| Tikal: _RY_____([1 2] [2 19])
+| Uxmal: _B___B__([5 1 1] [12 13 14])
+| Chichen Itza: ____Y______([4] [18])
+------------------------
+
+----Player R------------
+| Resources: 4W 1S 0G 0C 
+| Corn: 5
+| Points: 3
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: false
+------------------------
+----Player G------------
+| Resources: 0W 2S 1G 0C 
+| Corn: 6
+| Points: 3
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: false
+------------------------
+----Player B------------
+| Resources: 0W 3S 1G 0C 
+| Corn: 2
+| Points: 11
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: true
+------------------------
+----Player Y------------
+| Resources: 3W 1S 0G 0C 
+| Corn: 2
+| Points: 3
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: true
+------------------------
+Accumulated corn: 2
+----Research------------
+|A |RGY |B   |    |    |
+|R |RGBY|    |    |    |
+|C |RY  |GB  |    |    |
+|T |GBY |R   |    |    |
+------------------------
+
+----Temples------------
+              Y----------              
+              | |    |13|  G---------- 
+ B----------  | |    |12|  | |    |10| 
+ | |    | 8|  | |    | 9|  | |    | 9| 
+ | |    | 7|  |G|    | 6|  |C|    | 7| 
+ |S|    | 6|  | |    | 4|  |W|    | 5| 
+ | |    | 4|  |G|    | 2|  | |    | 3| 
+ |S|B   | 2|  | |    | 1|  |W|    | 1| 
+ | |YRG | 0|  | |RGBY| 0|  | |RGBY| 0| 
+ | |    |-1|  | |    |-2|  | |    |-3| 
+	R R [0 1 2] P []
+Playing move Retrieve (2, 2 1) (1, 1 3)  for R
+Executing move Retrieve (2, 2 1) (1, 1 3) 
+Retrieving worker 2 from Tikal position 1, executing pay [1 S], gain [A 1]
+Retrieving worker 1 from Yaxchilan position 3, executing 1 + 0 gold, 1 corn
+	G R [8] P [6 7]
+Playing move Place (6, 2 0) (7, 0 0)  for G
+Executing move Place (6, 2 0) (7, 0 0) 
+Placing workers Place (6, 2 0) (7, 0 0) 
+Placing worker 6 on Tikal position 0
+Placing worker 7 on Palenque position 0
+	B R [12 13 14] P []
+Playing move Retrieve (12, 3 5)  for B
+Executing move Retrieve (12, 3 5) 
+Retrieving worker 12 from Uxmal position 5, executing [mirror] pay 1 corn, pay [2 S], gain [T 1]
+	Y R [18 19] P [20]
+Playing move Retrieve (19, 2 2) (18, 4 4)  for Y
+Executing move Retrieve (19, 2 2) (18, 4 4) 
+Retrieving worker 19 from Tikal position 2, executing [build 6] pay 3W , pay [], gain [A 1], 1 stone +
+Retrieving worker 18 from Chichen Itza position 4, executing skip
+Rotating Calendar
+Player R paid 2 workers, didn't pay 0 workers
+Player G paid 2 workers, didn't pay 0 workers
+Player B paid 1 workers, didn't pay 0 workers
+Player Y paid 1 workers, didn't pay 0 workers
+giving 0 points to R from temple 0
+giving 3 points to R from temple 1
+giving 2 points to R from temple 2
+giving 0 points to G from temple 0
+giving 3 points to G from temple 1
+giving 2 points to G from temple 2
+giving 4 points to B from temple 0
+giving 3 points to B from temple 1
+giving 2 points to B from temple 2
+giving 0 points to Y from temple 0
+giving 3 points to Y from temple 1
+giving 2 points to Y from temple 2
+Calendar State: 
+----Calendar------------
+| Palenque: _G__R___([4 1] [0 7])
+| Yaxchilan: _____G__([5] [8])
+| Tikal: _G______([1] [6])
+| Uxmal: __B_____([2 2] [13 14])
+| Chichen Itza: ___________([] [])
+------------------------
+
+----Player R------------
+| Resources: 4W 1S 0G 0C 
+| Corn: 1
+| Points: 11
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: false
+------------------------
+----Player G------------
+| Resources: 0W 2S 1G 0C 
+| Corn: 1
+| Points: 10
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: false
+------------------------
+----Player B------------
+| Resources: 0W 3S 1G 0C 
+| Corn: 1
+| Points: 23
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: true
+------------------------
+----Player Y------------
+| Resources: 3W 1S 0G 0C 
+| Corn: 1
+| Points: 10
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: true
+------------------------
+Accumulated corn: 3
+----Research------------
+|A |RGY |B   |    |    |
+|R |RGBY|    |    |    |
+|C |RY  |GB  |    |    |
+|T |GBY |R   |    |    |
+------------------------
+
+----Temples------------
+              Y----------              
+              | |    |13|  G---------- 
+ B----------  | |    |12|  | |    |10| 
+ | |    | 8|  | |    | 9|  | |    | 9| 
+ | |    | 7|  |G|    | 6|  |C|    | 7| 
+ |S|    | 6|  | |    | 4|  |W|    | 5| 
+ | |    | 4|  |G|    | 2|  | |    | 3| 
+ |S|B   | 2|  | |    | 1|  |W|    | 1| 
+ | |GYR | 0|  | |RGBY| 0|  | |RGBY| 0| 
+ | |    |-1|  | |    |-2|  | |    |-3| 
+End of round
+Calendar State: 
+----Calendar------------
+| Palenque: _G__R___([4 1] [0 7])
+| Yaxchilan: _____G__([5] [8])
+| Tikal: _G______([1] [6])
+| Uxmal: __B_____([2 2] [13 14])
+| Chichen Itza: ___________([] [])
+------------------------
+
+----Player R------------
+| Resources: 4W 1S 0G 0C 
+| Corn: 1
+| Points: 11
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: false
+------------------------
+----Player G------------
+| Resources: 0W 2S 1G 0C 
+| Corn: 1
+| Points: 10
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: false
+------------------------
+----Player B------------
+| Resources: 0W 3S 1G 0C 
+| Corn: 1
+| Points: 23
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: true
+------------------------
+----Player Y------------
+| Resources: 3W 1S 0G 0C 
+| Corn: 1
+| Points: 10
+| Corn Tiles: 0
+| Wood Tiles: 0
+| Free Workers: 0
+| Worker Deduction: 0
+| Light Side: true
+------------------------
+Accumulated corn: 3
+----Research------------
+|A |RGY |B   |    |    |
+|R |RGBY|    |    |    |
+|C |RY  |GB  |    |    |
+|T |GBY |R   |    |    |
+------------------------
+
+----Temples------------
+              Y----------              
+              | |    |13|  G---------- 
+ B----------  | |    |12|  | |    |10| 
+ | |    | 8|  | |    | 9|  | |    | 9| 
+ | |    | 7|  |G|    | 6|  |C|    | 7| 
+ |S|    | 6|  | |    | 4|  |W|    | 5| 
+ | |    | 4|  |G|    | 2|  | |    | 3| 
+ |S|B   | 2|  | |    | 1|  |W|    | 1| 
+ | |RGY | 0|  | |RGBY| 0|  | |RGBY| 0| 
+ | |    |-1|  | |    |-2|  | |    |-3| 
+ʃəɹvɛnæk [tzgolk-in] @main ! ➜ 

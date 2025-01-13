@@ -24,21 +24,29 @@ Things left to do
 - [x] add "player doesn't pay for 1 worker" and "player pays 1 food for worker" effects
 - [x] display research 
 - [x] display temples
-- [ ]  confirm all of research is there (who knows lol)
 - [x] add building color
 - [x] add monuments and set up currentMonuments
 - [x] end game
+
+# Sprint 2
+
+- [x] fix double-dipping
+- [ ] fix age2building16
+- [ ] fix removing buildings glitch (for real this time)
+- [ ] confirm all of research is there (who knows lol)
+
 - [ ] beg for corn
 - [ ] pay corn to go lower (first attempt broke)
 - [ ] uxmal exchange (first attempt broke)
 - [ ] make game clone itself not calendar
 - [ ] can't use same resources twice
 
-
-
 - [ ] change age1 and age2 stuff to just be arrays
 - [ ] add cdata.full to display
 - [ ] display buildings & monuments
+- [ ] clean up code
+- [ ] controller
+- [ ] enhanced x/y display
 
 ## AI 
 

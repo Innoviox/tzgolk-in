@@ -15,14 +15,34 @@ type Temple struct {
 	resources map[int]Resource
 }
 
+func (t *Temple) Clone() *Temple {
+	newLocations := make(map[Color]int)
+	for k, v := range t.playerLocations {
+		newLocations[k] = v
+	}
+
+	return &Temple {
+		steps: t.steps,
+		playerLocations: newLocations,
+		age1Prize: t.age1Prize,
+		age2Prize: t.age2Prize,
+		points: t.points,
+		resources: t.resources,
+	}
+}
+
 type Temples struct {
 	temples []*Temple
 }
 
 func (t *Temples) Clone() *Temples {
-	// todo if this matters
+	var newTemples = make([]*Temple, 0)
+	for _, temple := range t.temples {
+		newTemples = append(newTemples, temple.Clone())
+	}
+
 	return &Temples {
-		temples: t.temples,
+		temples: newTemples,
 	}
 }
 

@@ -24,9 +24,18 @@ type Research struct {
 }
 
 func (r *Research) Clone() *Research {
-	// todo if this matters
+	var newLevels = make(map[Color]Levels)
+
+	for k, v := range r.levels {
+		newSci := make(Levels)
+		for k2, v2 := range v {
+			newSci[k2] = v2
+		}
+		newLevels[k] = newSci
+	}
+
 	return &Research {
-		levels: r.levels,
+		levels: newLevels,
 	}
 }
 

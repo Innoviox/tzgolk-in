@@ -111,9 +111,9 @@ func Uxmal4(g *Game, p *Player) []Option {
 						g.research.Built(p)
 						
 						p.buildings = append(p.buildings, b)
-						g.RemoveBuilding(b)
+						// g.RemoveBuilding(b)
 					},
-					description: fmt.Sprintf("[build] pay %d corn, %s", cost, effect.description),
+					description: fmt.Sprintf("[build %d] pay %d corn, %s", b.id, cost, effect.description),
 				})
 			}
 		}

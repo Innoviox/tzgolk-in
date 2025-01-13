@@ -10,6 +10,7 @@ type Calendar struct {
 	wheels []*Wheel
 	rotation int
 	firstPlayer int
+	clone bool
 	// tojm9 do food days & such
 }
 
@@ -26,6 +27,7 @@ func (c *Calendar) Init() {
 	}
 
 	c.firstPlayer = -1
+	c.clone = false
 
 	// for i := 0; i < 5; i++ {
 	// 	c.AddWheel(&Wheel {
@@ -36,32 +38,34 @@ func (c *Calendar) Init() {
 	// }
 }
 
-func (c *Calendar) Clone() Calendar {
+func (c *Calendar) Clone() *Calendar {
 	new_wheels := make([]*Wheel, 0) // todo map method?
 	for _, wheel := range c.wheels {
 		new_wheels = append(new_wheels, wheel.Clone())
 	}
 
-	return Calendar {
+	return &Calendar {
 		wheels: new_wheels,
 		rotation: c.rotation,
+		firstPlayer: c.firstPlayer,
+		clone: true,
 	}
 }
 
 func (c *Calendar) Execute(move Move, game *Game) {
-	fmt.Fprintf(os.Stdout, "Executing move %s\n", move.String())
+	if !c.clone { fmt.Fprintf(os.Stdout, "Executing move %s\n", move.String()) }
 	if (move.placing) {
-		fmt.Fprintf(os.Stdout, "Placing workers %s\n", move.String())
+		if !c.clone { fmt.Fprintf(os.Stdout, "Placing workers %s\n", move.String()) }
 		for i := 0; i < len(move.workers); i++ {
 			p := move.positions[i]
 			worker := game.GetWorker(move.workers[i])
 
 			if p.firstPlayer {
-				fmt.Fprintf(os.Stdout, "First playering!\n")
+				if !c.clone { fmt.Fprintf(os.Stdout, "First playering!\n") }
 				c.firstPlayer = move.workers[i]
 				worker.available = false
 			} else {
-				fmt.Fprintf(os.Stdout, "Placing worker %d on %s position %d\n", move.workers[i], c.wheels[p.wheel_id].name, p.corn)
+				if !c.clone { fmt.Fprintf(os.Stdout, "Placing worker %d on %s position %d\n", move.workers[i], c.wheels[p.wheel_id].name, p.corn) }
 				c.wheels[p.wheel_id].AddWorker(p.corn, move.workers[i])
 
 				worker.available = false
@@ -77,8 +81,8 @@ func (c *Calendar) Execute(move Move, game *Game) {
 			w := game.GetWorker(move.workers[i])
 			p := move.positions[i]
 
-			fmt.Fprintf(os.Stdout, "Retrieving worker %d from %s position %d, executing %s\n", 
-						w.id, c.wheels[p.wheel_id].name, p.corn, p.Execute.description)
+			if !c.clone { fmt.Fprintf(os.Stdout, "Retrieving worker %d from %s position %d, executing %s\n", 
+						w.id, c.wheels[p.wheel_id].name, p.corn, p.Execute.description) }
 			p.Execute.Execute()
 			w.ReturnFrom(c.wheels[p.wheel_id])
 		}

@@ -268,15 +268,15 @@ func Age2Building16() Building {
         cost: [4]int{2, 1, 1, 0},
         GetEffects: func (g *Game, p *Player) []Option {
             options := make([]Option, 0)
-            for _, o := range Uxmal5(g, p) {
-                options = append(options, Option{
-                    Execute: func() {
-                        o.Execute()
-                        p.points += 2
-                    },
-                    description: fmt.Sprintf("%s, 2 points", o.description),
-                })
-            }
+            // for _, o := range Uxmal5(g, p) {
+            //     options = append(options, Option{
+            //         Execute: func() {
+            //             o.Execute()
+            //             p.points += 2
+            //         },
+            //         description: fmt.Sprintf("%s, 2 points", o.description),
+            //     })
+            // }
             return options
         },
         color: Red,
