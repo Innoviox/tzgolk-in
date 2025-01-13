@@ -140,7 +140,7 @@ func (t *Temples) GainTempleStep(p *Player, o Option, dir int) []Option {
 		if t.CanStep(p, i, dir) {
 			options = append(options, Option{
 				Execute: func(g *Game, p *Player) {
-					t.Step(p, i, dir)
+					g.temples.Step(p, i, dir)
 					o.Execute(g, p)
 				},
 				description: fmt.Sprintf("%s, %s temple %d", o.description, p.color.String(), dir),
