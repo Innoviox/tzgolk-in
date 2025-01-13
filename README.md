@@ -5,7 +5,7 @@ Goals
 Things left to do
 
 - [ ] Enhance display to display player resources & research & such
-- [ ] Add in wealth tiles
+- [x] Add in wealth tiles
 - [ ] Add buildings
 - [ ] Add first player space
 - [ ] add corn accumulation
@@ -16,6 +16,7 @@ Things left to do
 - [ ] add theo 1 (& confirm rest of research is in there)
 - [ ] add ages, food days, wealth days, point days, and such
 - [ ] add second building
+- [ ] add "player doesn't pay for 1 worker" and "player pays 1 food for worker" effects
 
 ## AI 
 

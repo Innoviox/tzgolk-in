@@ -33,9 +33,10 @@ func (g *Game) Init() {
 	for i, color := range [...]Color{Red, Green, Blue, Yellow} {
 		g.players[i] = &Player{
 			resources: [...]int{0, 0, 0, 0},
-			corn: 10, // todo wealth tiles
+			corn: 0,
 			color: color,
 			points: 0,
+			freeWorkers: 0,
 		}
 
 		for j := 0; j < 6; j++ {
@@ -55,9 +56,25 @@ func (g *Game) Init() {
 	g.temples = MakeTemples()
 	g.research = MakeResearch()
 
+	g.TileSetup()
+
 	g.currPlayer = 0
 	g.firstPlayer = 0
 	g.age = 1
+}
+
+func (g *Game) TileSetup() {
+	// todo: 4 choose 2
+
+	tiles := MakeWealthTiles()
+	t := 0
+	for i := 0; i < 4; i++ {
+		tiles[t].Execute(g, g.GetPlayer(i))
+		t++
+
+		tiles[t].Execute(g, g.GetPlayer(i))
+		t++
+	}
 }
 
 func (g *Game) Round() {

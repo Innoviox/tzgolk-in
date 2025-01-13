@@ -216,3 +216,7 @@ func (r *Research) GetOptionsHelper(g *Game, p *Player, resources [4]int, levels
 
 	return options
 }
+
+func (r *Research) FreeResearch(c Color, s Science) {
+	r.levels[c][s] += 1
+}

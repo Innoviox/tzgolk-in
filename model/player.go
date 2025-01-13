@@ -8,4 +8,6 @@ type Player struct {
 	points int
 	cornTiles int
 	woodTiles int
+
+	freeWorkers int
 }
