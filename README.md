@@ -24,12 +24,13 @@ Things left to do
 - [x] add "player doesn't pay for 1 worker" and "player pays 1 food for worker" effects
 - [x] display research 
 - [x] display temples
-- [ ]  confirm all of research is there
-- [ ] add building color
-- [ ] add monuments and set up currentMonuments
-- [ ] end game
+- [ ]  confirm all of research is there (who knows lol)
+- [x] add building color
+- [x] add monuments and set up currentMonuments
+- [x] end game
 - [ ] change age1 and age2 stuff to just be arrays
 - [ ] add cdata.full to display
+- [ ] display buildings & monuments
 
 ## AI 
 

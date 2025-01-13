@@ -16,6 +16,7 @@ func Building1() Building {
                 description: "1 free worker",
             }}
         },
+        color: Yellow,
     }
 }
 
@@ -32,6 +33,7 @@ func Building2() Building {
                 description: "1 BT, 1 GT",
             }}
         },
+        color: Red,
     }
 }
 
@@ -41,6 +43,7 @@ func Building3() Building {
         id: 3,
         cost: b.cost,
         GetEffects: b.GetEffects,
+        color: b.color,
     }
 }
 
@@ -56,6 +59,7 @@ func Building4() Building {
                 description: "free agr",
             }}
         },
+        color: Green,
     }
 }
 
@@ -71,6 +75,7 @@ func Building5() Building {
                 description: "1 worker deduction",
             }}
         },
+        color: Yellow,
     }
 }
 
@@ -86,6 +91,7 @@ func Building6() Building {
                 description: "free const",
             }}
         },
+        color: Blue,
     }
 }
 
@@ -102,6 +108,7 @@ func Building7() Building {
 
             return options
         },
+        color: Red,
     }
 }
 
@@ -118,6 +125,7 @@ func Building8() Building {
                 description: "1 BT 1 YT",
             }}
         },
+        color: Red,
     }
 }
 
@@ -134,6 +142,7 @@ func Building9() Building {
                 description: "free res, 1 corn",
             }}
         },
+        color: Green,
     }
 }
 
@@ -150,6 +159,7 @@ func Building10() Building {
                 description: "free theo, 1 GT",
             }}
         },
+        color: Blue,
     }
 }
 
@@ -159,6 +169,7 @@ func Building11() Building {
         id: 11,
         cost: b.cost,
         GetEffects: b.GetEffects,
+        color: b.color,
     }
 }
 
@@ -175,6 +186,7 @@ func Building12() Building {
                 description: "free res, 1 G",
             }}
         },
+        color: Green,
     }
 }
 
@@ -191,6 +203,7 @@ func Building13() Building {
                 description: "free agr, 1 S",
             }}
         },
+        color: Green,
     }
 }
 
@@ -200,6 +213,7 @@ func Building14() Building {
         id: 14,
         cost: b.cost,
         GetEffects: b.GetEffects,
+        color: Yellow,
     }
 }
 

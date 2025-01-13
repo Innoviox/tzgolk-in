@@ -8,6 +8,7 @@ type Building struct {
 	id int
 	cost [4]int
 	GetEffects Options
+	color Color
 }
 
 func (b *Building) CanBuild(player *Player) bool {
@@ -77,12 +78,38 @@ func (g *Game) GetBuildingOptions(p *Player, exclude int, useResearch bool) []Op
 						if useResearch {
 							g.research.Built(p)
 						}
-						// todo building colors?
+
+						p.buildings = append(p.buildings, b)
+
+						g.RemoveBuilding(b)
 					},
 					description: fmt.Sprintf("[build] pay %s, %s +%s", CostString(cost), effect.description, g.research.BuiltString(p)),
 					buildingNum: b.id,
 				})
 			}
+		}
+	}
+
+	return options
+}
+
+func (g *Game) GetMonumentOptions(p *Player) []Option {
+	options := make([]Option, 0)
+
+	for _, m := range g.currentMonuments {
+		if m.CanBuild(p) {
+			options = append(options, Option{
+				Execute: func() {
+					for i := 0; i < 4; i++ {
+						p.resources[i] -= m.cost[i]
+					}
+
+					p.monuments = append(p.monuments, m)
+
+					g.RemoveMonument(m)
+				},
+				description: fmt.Sprintf("[build] pay %s, get monument %d", CostString(m.cost), m.id),
+			})
 		}
 	}
 

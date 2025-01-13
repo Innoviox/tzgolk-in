@@ -5,7 +5,7 @@ import (
 )
 
 // https://stackoverflow.com/questions/37334119/how-to-delete-an-element-from-a-slice-in-golang
-func remove(slice []int, s int) []int {
+func remove[T any](slice []T, s int) []T {
     return append(slice[:s], slice[s+1:]...)
 }
 
@@ -119,4 +119,13 @@ func CostString(cost [4]int) string {
 		}
 	}
 	return result
+}
+
+func TotalCorn(p *Player) int {
+	corn := p.corn
+	corn += 2 * p.resources[Wood]
+	corn += 3 * p.resources[Stone]
+	corn += 4 * p.resources[Gold]
+	
+	return corn
 }

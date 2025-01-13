@@ -3,6 +3,7 @@ package model
 import (
 	"fmt"
 	"os"
+	"strings"
 	"math/rand"
 )
 
@@ -15,9 +16,9 @@ type Game struct {
 	temples *Temples
 	research *Research 
 	
-
-	// currentMonuments []Monument
-	// allMonuments []Monument 
+	nMonuments int
+	currentMonuments []Monument
+	allMonuments []Monument 
 	
 	nBuildings int
 	currentBuildings []Building
@@ -33,6 +34,8 @@ type Game struct {
 	day int
 	resDays []int
 	pointDays []int
+
+	over bool
 }
 
 func (g *Game) Init() {
@@ -68,11 +71,13 @@ func (g *Game) Init() {
 	g.age2Buildings = MakeAge2Buildings()
 
 	g.nBuildings = 6
+	g.currentBuildings = make([]Building, 0)
 	g.DealBuildings()
 
-	// todo currentbuildings
-	// todo monuments
-
+	g.nMonuments = 6
+	g.allMonuments = MakeMonuments()
+	g.currentMonuments = make([]Monument, 0)
+	g.DealMonuments()
 
 	g.TileSetup()
 
@@ -84,6 +89,8 @@ func (g *Game) Init() {
 	g.day = 0
 	g.resDays = []int{7, 20}
 	g.pointDays = []int{13, 26}
+
+	g.over = false
 }
 
 func (g *Game) TileSetup() {
@@ -101,6 +108,10 @@ func (g *Game) TileSetup() {
 }
 
 func (g *Game) Round() {
+	if g.over {
+		return 
+	}
+
 	g.currPlayer = g.firstPlayer
 	for i := 0; i < len(g.players); i++ {
 		g.TakeTurn()
@@ -117,14 +128,8 @@ func (g *Game) Round() {
 	fmt.Fprintf(os.Stdout, "Rotating Calendar\n")
 	g.Rotate()
 
-	fmt.Fprintf(os.Stdout, "Calendar State: \n%s\n", g.calendar.String(g.workers))
-
-	for i := 0; i < len(g.players); i++ {
-		fmt.Fprintf(os.Stdout, "%s", g.players[i].String())
-	}
-	fmt.Fprintf(os.Stdout, "Accumulated corn: %d\n", g.accumulatedCorn)
-
-	fmt.Fprintf(os.Stdout, "%s\n%s", g.research.String(), g.temples.String())
+	fmt.Fprintf(os.Stdout, "End of round\n")
+	fmt.Fprintf(os.Stdout, "%s", g.String())
 }
 
 func (g *Game) FirstPlayer() {
@@ -203,11 +208,40 @@ func (g *Game) CheckDay() {
 				g.currentBuildings = nil
 				g.DealBuildings()
 			} else {
-				// todo end game
+				g.EndGame()
 			}
 			return
 		}
 	}
+}
+
+func (g *Game) EndGame() {
+	for _, p := range g.players {
+		p.points += TotalCorn(p) / 4
+		p.points += p.resources[Skull] * 3
+
+		for _, m := range p.monuments {
+			p.points += m.GetPoints(g, p)
+		}
+	}
+
+	fmt.Fprintf(os.Stdout, "%s", g.String())
+	g.over = true
+}
+
+func (g *Game) String() string {
+	var br strings.Builder
+
+	fmt.Fprintf(&br, "Calendar State: \n%s\n", g.calendar.String(g.workers))
+
+	for i := 0; i < len(g.players); i++ {
+		fmt.Fprintf(&br, "%s", g.players[i].String())
+	}
+	fmt.Fprintf(&br, "Accumulated corn: %d\n", g.accumulatedCorn)
+
+	fmt.Fprintf(&br, "%s\n%s", g.research.String(), g.temples.String())
+
+	return br.String()
 }
 
 func (g *Game) FoodDay() {
@@ -252,6 +286,14 @@ func (g *Game) DealBuildings() {
 			b, g.age2Buildings = g.age2Buildings[0], g.age2Buildings[1:]
 			g.currentBuildings = append(g.currentBuildings, b)
 		}
+	}
+}
+
+func (g *Game) DealMonuments() {
+	for len(g.currentMonuments) < g.nMonuments {
+		var m Monument
+		m, g.allMonuments = g.allMonuments[0], g.allMonuments[1:]
+		g.currentMonuments = append(g.currentMonuments, m)
 	}
 }
 
@@ -452,4 +494,32 @@ func (g *Game) UnlockWorker(color Color) {
 			}
 		}
 	}
+}
+
+func (g *Game) RemoveBuilding(b Building) {
+	i := 0
+	for _, b2 := range g.currentBuildings {
+		if b2.id == b.id {
+			break
+		}
+		i++
+	}
+
+	g.currentBuildings = remove(g.currentBuildings, i)
+}
+
+func (g *Game) RemoveMonument(m Monument) {
+	i := 0
+	for _, m2 := range g.currentMonuments {
+		if m2.id == m.id {
+			break
+		}
+		i++
+	}
+
+	g.currentMonuments = remove(g.currentMonuments, i)
+}
+
+func (g *Game) Over() bool {
+	return g.over
 }

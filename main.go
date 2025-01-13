@@ -8,6 +8,7 @@ func main() {
 	game := new(model.Game)
 	game.Init()
 
-	game.Round()
-	game.Round()
+	for !game.Over() {
+		game.Round()
+	}
 }

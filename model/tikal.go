@@ -37,7 +37,7 @@ func Tikal4(g *Game, p *Player) []Option {
 		}
 	}
 
-	// todo monuments
+	options = append(options, g.GetMonumentOptions(p)...)
 
 	return options
 }

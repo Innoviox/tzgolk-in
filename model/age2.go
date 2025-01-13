@@ -18,6 +18,7 @@ func Age2Building1() Building {
                 description: "2 GT, 3 points",
             }}
         },
+        color: Blue,
     }
 }
 
@@ -34,6 +35,7 @@ func Age2Building2() Building {
                 description: "2 BT, 2 points",
             }}
         },
+        color: Blue,
     }
 }
 
@@ -49,6 +51,7 @@ func Age2Building3() Building {
                 description: "2 YT, 4 points",
             }}
         },
+        color: Blue,
     }
 }
 
@@ -59,6 +62,7 @@ func Age2Building4() Building {
         GetEffects: func (g *Game, p *Player) []Option {
             return g.research.GetOptions(g, p, 2, true)
         },
+        color: Blue,
     }
 }
 
@@ -76,6 +80,7 @@ func Age2Building5() Building {
                 description: "free theo, 1 BT, 1 GT",
             }}
         },
+        color: Blue,
     }
 }
 
@@ -97,6 +102,7 @@ func Age2Building6() Building {
 
             return options
         },
+        color: Green,
     }
 }
 
@@ -113,6 +119,8 @@ func Age2Building7() Building {
                 description: "unlock worker, 6 points",
             }}
         },
+        color: Red,
+
     }
 }
 
@@ -141,6 +149,7 @@ func Age2Building8() Building {
 
             return options
         },
+        color: Red,
     }
 }
 
@@ -156,6 +165,7 @@ func Age2Building9() Building {
                 description: "8 points",
             }}
         },
+        color: Red,
     }
 }
 
@@ -171,6 +181,7 @@ func Age2Building10() Building {
                 description: "3 free workers",
             }}
         },
+        color: Yellow,
     }
 }
 
@@ -189,6 +200,7 @@ func Age2Building11() Building {
                 description: "1 BT 1 GT 1 YT, 3 points",
             }}
         },
+        color: Red,
     }
 }
 
@@ -209,6 +221,7 @@ func Age2Building12() Building {
             }
             return options
         },
+        color: Green,
     }
 }
 
@@ -225,6 +238,7 @@ func Age2Building13() Building {
                 description: "free const, 3 points",
             }}
         },
+        color: Blue,
     }
 }
 
@@ -234,6 +248,7 @@ func Age2Building14() Building {
         id: 14,
         cost: b.cost,
         GetEffects: b.GetEffects,
+        color: Yellow,
     }
 }
 
@@ -243,6 +258,7 @@ func Age2Building15() Building {
         id: 15,
         cost: b.cost,
         GetEffects: b.GetEffects,
+        color: Yellow,
     }
 }
 
@@ -263,6 +279,7 @@ func Age2Building16() Building {
             }
             return options
         },
+        color: Red,
     }
 }
 
@@ -283,6 +300,7 @@ func Age2Building17() Building {
             }
             return options
         },
+        color: Green,
     }
 }
 
@@ -303,6 +321,7 @@ func Age2Building18() Building {
             }
             return options
         },
+        color: Green,
     }
 }
 

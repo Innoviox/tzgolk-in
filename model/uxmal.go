@@ -24,10 +24,7 @@ func Uxmal1(g *Game, p *Player) []Option {
 }
 
 func Uxmal2(g *Game, p *Player) []Option {
-	corn := p.corn
-	corn += 2 * p.resources[Wood]
-	corn += 3 * p.resources[Stone]
-	corn += 4 * p.resources[Gold]
+	corn := TotalCorn(p)
 
 	cornOptions := GenerateCornExchanges(corn, []CornOption{CornOption{
 		corn: p.corn,
@@ -106,7 +103,9 @@ func Uxmal4(g *Game, p *Player) []Option {
 						effect.Execute()
 
 						g.research.Built(p)
-						// todo building colors?
+						
+						p.buildings = append(p.buildings, b)
+						g.RemoveBuilding(b)
 					},
 					description: fmt.Sprintf("[build] pay %d corn, %s", cost, effect.description),
 				})

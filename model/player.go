@@ -18,6 +18,9 @@ type Player struct {
 	workerDeduction int
 
 	lightSide bool
+
+	buildings []Building
+	monuments []Monument
 }
 
 func (p *Player) String() string {

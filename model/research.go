@@ -55,14 +55,14 @@ func (r *Research) Foresight(c Color) bool {
 	return r.HasLevel(c, Theology, 1)
 }
 
-func (r *Research) CornBonus(player Color, tile Color) int {
-	if tile == Blue {
+func (r *Research) CornBonus(player Color, positionColor Color) int {
+	if positionColor == Blue {
 		if r.HasLevel(player, Agriculture, 2) {
 			return 1
 		} else {
 			return 0
 		}
-	} else if tile == Green {
+	} else if positionColor == Green {
 		if r.HasLevel(player, Agriculture, 1) {
 			return 1
 		} else if r.HasLevel(player, Agriculture, 3) {
