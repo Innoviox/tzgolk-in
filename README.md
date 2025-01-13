@@ -2,6 +2,21 @@
 
 Goals
 
+Things left to do
+
+- [ ] Enhance display to display player resources & research & such
+- [ ] Add in wealth tiles
+- [ ] Add buildings
+- [ ] Add first player space
+- [ ] add corn accumulation
+- [ ] add light side / dark side
+- [ ] add monuments
+- [ ] add corn exchange
+- [ ] add pay corn to get less
+- [ ] add theo 1 (& confirm rest of research is in there)
+- [ ] add ages, food days, wealth days, point days, and such
+- [ ] add second building
+
 ## AI 
 
 - [ ] Be able to generate all legal moves

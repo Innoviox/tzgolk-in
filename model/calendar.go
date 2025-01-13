@@ -64,8 +64,8 @@ func (c *Calendar) Execute(move Move, game *Game) {
 			w := game.GetWorker(move.workers[i])
 			p := move.positions[i]
 
-			fmt.Fprintf(os.Stdout, "Retrieving worker %d from wheel %d position %d, executing %s\n", 
-						w.id, p.wheel_id, p.corn, p.Execute.description)
+			fmt.Fprintf(os.Stdout, "Retrieving worker %d from %s position %d, executing %s\n", 
+						w.id, c.wheels[p.wheel_id].name, p.corn, p.Execute.description)
 			p.Execute.Execute()
 			w.ReturnFrom(c.wheels[p.wheel_id])
 		}
