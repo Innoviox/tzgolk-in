@@ -168,19 +168,22 @@ func (g *Game) TileSetup() {
 }
 
 // -- MARK -- Flow methods
-func (g *Game) FirstPlayerSpace() {
-	fmt.Fprintf(os.Stdout, "Firstplayering");
+func (g *Game) FirstPlayerSpace(MarkStep func(string)) {
+	// fmt.Fprintf(os.Stdout, "Firstplayering");
 	worker := g.GetWorker(g.Calendar.FirstPlayer)
-	fmt.Fprintf(os.Stdout, "Firstplayering %s\n", worker.Color)
+	// fmt.Fprintf(os.Stdout, "Firstplayering %s\n", worker.Color)
 	worker.Available = true
 	worker.Wheel_id = -1
 	worker.Position = -1
 	g.Calendar.FirstPlayer = -1
 	player := g.GetPlayerByColor(worker.Color)
-	fmt.Fprintf(os.Stdout, "giving player %d Corn", player.Corn)
+	// fmt.Fprintf(os.Stdout, "giving player %d Corn", player.Corn)
 	player.Corn += g.AccumulatedCorn
+	MarkStep(fmt.Sprintf("FirstPlayer for %s, +%d Corn", player.Color.String(), g.AccumulatedCorn))
+
 	g.AccumulatedCorn = 0
 
+	
 	playerIdx := 0
 	for i := 0; i < len(g.Players); i++ {
 		if g.Players[i].Color == player.Color {
@@ -212,52 +215,61 @@ func (g *Game) FirstPlayerSpace() {
 	if !nextDayIsFoodDay && player.LightSide && g.Rand.Intn(2) == 0 {
 		// todo actually decide
 		player.LightSide = false
-		fmt.Fprintf(os.Stdout, "Player %s has gone dark\n", player.Color)
-		g.Rotate()
+		// fmt.Fprintf(os.Stdout, "Player %s has gone dark\n", player.Color)
+		MarkStep(fmt.Sprintf("Player %s has gone dark", player.Color.String()))
+		g.Rotate(MarkStep)
 	}
 }
 
-func (g *Game) Rotate() {
-	fmt.Fprintf(os.Stdout, "Rotating Calendar\n")
+func (g *Game) Rotate(MarkStep func(string)) {
+	// fmt.Fprintf(os.Stdout, "Rotating Calendar\n")
+	MarkStep("Rotating Calendar")
 	g.Calendar.Rotate(g)
 	g.AccumulatedCorn += 1
 	g.Day += 1
-	g.CheckDay()
+	MarkStep("Rotated Calendar")
+	g.CheckDay(MarkStep)
 }
 
-func (g *Game) CheckDay() {
+func (g *Game) CheckDay(MarkStep func(string)) {
 	for _, day := range g.ResDays {
 		if g.Day == day {
-			g.FoodDay()
+			g.FoodDay(MarkStep)
 
 			for _, player := range g.Players {
 				g.Temples.GainResources(player)
 			}
+
+			MarkStep("Gained resources")
+
 			return
 		}
 	}
 
 	for _, day := range g.PointDays {
 		if g.Day == day {
-			g.FoodDay()
+			g.FoodDay(MarkStep)
 			
 			for _, player := range g.Players {
 				g.Temples.GainPoints(player, g.Age)
 			}
 
+			MarkStep("Gained points")
+
 			g.Age += 1
 			if g.Age == 2 {
 				g.CurrentBuildings = nil
 				g.DealBuildings()
+				MarkStep("Dealt new buildings")
 			} else {
-				g.EndGame()
+				g.EndGame(MarkStep)
 			}
 			return
 		}
 	}
 }
 
-func (g *Game) EndGame() {
+func (g *Game) EndGame(MarkStep func(string)) {
 	for _, p := range g.Players {
 		p.Points += p.TotalCorn() / 4
 		p.Points += p.Resources[Skull] * 3
@@ -265,13 +277,13 @@ func (g *Game) EndGame() {
 		for _, m := range p.Monuments {
 			p.Points += m.GetPoints(g, p)
 		}
+		MarkStep(fmt.Sprintf("Gained endgame points for %s", p.Color.String()))
 	}
 
-	fmt.Fprintf(os.Stdout, "%s", g.String())
 	g.Over = true
 }
 
-func (g *Game) FoodDay() {
+func (g *Game) FoodDay(MarkStep func(string)) {
 	for _, player := range g.Players {
 		paid := 0
 		unpaid := 0
@@ -288,22 +300,26 @@ func (g *Game) FoodDay() {
 				}
 			}
 		}
-		fmt.Fprintf(os.Stdout, "Player %s paid %d workers, didn't pay %d workers\n", player.Color.String(), paid, unpaid)
+		// fmt.Fprintf(os.Stdout, "Player %s paid %d workers, didn't pay %d workers\n", player.Color.String(), paid, unpaid)
+		MarkStep(fmt.Sprintf("Player %s paid %d workers, didn't pay %d workers", player.Color.String(), paid, unpaid))
 	}
 }
 
-func (g *Game) TakeTurn() {
+func (g *Game) TakeTurn(MarkStep func(string)) {
 	player := g.Players[g.CurrPlayer]
 	if player.Corn < 3 {
 		player.Corn = 3 // todo actually have begging
+		MarkStep(fmt.Sprintf("Player %s begged (TODO)", player.Color.String()))
 	}
 	moves := g.GenerateMoves(g.Players[g.CurrPlayer])
 	move := moves[g.Rand.Intn(len(moves))]
 
-	fmt.Fprintf(os.Stdout, "Playing move %s for %s\n", move.String(), player.Color)
+	// fmt.Fprintf(os.Stdout, "Playing move %s for %s\n", move.String(), player.Color)
+	MarkStep(fmt.Sprintf("Playing move %s for %s", move.String(), player.Color.String()))
 	
-	g.Calendar.Execute(move, g)
-	player.Corn -= move.Corn
+	g.Calendar.Execute(move, g, MarkStep)
+	// player.Corn -= move.Corn
+
 	g.DealBuildings()
 }
 

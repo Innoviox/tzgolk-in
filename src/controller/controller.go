@@ -1,8 +1,8 @@
 package controller
 
 import (
-    "fmt"
-    "os"
+    // "fmt"
+    // "os"
     "math/rand"
     . "tzgolkin/model"
     . "tzgolkin/impl"
@@ -49,10 +49,29 @@ func MakeController(rand *rand.Rand) *Controller {
     }
 }
 
-func (c *Controller) RunGame() {
+func (c *Controller) Run(MarkStep func(string)) {
     for !c.game.IsOver() {
-        c.Round()
+        MarkStep("Start of round\n")
+    
+        c.game.CurrPlayer = c.game.FirstPlayer
+        for i := 0; i < len(c.game.Players); i++ {
+            c.game.TakeTurn(MarkStep)
+            c.game.CurrPlayer = (c.game.CurrPlayer + 1) % len(c.game.Players)
+        }
+    
+        if c.game.Calendar.FirstPlayer != -1 {
+            c.game.FirstPlayerSpace(MarkStep)
+        }
+    
+        c.game.Rotate(MarkStep)
+
+        MarkStep("End of round\n")
+    
+        // fmt.Fprintf(os.Stdout, "End of round\n")
+        // fmt.Fprintf(os.Stdout, "%s", c.game.String())
     }
+
+    MarkStep("Game over\n")
 }
 
 func (c *Controller) IsOver() bool {
@@ -61,25 +80,4 @@ func (c *Controller) IsOver() bool {
 
 func (c *Controller) GetGame() *Game {
     return c.game
-}
-
-func (c *Controller) Round() {
-	if c.game.Over {
-		return 
-	}
-
-	c.game.CurrPlayer = c.game.FirstPlayer
-	for i := 0; i < len(c.game.Players); i++ {
-		c.game.TakeTurn()
-		c.game.CurrPlayer = (c.game.CurrPlayer + 1) % len(c.game.Players)
-	}
-
-	if c.game.Calendar.FirstPlayer != -1 {
-		c.game.FirstPlayerSpace()
-	}
-
-	c.game.Rotate()
-
-	fmt.Fprintf(os.Stdout, "End of round\n")
-	fmt.Fprintf(os.Stdout, "%s", c.game.String())
 }

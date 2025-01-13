@@ -112,7 +112,7 @@ func (g *Game) MakeRetrievalMoves(moves []Move, retrieval []int) []Move {
 
 		for i := 0; i < len(moves); i++ {
 			new_game := g.Clone()
-			new_game.Calendar.Execute(moves[i], new_game)
+			new_game.Calendar.Execute(moves[i], new_game, func(s string){})
 			for _, option := range new_game.GetOptions(worker) {
 				// if worker.Wheel_id != 4 {
 				// 	for j := 1; j < worker.Position; j++ {
@@ -166,7 +166,7 @@ func (g *Game) MakePlacementMoves(moves []Move, placement []int) []Move {
 	l := len(moves)
 	for i := 0; i < l; i++ {
 		new_game := g.Clone()
-		new_game.Calendar.Execute(moves[i], new_game)
+		new_game.Calendar.Execute(moves[i], new_game, func(s string){})
 
 		for _, position := range new_game.Calendar.LegalPositions() {
 			moves = append(moves, moves[i].Place(worker, position))

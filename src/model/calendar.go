@@ -2,7 +2,7 @@ package model
 
 import (
 	"fmt"
-	"os"
+	// "os"
 	"strings"
 )
 
@@ -66,20 +66,28 @@ func (c *Calendar) String(workers []*Worker) string {
 
 
 // -- MARK -- Unique methods
-func (c *Calendar) Execute(move Move, game *Game) {
-	if !c.IsClone { fmt.Fprintf(os.Stdout, "Executing move %s\n", move.String()) }
+func (c *Calendar) Execute(move Move, game *Game, MarkStep func(string)) {
+	if len(move.Workers) > 0 {
+		player := game.GetPlayerByColor(game.GetWorker(move.Workers[0]).Color)
+		player.Corn -= move.Corn
+		if !c.IsClone { MarkStep(fmt.Sprintf("Executing move %s for %s (-%d corn)", move.String(), player.Color.String(), move.Corn)) }
+	}
+	
+	
 	if (move.Placing) {
-		if !c.IsClone { fmt.Fprintf(os.Stdout, "Placing workers %s\n", move.String()) }
+		// if !c.IsClone { fmt.Fprintf(os.Stdout, "Placing workers %s\n", move.String()) }
 		for i := 0; i < len(move.Workers); i++ {
 			p := move.Positions[i]
 			worker := game.GetWorker(move.Workers[i])
 
 			if p.FirstPlayer {
-				if !c.IsClone { fmt.Fprintf(os.Stdout, "First playering!\n") }
+				// if !c.IsClone { fmt.Fprintf(os.Stdout, "First playering!\n") }
+				if !c.IsClone { MarkStep(fmt.Sprintf("First playering %s", worker.Color.String())) }
 				c.FirstPlayer = move.Workers[i]
 				worker.Available = false
 			} else {
-				if !c.IsClone { fmt.Fprintf(os.Stdout, "Placing worker %d on %s position %d\n", move.Workers[i], c.Wheels[p.Wheel_id].Name, p.Corn) }
+				// if !c.IsClone { fmt.Fprintf(os.Stdout, "Placing worker %d on %s position %d\n", move.Workers[i], c.Wheels[p.Wheel_id].Name, p.Corn) }
+				if !c.IsClone { MarkStep(fmt.Sprintf("Placing worker %s on %s position %d", worker.Color.String(), c.Wheels[p.Wheel_id].Name, p.Corn)) }
 				c.Wheels[p.Wheel_id].AddWorker(p.Corn, move.Workers[i])
 
 				worker.Available = false
@@ -97,8 +105,10 @@ func (c *Calendar) Execute(move Move, game *Game) {
 
 			player := game.GetPlayerByColor(w.Color)
 
-			if !c.IsClone { fmt.Fprintf(os.Stdout, "Retrieving worker %d from %s position %d, executing %s\n", 
-						w.Id, c.Wheels[p.Wheel_id].Name, p.Corn, p.Execute.Description) }
+			// if !c.IsClone { fmt.Fprintf(os.Stdout, "Retrieving worker %d from %s position %d, executing %s\n", 
+						// w.Id, c.Wheels[p.Wheel_id].Name, p.Corn, p.Execute.Description) }
+			if !c.IsClone { MarkStep(fmt.Sprintf("Retrieving worker %s from %s position %d, executing %s",
+				w.Color.String(), c.Wheels[p.Wheel_id].Name, p.Corn, p.Execute.Description)) }
 			p.Execute.Execute(game, player)
 			w.ReturnFrom(c.Wheels[p.Wheel_id])
 		}

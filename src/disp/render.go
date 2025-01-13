@@ -4,7 +4,7 @@ import (
     . "tzgolkin/model"
 )
 
-func (d *Display) Render() {
+func (d *Display) Render(step string) {
     g := d.controller.GetGame()
 
     for i, p := range g.Players {
@@ -12,10 +12,9 @@ func (d *Display) Render() {
     }
 
     d.screen.Put(10, 15, d.RenderCalendar(g.Calendar))
-
     d.screen.Put(d.screen.width - 40, 0, d.RenderTemples(g.Temples))
-
     d.screen.Put(d.screen.width - 40, 15, d.RenderResearch(g.Research))
+    d.screen.Put(10, 25, Convert(step))
 }
 
 func (d *Display) RenderPlayer(p *Player) [][]byte {

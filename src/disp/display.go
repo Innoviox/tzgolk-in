@@ -20,23 +20,24 @@ func MakeDisplay(controller *Controller) *Display {
     }
 }
 
-func (d *Display) String() string {
-    d.Blit()
+func (d *Display) String(step string) string {
+    d.Blit(step)
     return d.screen.String()
 }
 
 // -- MARK -- Unique methods
-func (d *Display) Blit() {
+func (d *Display) Blit(step string) {
     d.screen.Clear()
-    d.Render()
+    d.Render(step)
 }
 
 func (d *Display) Run() {
-    for !d.controller.IsOver() {
-        d.controller.Step()
-        fmt.Println(d.String())
-        d.Hang()
-    }
+    d.controller.Run(d.MarkStep)
+}
+
+func (d *Display) MarkStep(step string) {
+    fmt.Println(d.String(step))
+    d.Hang()
 }
 
 func (d *Display) Hang() {

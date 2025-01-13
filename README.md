@@ -10,10 +10,14 @@
 
 - [ ] display buildings
 - [ ] display game info (day, acc corn, etc...)
-- [ ] granular step
-- [ ] display moves
+- [x] granular step
+- [x] display moves
 - [ ] display advanced wheel info
 - [ ] highlight current player / changes at each step
+- [ ] display first player step
+- [ ] display day & food days
+- [ ] display number of workers per player
+- [ ] run through game and see if theres glitches
 
 
 
