@@ -8,37 +8,60 @@ func Chichen0(g *Game, p *Player) []Option {
 	return make([]Option, 0)
 }
 
-func ChichenX(temple int, points int, block bool, position int) Options {
+type ChichenSpot struct {
+	temple int
+	points int
+	block bool
+	position int
+}
+
+func ChichenSpots() []ChichenSpot {
+	return []ChichenSpot{
+		{0, 4, false, 1},
+		{0, 5, false, 2},
+		{0, 6, false, 3},
+		{2, 7, false, 4},
+		{2, 8, false, 5},
+		{2, 8, true, 6},
+		{1, 10, false, 7},
+		{1, 11, true, 8},
+		{1, 13, true, 9},
+	}
+}
+
+
+func ChichenX(n int) Options {
+	spot := ChichenSpots()[n]
 	return func(g *Game, p *Player) []Option {
 		ChichenHelper := func () []Option {
 			options := make([]Option, 0)
 		
-			if block {
+			if spot.block {
 				// if blocK: generate option for gaining each block
 				for i := 0; i < 3; i++ {
 					options = append(options, Option{
 						Execute: func() {
-							g.temples.Step(p, temple, 1)
-							p.points += points
+							g.temples.Step(p, spot.temple, 1)
+							p.points += spot.points
 							p.resources[i] += 1
 							p.resources[Skull] -= 1
 			
-							g.calendar.wheels[4].positions[position].cData.full = true
+							g.calendar.wheels[4].positions[spot.position].cData.full = true
 						},
-						description: fmt.Sprintf("%s temple, %d points, 1 %sT", string(ResourceDebug[i]), points, string(TempleDebug[temple])),
+						description: fmt.Sprintf("%s temple, %d points, 1 %sT", string(ResourceDebug[i]), spot.points, string(TempleDebug[spot.temple])),
 					})
 				}
 			} else {
 				// just generate option for points
 				options = append(options, Option{
 					Execute: func() {
-						g.temples.Step(p, temple, 1)
-						p.points += points
+						g.temples.Step(p, spot.temple, 1)
+						p.points += spot.points
 						p.resources[Skull] -= 1
 			
-						g.calendar.wheels[4].positions[position].cData.full = true
+						g.calendar.wheels[4].positions[spot.position].cData.full = true
 					},
-					description: fmt.Sprintf("%s temple, %d points", string(TempleDebug[temple]), points),
+					description: fmt.Sprintf("%s temple, %d points", string(TempleDebug[spot.temple]), spot.points),
 				})
 			}
 		
@@ -47,7 +70,18 @@ func ChichenX(temple int, points int, block bool, position int) Options {
 
 		options := make([]Option, 0)
 
-		if g.calendar.wheels[4].positions[position].cData.full || p.resources[Skull] == 0 {
+		if g.research.Foresight(p.color) {
+			if n < 8 {
+				options = append(options, ChichenX(n + 1)(g, p)...)
+			} else {
+				// mimic mirror
+				for i := 0; i < 8; i++ {
+					options = append(options, ChichenX(i)(g, p)...)
+				}
+			}
+		}
+
+		if g.calendar.wheels[4].positions[spot.position].cData.full || p.resources[Skull] == 0 {
 			return options 
 		}
 
@@ -75,20 +109,16 @@ func ChichenX(temple int, points int, block bool, position int) Options {
 		return options
 	}
 }
-
 func Chichen() []Options {
-	return []Options{
-		Chichen0,
-		ChichenX(0, 4, false, 1),
-		ChichenX(0, 5, false, 2),
-		ChichenX(0, 6, false, 3),
-		ChichenX(2, 7, false, 4),
-		ChichenX(2, 8, false, 5),
-		ChichenX(2, 8, true, 6),
-		ChichenX(1, 10, false, 7),
-		ChichenX(1, 11, true, 8),
-		ChichenX(1, 13, true, 9),
+	options := make([]Options, 0)
+
+	options = append(options, Chichen0)
+
+	for i := range ChichenSpots() {
+		options = append(options, ChichenX(i))
 	}
+
+	return options
 }
 
 func MakeChichen() *Wheel {

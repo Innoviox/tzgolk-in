@@ -50,6 +50,10 @@ func (r *Research) Devout(c Color) bool {
 	return r.HasLevel(c, Theology, 2)
 }
 
+func (r *Research) Foresight(c Color) bool {
+	return r.HasLevel(c, Theology, 1)
+}
+
 func (r *Research) CornBonus(player Color, tile Color) int {
 	if tile == Blue {
 		if r.HasLevel(player, Agriculture, 2) {

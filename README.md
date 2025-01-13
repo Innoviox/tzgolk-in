@@ -18,8 +18,8 @@ Things left to do
 - [x] add corn exchange
 - [x] add pay corn to get less
 - [x] pay corn for moves (and only generate playable moves)
-- [ ] workers that fall off come back
-- [ ] add theo 1
+- [x] workers that fall off come back
+- [x] add theo 1
 - [ ] add second building
 - [ ] add "player doesn't pay for 1 worker" and "player pays 1 food for worker" effects
 - [ ] display research 
@@ -29,6 +29,7 @@ Things left to do
 - [ ] add monuments and set up currentMonuments
 - [ ] end game
 - [ ] change age1 and age2 stuff to just be arrays
+- [ ] add cdata.full to display
 
 ## AI 
 
