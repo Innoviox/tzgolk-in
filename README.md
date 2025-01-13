@@ -15,12 +15,12 @@ Things left to do
 - [x] add ages, food days, wealth days, point days, and such
 - [x] set up currentBuildings
 - [x] deal out age 2 buildings
-- [ ] add corn exchange
+- [x] add corn exchange
 - [ ] add pay corn to get less
 - [ ] add theo 1
 - [ ] add second building
 - [ ] add "player doesn't pay for 1 worker" and "player pays 1 food for worker" effects
-- [ ] pay corn for moves
+- [ ] pay corn for moves (and only generate playable moves)123
 - [ ] display research 
 - [ ] display templs
 - [ ]  confirm all of research is there
