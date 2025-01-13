@@ -6,9 +6,10 @@ Things left to do
 
 - [x] Enhance display to display player resources
 - [x] Add in wealth tiles
-- [ ] Add buildings
+- [x] Add age 1 buildings
+- [ ] add age 2 buildings
 - [ ] Add first player space
-- [ ] add corn accumulation
+- [x] add corn accumulation
 - [ ] add light side / dark side
 - [ ] add monuments
 - [ ] add corn exchange
@@ -20,6 +21,7 @@ Things left to do
 - [ ] pay corn for moves
 - [ ] display research 
 - [ ] display templs
+- [ ] add building color
 
 ## AI 
 

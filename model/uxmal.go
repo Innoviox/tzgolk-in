@@ -49,13 +49,7 @@ func Uxmal4(g *Game, p *Player) []Option {
 						p.corn -= cost
 						effect.Execute()
 
-						// todo move to research file to remove HasLevels
-						if g.research.HasLevel(p.color, Construction, 1) {
-							p.corn += 1
-						}
-						if g.research.HasLevel(p.color, Construction, 2) {
-							p.points += 2
-						}
+						g.research.Built(p)
 						// todo building colors?
 					},
 					description: fmt.Sprintf("[build] pay %d corn, %s", cost, effect.description),

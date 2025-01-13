@@ -16,16 +16,18 @@ type Game struct {
 	research *Research 
 	
 
-	// currentMonuments []Monument
-	// allMonuments []Monument 
+	currentMonuments []Monument
+	allMonuments []Monument 
 
 	age int
-	currentBuildings []*Building
-	age1Buildings []*Building
-	age2Buildings []*Building 
+	currentBuildings []Building
+	age1Buildings []Building
+	age2Buildings []Building 
 
 	currPlayer int
 	firstPlayer int 
+
+	accumulatedCorn int
 }
 
 func (g *Game) Init() {
@@ -37,6 +39,7 @@ func (g *Game) Init() {
 			color: color,
 			points: 0,
 			freeWorkers: 0,
+			workerDeduction: 0,
 		}
 
 		for j := 0; j < 6; j++ {
@@ -56,11 +59,19 @@ func (g *Game) Init() {
 	g.temples = MakeTemples()
 	g.research = MakeResearch()
 
+	g.age1Buildings = MakeAge1Buildings()
+	g.age2Buildings = MakeAge2Buildings()
+
+	// todo currentbuildings
+	// todo monuments
+
+
 	g.TileSetup()
 
 	g.currPlayer = 0
 	g.firstPlayer = 0
 	g.age = 1
+	g.accumulatedCorn = 0
 }
 
 func (g *Game) TileSetup() {
@@ -90,10 +101,12 @@ func (g *Game) Round() {
 	fmt.Fprintf(os.Stdout, "Rotating Calendar\n")
 	g.calendar.Rotate(g)
 
+	g.accumulatedCorn += 1
+
 	fmt.Fprintf(os.Stdout, "Calendar State: \n%s\n", g.calendar.String(g.workers))
 
 	for i := 0; i < len(g.players); i++ {
-		fmt.Fprintf(os.Stdout, g.players[i].String())
+		fmt.Fprintf(os.Stdout, "%s", g.players[i].String())
 	}
 }
 
