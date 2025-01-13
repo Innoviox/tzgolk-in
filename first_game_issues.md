@@ -1,0 +1,4 @@
+- [ ] B's first move should have cost 1 corn
+- [ ] R got an extra corn from yaxchilan 2
+- [ ] B double-placed onto Tikal 0
+- [ ] 

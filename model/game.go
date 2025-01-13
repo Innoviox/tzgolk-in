@@ -36,9 +36,12 @@ type Game struct {
 	pointDays []int
 
 	over bool
+
+	rand *rand.Rand
 }
 
-func (g *Game) Init() {
+func (g *Game) Init(rand *rand.Rand) {
+	g.rand = rand
 	g.players = make([]*Player, 4)
 	for i, color := range [...]Color{Red, Green, Blue, Yellow} {
 		g.players[i] = &Player{
@@ -68,15 +71,15 @@ func (g *Game) Init() {
 	g.temples = MakeTemples()
 	g.research = MakeResearch()
 
-	g.age1Buildings = MakeAge1Buildings()
-	g.age2Buildings = MakeAge2Buildings()
+	g.age1Buildings = MakeAge1Buildings(g.rand)
+	g.age2Buildings = MakeAge2Buildings(g.rand)
 
 	g.nBuildings = 6
 	g.currentBuildings = make([]Building, 0)
 	g.DealBuildings()
 
 	g.nMonuments = 6
-	g.allMonuments = MakeMonuments()
+	g.allMonuments = MakeMonuments(g.rand)
 	g.currentMonuments = make([]Monument, 0)
 	g.DealMonuments()
 
@@ -99,7 +102,7 @@ func (g *Game) Init() {
 func (g *Game) TileSetup() {
 	// todo: 4 choose 2
 
-	tiles := MakeWealthTiles()
+	tiles := MakeWealthTiles(g.rand)
 	t := 0
 	for i := 0; i < 4; i++ {
 		for j := 0; j < 2; j++ {
@@ -173,7 +176,7 @@ func (g *Game) FirstPlayer() {
 		}
 	}
 
-	if !nextDayIsFoodDay && player.lightSide && rand.Intn(2) == 0 {
+	if !nextDayIsFoodDay && player.lightSide && g.rand.Intn(2) == 0 {
 		// todo actually decide
 		player.lightSide = false
 		fmt.Fprintf(os.Stdout, "Player %s has gone dark\n", player.color)
@@ -277,7 +280,7 @@ func (g *Game) TakeTurn() {
 		player.corn = 3 // todo actually have begging
 	}
 	moves := g.GenerateMoves(g.players[g.currPlayer])
-	move := moves[rand.Intn(len(moves))]
+	move := moves[g.rand.Intn(len(moves))]
 
 	fmt.Fprintf(os.Stdout, "Playing move %s for %s\n", move.String(), player.color)
 	

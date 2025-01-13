@@ -126,8 +126,7 @@ func MakePalenque() *Wheel {
 	return &Wheel{
 		id: 0,
 		size: len(positions),
-		occupied: make([]int, 0),
-		workers: make([]int, 0),
+		occupied: make(map[int]int),
 		positions: positions, 
 		name: "Palenque",
 	}

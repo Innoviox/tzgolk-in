@@ -3,6 +3,7 @@ package model
 import (
 	// "fmt"
 	// "os"
+	// "sort"
 )
 
 type Wheel struct {
@@ -10,8 +11,10 @@ type Wheel struct {
 	id int
 	size int
 
-	occupied []int
-	workers []int
+	// occupied []int
+	// workers []int
+	// map from position => worker id
+	occupied map[int]int
 
 
 	positions []*Position
@@ -19,17 +22,20 @@ type Wheel struct {
 }
 
 func (w *Wheel) Clone() *Wheel {
-	new_occupied := make([]int, 0)
-	new_occupied = append(new_occupied, w.occupied...)
+	// new_occupied := make([]int, 0)
+	// new_occupied = append(new_occupied, w.occupied...)
 
-	new_workers := make([]int, 0)
-	new_workers = append(new_workers, w.workers...)
+	// new_workers := make([]int, 0)
+	// new_workers = append(new_workers, w.workers...)
+	new_occupied := make(map[int]int)
+	for k, v := range w.occupied {
+		new_occupied[k] = v
+	}
 
 	return &Wheel {
 		id: w.id,
 		size: w.size,
 		occupied: new_occupied,
-		workers: new_workers,
 		positions: w.positions,
 		name: w.name,
 	}
@@ -37,39 +43,38 @@ func (w *Wheel) Clone() *Wheel {
 
 func (w *Wheel) AddWorker(position int, worker int) {
 	// fmt.Fprintf(os.Stdout, "Adding worker %d to %s position %d\n", worker, w.name, position)
-	w.occupied = append(w.occupied, position)
-	w.workers = append(w.workers, worker)
+	// w.occupied = append(w.occupied, position)
+	// w.workers = append(w.workers, worker)
+	w.occupied[position] = worker
 }
 
 func (w *Wheel) Rotate(g *Game) {
 	workerToRemove := -1
-	for i := 0; i < len(w.occupied); i++ {
-		w.occupied[i]++
-		if w.occupied[i] >= w.size {
-			workerToRemove = w.workers[i]
+	new_occupied := make(map[int]int)
+	for k, v := range w.occupied {
+		if k >= w.size - 1 {
+			workerToRemove = v
 		} else {
-			worker := g.GetWorker(w.workers[i])
+			new_occupied[k + 1] = v
+			worker := g.GetWorker(v)
 			worker.position++
 		}
-	}
+	} 
 
 	if workerToRemove != -1 {
 		g.GetWorker(workerToRemove).ReturnFrom(w)
 	}
+
+	w.occupied = new_occupied
 }
 
 func (w *Wheel) RemoveWorker(worker int) {
-	// todo use indexof method?
-	j := 0
-	for i := 0; i < len(w.workers); i++ {
-		if w.workers[i] == worker {
-			j = i
-			break
+	for k, v := range w.occupied {
+		if v == worker {
+			delete(w.occupied, k)
+			return
 		}
 	}
-
-	w.workers = remove(w.workers, j)
-	w.occupied = remove(w.occupied, j)
 }
 
 func MakeWheel(options []Options, wheel_id int, wheel_name string) *Wheel {
@@ -94,9 +99,19 @@ func MakeWheel(options []Options, wheel_id int, wheel_name string) *Wheel {
 	return &Wheel{
 		id: wheel_id,
 		size: len(positions),
-		occupied: make([]int, 0),
-		workers: make([]int, 0),
+		occupied: make(map[int]int),
 		positions: positions, 
 		name: wheel_name,
 	}
+}
+
+func (w *Wheel) LowestUnoccupied() int {
+	for i := 0; i < w.size; i++ {
+		_, ok := w.occupied[i]
+		if !ok {
+			return i
+		}
+	}
+
+	return -1
 }

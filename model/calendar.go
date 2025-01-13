@@ -93,14 +93,7 @@ func (c *Calendar) LegalPositions() []*SpecificPosition {
 	positions := make([]*SpecificPosition, 0)
 
 	for _, wheel := range c.wheels {
-		i := 0
-		for j := 0; j < len(wheel.occupied); j++ {
-			if (wheel.occupied[j]) > i {
-				break
-			} else {
-				i++
-			}
-		}
+		i := wheel.LowestUnoccupied()
 		
 		positions = append(positions, &SpecificPosition{
 			wheel_id: wheel.id,
@@ -144,10 +137,8 @@ func (c *Calendar) String(workers []*Worker) string {
 
 		out := make([]string, wheel.size)
 
-		for i := 0; i < len(wheel.occupied); i++ {
-			if wheel.occupied[i] < wheel.size {
-				out[wheel.occupied[i]] = workers[wheel.workers[i]].color.String()
-			}
+		for k, v := range wheel.occupied {
+			out[k] = workers[v].color.String()
 		}
 
 		for _, o := range out {
@@ -157,7 +148,7 @@ func (c *Calendar) String(workers []*Worker) string {
 				fmt.Fprintf(&br, "_")
 			}
 		}
-		fmt.Fprintf(&br, "(%v %v)\n", wheel.occupied, wheel.workers)
+		fmt.Fprintf(&br, "(%v)\n", wheel.occupied)
 	}
 	fmt.Fprintf(&br, "------------------------\n")
 

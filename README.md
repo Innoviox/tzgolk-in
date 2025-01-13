@@ -31,6 +31,7 @@ Things left to do
 # Sprint 2
 
 - [x] fix double-dipping
+- [ ] fix multitie at top of temple
 - [ ] fix age2building16
 - [ ] fix removing buildings glitch (for real this time)
 - [ ] confirm all of research is there (who knows lol)

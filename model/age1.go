@@ -217,7 +217,7 @@ func Building14() Building {
     }
 }
 
-func MakeAge1Buildings() []Building {
+func MakeAge1Buildings(r *rand.Rand) []Building {
     buildings := make([]Building, 0)
 
     buildings = append(buildings, Building1())
@@ -237,7 +237,7 @@ func MakeAge1Buildings() []Building {
 
     // shuffle buildings
 	for i := range buildings {
-		j := rand.Intn(i + 1)
+		j := r.Intn(i + 1)
 		buildings[i], buildings[j] = buildings[j], buildings[i]
 	}
 

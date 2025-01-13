@@ -128,7 +128,7 @@ func Tile21(g *Game, p *Player) {
 	p.resources[Stone] += 1
 }
 
-func MakeWealthTiles() []Tile {
+func MakeWealthTiles(r *rand.Rand) []Tile {
 	tiles := make([]Tile, 0)
 
 	tiles = append(tiles, Tile{ 1, Tile1 })
@@ -155,7 +155,7 @@ func MakeWealthTiles() []Tile {
 
 	// shuffle tiles
 	for i := range tiles {
-		j := rand.Intn(i + 1)
+		j := r.Intn(i + 1)
 		tiles[i], tiles[j] = tiles[j], tiles[i]
 	}
 

@@ -230,7 +230,7 @@ func Monument13() Monument {
     }
 }
 
-func MakeMonuments() []Monument {
+func MakeMonuments(r *rand.Rand) []Monument {
     monuments := make([]Monument, 0)
 
     monuments = append(monuments, Monument1())
@@ -248,7 +248,7 @@ func MakeMonuments() []Monument {
     monuments = append(monuments, Monument13())
 
     for i := range monuments {
-		j := rand.Intn(i + 1)
+		j := r.Intn(i + 1)
 		monuments[i], monuments[j] = monuments[j], monuments[i]
 	}
 

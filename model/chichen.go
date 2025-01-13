@@ -151,8 +151,7 @@ func MakeChichen() *Wheel {
 	return &Wheel {
 		id: 4,
 		size: len(positions),
-		occupied: make([]int, 0),
-		workers: make([]int, 0),
+		occupied: make(map[int]int),
 		positions: positions,
 		name: "Chichen Itza",
 	}
