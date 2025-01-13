@@ -1,7 +1,8 @@
-package model
+package wheels
 
 import (
 	"fmt"
+	. "tzgolkin/model"
 )
 
 func Chichen0(g *Game, p *Player) []Option {

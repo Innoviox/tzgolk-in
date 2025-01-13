@@ -10,6 +10,16 @@ type Worker struct {
 	position int// | nil
 }
 
+func MakeWorker(id int, color Color) *Worker {
+	return &Worker {
+		id: id,
+		color: color,
+		available: true,
+		wheel_id: -1,
+		position: -1,
+	}
+}
+
 func (w *Worker) ReturnFrom(wheel *Wheel) {
 	w.available = true
 	w.wheel_id = -1

@@ -17,6 +17,21 @@ type Option struct {
 	buildingNum int
 }
 
+func MakeOption(Execute func(*Game, *Player), description string) Option {
+	return Option{
+		Execute: Execute,
+		description: description,
+	}
+}
+
+func MakeOptionNum(Execute func(*Game, *Player), description string, buildingNum int) Option {
+	return Option{
+		Execute: Execute,
+		description: description,
+		buildingNum: buildingNum,
+	}
+}
+
 type Options func(*Game, *Player) []Option
 
 
@@ -130,4 +145,9 @@ func TotalCorn(p *Player) int {
 	corn += 4 * p.resources[Gold]
 	
 	return corn
+}
+
+type Tile struct {
+	n int
+	Execute func(*Game, *Player) // todo color type
 }

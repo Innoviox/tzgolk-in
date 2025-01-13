@@ -38,11 +38,13 @@ type Game struct {
 	over bool
 
 	rand *rand.Rand
+
+	tiles []Tile
 }
 
-func (g *Game) Init(rand *rand.Rand) {
-	g.rand = rand
+func (g *Game) Init() {
 	g.players = make([]*Player, 4)
+	g.workers = make([]*Worker, 0)
 	for i, color := range [...]Color{Red, Green, Blue, Yellow} {
 		g.players[i] = &Player{
 			resources: [...]int{0, 0, 0, 0},
@@ -65,21 +67,13 @@ func (g *Game) Init(rand *rand.Rand) {
 		}
 	}
 
-	g.calendar = new(Calendar)
-	g.calendar.Init()
-
-	g.temples = MakeTemples()
 	g.research = MakeResearch()
-
-	g.age1Buildings = MakeAge1Buildings(g.rand)
-	g.age2Buildings = MakeAge2Buildings(g.rand)
 
 	g.nBuildings = 6
 	g.currentBuildings = make([]Building, 0)
 	g.DealBuildings()
 
 	g.nMonuments = 6
-	g.allMonuments = MakeMonuments(g.rand)
 	g.currentMonuments = make([]Monument, 0)
 	g.DealMonuments()
 
@@ -101,13 +95,11 @@ func (g *Game) Init(rand *rand.Rand) {
 
 func (g *Game) TileSetup() {
 	// todo: 4 choose 2
-
-	tiles := MakeWealthTiles(g.rand)
 	t := 0
 	for i := 0; i < 4; i++ {
 		for j := 0; j < 2; j++ {
-			fmt.Fprintf(os.Stdout, "Placing tile %d for player %s\n", tiles[t].n, g.GetPlayer(i).color.String())
-			tiles[t].Execute(g, g.GetPlayer(i))
+			fmt.Fprintf(os.Stdout, "Placing tile %d for player %s\n", g.tiles[t].n, g.GetPlayer(i).color.String())
+			g.tiles[t].Execute(g, g.GetPlayer(i))
 			t++
 		}
 	}

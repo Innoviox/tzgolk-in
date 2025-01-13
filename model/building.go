@@ -11,6 +11,15 @@ type Building struct {
 	color Color
 }
 
+func MakeBuilding(id int, cost [4]int, getEffects Options, color Color) Building {
+	return Building {
+		id: id,
+		cost: cost,
+		GetEffects: getEffects,
+		color: color,
+	}
+}
+
 func (b *Building) CanBuild(player *Player) bool {
 	for i := 0; i < 4; i++ {
 		if player.resources[i] < b.cost[i] {

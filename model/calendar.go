@@ -14,20 +14,28 @@ type Calendar struct {
 	// tojm9 do food days & such
 }
 
-func (c *Calendar) Init() {
+// func (c *Calendar) Init() {
+func MakeCalendar(wheels []*Wheel) *Calendar {
 	// c.wheels = make([]*Wheel, 0)
-	c.rotation = 0
-
-	c.wheels = []*Wheel {
-		MakePalenque(),
-		MakeYaxchilan(),
-		MakeTikal(),
-		MakeUxmal(),
-		MakeChichen(),
+	return &Calendar {
+		rotation: 0,
+		wheels: wheels,
+		firstPlayer: -1,
+		clone: false,
 	}
+	// c.rotation = 0
 
-	c.firstPlayer = -1
-	c.clone = false
+	// // c.wheels = []*Wheel {
+	// // 	MakePalenque(),
+	// // 	MakeYaxchilan(),
+	// // 	MakeTikal(),
+	// // 	MakeUxmal(),
+	// // 	MakeChichen(),
+	// // }
+	// c.wheels = wheels
+
+	// c.firstPlayer = -1
+	// c.clone = false
 
 	// for i := 0; i < 5; i++ {
 	// 	c.AddWheel(&Wheel {

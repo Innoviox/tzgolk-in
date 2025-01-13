@@ -1,8 +1,9 @@
-package model
+package buildings
 
 import (
     "fmt"
     "math/rand"
+    . "tzgolkin/model"
 )
 
 func Age2Building1() Building {

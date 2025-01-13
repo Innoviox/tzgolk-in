@@ -23,6 +23,7 @@ type Player struct {
 	monuments []Monument
 }
 
+
 func (p *Player) String() string {
 	var br strings.Builder
 

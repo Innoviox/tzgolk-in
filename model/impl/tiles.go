@@ -1,13 +1,9 @@
-package model
+package impl
 
 import (
 	"math/rand"
+	. "tzgolkin/model"
 )
-
-type Tile struct {
-	n int
-	Execute func(*Game, *Player) // todo color type
-}
 
 func Tile1(g *Game, p *Player) {
 	p.corn += 6

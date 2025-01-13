@@ -35,7 +35,6 @@ Things left to do
 - [ ] fix age2building16
 - [ ] fix removing buildings glitch (for real this time)
 - [ ] confirm all of research is there (who knows lol)
-
 - [ ] beg for corn
 - [ ] pay corn to go lower (first attempt broke)
 - [ ] uxmal exchange (first attempt broke)
@@ -46,6 +45,8 @@ Things left to do
 - [ ] clean up code
 - [ ] controller
 - [ ] enhanced x/y display
+- [ ] make players a color-player map
+- [ ] move shuffles out of Make functions
 
 ## AI 
 

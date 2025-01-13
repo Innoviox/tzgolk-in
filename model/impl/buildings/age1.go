@@ -1,23 +1,24 @@
-package model
+package buildings
 
 import (
     "math/rand"
+    . "tzgolkin/model"
 )
 
 func Building1() Building {
-    return Building {
-        id: 1,
-        cost: [4]int{1, 0, 0, 0},
-        GetEffects: func (g *Game, p *Player) []Option {
-            return []Option {Option{
-                Execute: func(g *Game, p *Player) {
+    return MakeBuilding(
+        1,
+        [4]int{1, 0, 0, 0},
+        func (g *Game, p *Player) []Option {
+            return []Option {MakeOption(
+                func(g *Game, p *Player) {
                     p.freeWorkers += 1
                 },
-                description: "1 free worker",
-            }}
+                "1 free worker",
+            )}
         },
-        color: Yellow,
-    }
+        Yellow,
+    )
 }
 
 func Building2() Building {

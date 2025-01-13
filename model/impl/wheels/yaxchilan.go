@@ -1,7 +1,8 @@
-package model
+package wheels
 
 import (
 	"fmt"
+	. "tzgolkin/model"
 )
 
 func Yaxchilan0(g *Game, p *Player) []Option {
