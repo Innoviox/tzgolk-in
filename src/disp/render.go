@@ -14,6 +14,10 @@ func (d *Display) Render(step string) {
     d.screen.Put(10, 15, d.RenderCalendar(g.Calendar))
     d.screen.Put(d.screen.width - 40, 0, d.RenderTemples(g.Temples))
     d.screen.Put(d.screen.width - 40, 15, d.RenderResearch(g.Research))
+    for i, b := range g.CurrentBuildings {
+        d.screen.Put(d.screen.width - 8 - 6 * i, 25, d.RenderBuilding(b))
+    }
+
     d.screen.Put(10, 25, Convert(step))
 }
 
@@ -33,9 +37,9 @@ func (d *Display) RenderResearch(r *Research) [][]byte {
     return Convert(r.String())
 }
 
-// func (d *Display) RenderBuildings(b *Buildings) [][]byte {
-
-// }
+func (d *Display) RenderBuilding(b Building) [][]byte {
+    return Convert(b.String())
+}
 
 // func (d *Display) RenderMonuments(m *Monuments) [][]byte {
 

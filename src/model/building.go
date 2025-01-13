@@ -1,10 +1,37 @@
 package model
 
+import (
+	"fmt"
+	"strings"
+)
+
 type Building struct {
 	Id int
 	Cost [4]int
 	GetEffects Options
 	Color Color
+}
+
+func (b *Building) String() string {
+	var br strings.Builder
+
+	fmt.Fprintf(&br, "------\n")
+	fmt.Fprintf(&br, "|")
+	n := 0
+	for i := 0; i < 4; i++ {
+		for j := 0; j < b.Cost[i]; j++ {
+			fmt.Fprintf(&br, "%s", string(ResourceDebug[i]))
+			n++
+		}
+	}
+	for ; n < 4; n++ {
+		fmt.Fprintf(&br, " ")
+	}
+	fmt.Fprintf(&br, "|\n")
+	fmt.Fprintf(&br, "|%-4d|\n", b.Id)
+	fmt.Fprintf(&br, "------\n")
+
+	return br.String()
 }
 
 

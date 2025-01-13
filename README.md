@@ -8,16 +8,19 @@
 
 # Current Goal: Full-screeen display
 
-- [ ] display buildings
+- [x] display buildings
+- [ ] display monuments
 - [ ] display game info (day, acc corn, etc...)
+- [ ] display number of workers per player
+- [ ] display day & food days
+- [ ] display first player step
+- [ ] display who the first player is
 - [x] granular step
 - [x] display moves
 - [ ] display advanced wheel info
 - [ ] highlight current player / changes at each step
-- [ ] display first player step
-- [ ] display day & food days
-- [ ] display number of workers per player
 - [ ] run through game and see if theres glitches
+- [ ] further disentangle options and research from model
 
 
 
