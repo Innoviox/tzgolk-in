@@ -3,25 +3,8 @@ package model
 import (
 	"fmt"
 	"strings"
+	"github.com/innoviox/tzgolkin/model/types"
 )
-
-type Science int
-type Levels map[Science]int
-
-// todo get actual names
-const (
-	Agriculture Science = iota
-	Resources
-	Construction
-	Theology
-)
-
-const ResearchDebug = "ARCT"
-
-
-type Research struct {
-	levels map[Color]Levels
-}
 
 func (r *Research) Clone() *Research {
 	var newLevels = make(map[Color]Levels)

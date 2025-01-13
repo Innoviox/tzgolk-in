@@ -1,14 +1,8 @@
 package model
 
-type Worker struct {
-	id int
-
-	color Color
-
-	available bool
-	wheel_id int// | nil // use -1's
-	position int// | nil
-}
+import (
+	"github.com/innoviox/tzgolkin/model/types"
+)
 
 func (w *Worker) ReturnFrom(wheel *Wheel) {
 	w.available = true

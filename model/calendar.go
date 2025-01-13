@@ -4,15 +4,8 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"github.com/innoviox/tzgolkin/model/types"
 )
-
-type Calendar struct {
-	wheels []*Wheel
-	rotation int
-	firstPlayer int
-	clone bool
-	// tojm9 do food days & such
-}
 
 func (c *Calendar) Init() {
 	// c.wheels = make([]*Wheel, 0)

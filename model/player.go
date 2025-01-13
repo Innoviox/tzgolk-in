@@ -3,25 +3,8 @@ package model
 import (
 	"fmt"
 	"strings"
+	"github.com/innoviox/tzgolkin/model/types"
 )
-
-type Player struct {
-	resources [4]int
-	corn int 
-	color Color
-
-	points int
-	cornTiles int
-	woodTiles int
-
-	freeWorkers int
-	workerDeduction int
-
-	lightSide bool
-
-	buildings []Building
-	monuments []Monument
-}
 
 func (p *Player) String() string {
 	var br strings.Builder

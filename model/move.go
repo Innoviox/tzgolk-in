@@ -3,18 +3,8 @@ package model
 import (
 	"fmt"
 	"strings"
+	"github.com/innoviox/tzgolkin/model/types"
 )
-
-type Move struct {
-	placing bool
-	workers []int
-
-	positions []*SpecificPosition
-
-	corn int
-
-	Execute func()
-}
 
 func (m *Move) Retrieve(worker int, position *SpecificPosition, cornBack int) Move {
 	return Move {
