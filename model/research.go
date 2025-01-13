@@ -2,6 +2,7 @@ package model
 
 import (
 	"fmt"
+	"strings"
 )
 
 type Science int
@@ -92,8 +93,22 @@ func (r *Research) Built(p *Player) {
 	}
 
 	if r.HasLevel(p.color, Construction, 2) {
-		p.points += 1
+		p.points += 2
 	}
+}
+
+func (r *Research) BuiltString(p *Player) string {
+	var br strings.Builder
+
+	if r.HasLevel(p.color, Construction, 1) {
+		fmt.Fprintf(&br, "1 corn ")
+	}
+
+	if r.HasLevel(p.color, Construction, 2) {
+		fmt.Fprintf(&br, "2 points")
+	}
+
+	return br.String()
 }
 
 func (r *Research) Builder(c Color) bool {

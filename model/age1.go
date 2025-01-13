@@ -96,7 +96,7 @@ func Building7() Building {
         GetEffects: func (g *Game, p *Player) []Option {
             options := make([]Option, 0)
             
-            for _, o := range g.GetBuildingOptions(p, 7) {
+            for _, o := range g.GetBuildingOptions(p, 7, true) {
                 options = append(options, g.temples.GainTempleStep(p, o, 1)...)
             }
 

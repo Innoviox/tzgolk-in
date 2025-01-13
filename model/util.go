@@ -12,6 +12,7 @@ func remove(slice []int, s int) []int {
 type Option struct {
 	Execute func()
 	description string
+	buildingNum int
 }
 
 type Options func(*Game, *Player) []Option

@@ -215,10 +215,10 @@ func (g *Game) FoodDay() {
 		for _, w := range g.workers {
 			if w.color == player.color {
 				if w.wheel_id != -1 || w.available {
-					if player.corn >= 2 {
-						player.corn -= 2
+					if player.corn >= 2 - player.workerDeduction {
+						player.corn -= 2 - player.workerDeduction
 						paid += 1
-					} else {
+					} else if unpaid < player.freeWorkers{
 						player.points -= 3
 						unpaid += 1
 					}

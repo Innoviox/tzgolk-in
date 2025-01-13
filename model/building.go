@@ -55,7 +55,7 @@ func (b *Building) CornCost(game *Game, player *Player) int {
 	return cost
 }
 
-func (g *Game) GetBuildingOptions(p *Player, exclude int) []Option {
+func (g *Game) GetBuildingOptions(p *Player, exclude int, useResearch bool) []Option {
 	options := make([]Option, 0)
 
 	for _, b := range g.currentBuildings {
@@ -74,10 +74,13 @@ func (g *Game) GetBuildingOptions(p *Player, exclude int) []Option {
 
 						effect.Execute()
 
-						g.research.Built(p)
+						if useResearch {
+							g.research.Built(p)
+						}
 						// todo building colors?
 					},
-					description: fmt.Sprintf("[build] pay %s, %s", CostString(cost), effect.description),
+					description: fmt.Sprintf("[build] pay %s, %s +%s", CostString(cost), effect.description, g.research.BuiltString(p)),
+					buildingNum: b.id,
 				})
 			}
 		}

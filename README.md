@@ -20,10 +20,10 @@ Things left to do
 - [x] pay corn for moves (and only generate playable moves)
 - [x] workers that fall off come back
 - [x] add theo 1
-- [ ] add second building
-- [ ] add "player doesn't pay for 1 worker" and "player pays 1 food for worker" effects
+- [x] add second building
+- [x] add "player doesn't pay for 1 worker" and "player pays 1 food for worker" effects
 - [ ] display research 
-- [ ] display templs
+- [ ] display temples
 - [ ]  confirm all of research is there
 - [ ] add building color
 - [ ] add monuments and set up currentMonuments

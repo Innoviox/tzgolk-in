@@ -13,7 +13,7 @@ func Tikal1(g *Game, p *Player) []Option {
 }
 
 func Tikal2(g *Game, p *Player) []Option {
-	return g.GetBuildingOptions(p, -1)
+	return g.GetBuildingOptions(p, -1, true)
 }
 
 func Tikal3(g *Game, p *Player) []Option {
@@ -21,8 +21,25 @@ func Tikal3(g *Game, p *Player) []Option {
 }
 
 func Tikal4(g *Game, p *Player) []Option {
-	// todo double building
-	return make([]Option, 0)
+	options := make([]Option, 0)
+
+	for _, o := range g.GetBuildingOptions(p, -1, true) {
+		options = append(options, o)
+
+		for _, o2 := range g.GetBuildingOptions(p, o.buildingNum, false) {
+			options = append(options, Option{
+				Execute: func() {
+					o.Execute()
+					o2.Execute()
+				},
+				description: fmt.Sprintf("%s, %s [no res]", o.description, o2.description),
+			})
+		}
+	}
+
+	// todo monuments
+
+	return options
 }
 
 func Tikal5(g *Game, p *Player) []Option {
