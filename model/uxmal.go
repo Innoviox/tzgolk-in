@@ -24,23 +24,23 @@ func Uxmal1(g *Game, p *Player) []Option {
 }
 
 func Uxmal2(g *Game, p *Player) []Option {
-	corn := TotalCorn(p)
+	// corn := TotalCorn(p)
 
-	cornOptions := GenerateCornExchanges(corn, []CornOption{CornOption{
-		corn: p.corn,
-		resources: p.resources,
-	}})
+	// cornOptions := GenerateCornExchanges(corn, []CornOption{CornOption{
+	// 	corn: p.corn,
+	// 	resources: p.resources,
+	// }})
 
 	options := make([]Option, 0)
-	for _, o := range cornOptions {
-		options = append(options, Option{
-			Execute: func() {
-				p.corn = o.corn
-				p.resources = o.resources
-			},
-			description: fmt.Sprintf("exchange to %d corn, %v", o.corn, o.resources),
-		})
-	}
+	// for _, o := range cornOptions {
+	// 	options = append(options, Option{
+	// 		Execute: func() {
+	// 			p.corn = o.corn
+	// 			p.resources = o.resources
+	// 		},
+	// 		description: fmt.Sprintf("exchange to %d corn, %v", o.corn, o.resources),
+	// 	})
+	// }
 
 	return options
 }
@@ -57,25 +57,31 @@ func GenerateCornExchanges(corn int, base []CornOption) []CornOption {
 
 	options := make([]CornOption, 0)
 	
-	for _, o := range GenerateCornExchanges(corn - 2, base) {
-		options = append(options, CornOption{
-			corn: o.corn - 2,
-			resources: [4]int{ o.resources[0] + 1, o.resources[1], o.resources[2], o.resources[3] },
-		})
+	if (corn >= 2) {
+		for _, o := range GenerateCornExchanges(corn - 2, base) {
+			options = append(options, CornOption{
+				corn: o.corn - 2,
+				resources: [4]int{ o.resources[0] + 1, o.resources[1], o.resources[2], o.resources[3] },
+			})
+		}
 	}
 
-	for _, o := range GenerateCornExchanges(corn - 3, base) {
-		options = append(options, CornOption{
-			corn: o.corn - 3,
-			resources: [4]int{ o.resources[0], o.resources[1] + 1, o.resources[2], o.resources[3] },
-		})
+	if (corn >= 3) {
+		for _, o := range GenerateCornExchanges(corn - 3, base) {
+			options = append(options, CornOption{
+				corn: o.corn - 3,
+				resources: [4]int{ o.resources[0], o.resources[1] + 1, o.resources[2], o.resources[3] },
+			})
+		}
 	}
 
-	for _, o := range GenerateCornExchanges(corn - 4, base) {
-		options = append(options, CornOption{
-			corn: o.corn - 4,
-			resources: [4]int{ o.resources[0], o.resources[1], o.resources[2] + 1, o.resources[3] },
-		})
+	if (corn >= 4) {
+		for _, o := range GenerateCornExchanges(corn - 4, base) {
+			options = append(options, CornOption{
+				corn: o.corn - 4,
+				resources: [4]int{ o.resources[0], o.resources[1], o.resources[2] + 1, o.resources[3] },
+			})
+		}
 	}
 
 	return options

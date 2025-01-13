@@ -70,6 +70,13 @@ func ChichenX(n int, canForesight bool) Options {
 
 		options := make([]Option, 0)
 
+		options = append(options, Option{
+			Execute: func() {
+
+			},
+			description: "skip",
+		})
+
 		if canForesight && g.research.Foresight(p.color) {
 			if n < 8 {
 				options = append(options, ChichenX(n + 1, false)(g, p)...)

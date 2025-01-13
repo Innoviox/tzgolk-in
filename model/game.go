@@ -48,6 +48,7 @@ func (g *Game) Init() {
 			points: 0,
 			freeWorkers: 0,
 			workerDeduction: 0,
+			lightSide: true,
 		}
 
 		for j := 0; j < 6; j++ {
@@ -91,6 +92,8 @@ func (g *Game) Init() {
 	g.pointDays = []int{13, 26}
 
 	g.over = false
+
+	fmt.Fprintf(os.Stdout, "%s", g.String())
 }
 
 func (g *Game) TileSetup() {
@@ -385,8 +388,8 @@ func (g *Game) GetOptions(worker *Worker) []Option {
 		return make_retrieval_moves(m, r)
 */
 func (g *Game) MakeRetrievalMoves(moves []Move, retrieval []int) []Move {
-	// fmt.Fprintf(os.Stdout, "\tMakeRetrievalMoves %v %v\n", len(moves), retrieval)
-
+	// fmt.Fprintf(os.Stdout, "MakeRetrievalMoves %v %v\n", len(moves), retrieval)
+// 
 	if len(retrieval) == 0 {
 		return moves
 	}
@@ -406,15 +409,16 @@ func (g *Game) MakeRetrievalMoves(moves []Move, retrieval []int) []Move {
 
 		for i := 0; i < len(moves); i++ {
 			for _, option := range g.GetOptions(worker) {
-				if worker.wheel_id != 4 {
-					for j := 1; j < worker.position; j++ {
-						m = append(m, moves[i].Retrieve(w, &SpecificPosition {
-							wheel_id: worker.wheel_id,
-							corn: j,
-							Execute: option,
-						}, worker.position - j))
-					}
-				}
+				// if worker.wheel_id != 4 {
+				// 	for j := 1; j < worker.position; j++ {
+
+				// 		m = append(m, moves[i].Retrieve(w, &SpecificPosition {
+				// 			wheel_id: worker.wheel_id,
+				// 			corn: j,
+				// 			Execute: option,
+				// 		}, worker.position - j))
+				// 	}
+				// }
 				m = append(m, moves[i].Retrieve(w, &SpecificPosition {
 					wheel_id: worker.wheel_id,
 					corn: worker.position,
@@ -446,7 +450,7 @@ func (g *Game) MakeRetrievalMoves(moves []Move, retrieval []int) []Move {
 		return mpm(m, p, wheels)
 */
 func (g *Game) MakePlacementMoves(moves []Move, placement []int) []Move {
-	// todo first player nonsense
+	// fmt.Fprintf(os.Stdout, "\nMakePlacementMoves %v %v\n", len(moves), placement)
 	if len(placement) == 0 {
 		return moves
 	}

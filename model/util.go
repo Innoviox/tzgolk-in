@@ -2,10 +2,12 @@ package model
 
 import (
 	"fmt"
+	"os"
 )
 
 // https://stackoverflow.com/questions/37334119/how-to-delete-an-element-from-a-slice-in-golang
 func remove[T any](slice []T, s int) []T {
+	fmt.Fprintf(os.Stderr, "removing %d from %v\n", s, slice)
     return append(slice[:s], slice[s+1:]...)
 }
 
