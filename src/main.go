@@ -12,5 +12,5 @@ func main() {
 	ctrl := MakeController(r)
 	disp := MakeDisplay(ctrl)
 
-	disp.RunGame()
+	disp.Run()
 }

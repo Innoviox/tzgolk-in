@@ -8,9 +8,12 @@
 
 # Current Goal: Full-screeen display
 
-- [ ] 
-
-
+- [ ] display buildings
+- [ ] display game info (day, acc corn, etc...)
+- [ ] granular step
+- [ ] display moves
+- [ ] display advanced wheel info
+- [ ] highlight current player / changes at each step
 
 
 

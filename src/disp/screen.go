@@ -19,7 +19,7 @@ func MakeScreen(width int, height int) *Screen {
     for i := 0; i < height; i++ {
         grid[i] = make([]byte, width)
         for j := 0; j < width; j++ {
-            grid[i][j] = ' '
+            grid[i] = append(grid[i], ' ')
         }
     }
 

@@ -2,6 +2,8 @@ package disp
 
 import (
     "fmt"
+    "bufio"
+    "os"
     . "tzgolkin/controller"
 )
 
@@ -13,7 +15,7 @@ type Display struct {
 // -- MARK -- Basic methods
 func MakeDisplay(controller *Controller) *Display {
     return &Display {
-        screen: MakeScreen(150, 100),
+        screen: MakeScreen(150, 30),
         controller: controller,
     }
 }
@@ -29,9 +31,15 @@ func (d *Display) Blit() {
     d.Render()
 }
 
-func (d *Display) RunGame() {
+func (d *Display) Run() {
     for !d.controller.IsOver() {
         d.controller.Step()
         fmt.Println(d.String())
+        d.Hang()
     }
+}
+
+func (d *Display) Hang() {
+    reader := bufio.NewReader(os.Stdin)
+    reader.ReadString('\n')
 }
