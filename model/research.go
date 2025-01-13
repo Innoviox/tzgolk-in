@@ -96,13 +96,13 @@ func (r *Research) Builder(c Color) bool {
 	return r.HasLevel(c, Construction, 3)
 }
 
-func (r *Research) GetOptions(g *Game, p *Player, n int) []Option{ 
+func (r *Research) GetOptions(g *Game, p *Player, n int, free bool) []Option{ 
 	resources := [4]int{}
 	for i := 0; i < 4; i++ {
 		resources[i] = p.resources[i]
 	}
 
-	return r.GetOptionsHelper(g, p, resources, r.levels[p.color], n)
+	return r.GetOptionsHelper(g, p, resources, r.levels[p.color], n, free)
 }
 
 func GenerateResearchDescription(r [4]int, nr [4]int, l Levels, nl Levels) string {
@@ -129,12 +129,16 @@ func GenerateLevelsDescription(l Levels, nl Levels) string {
 	return fmt.Sprintf("%v", descriptions)
 }
 
-func (r *Research) GetOptionsHelper(g *Game, p *Player, resources [4]int, levels Levels, n int) []Option {
+func (r *Research) GetOptionsHelper(g *Game, p *Player, resources [4]int, levels Levels, n int, free bool) []Option {
 	options := make([]Option, 0)
 	for s := 0; s < 4; s++ {
 		level := levels[Science(s)]
+		possResources := [][4]int{resources}
 		if level < 3 {
-			for _, newResources := range PayBlocks(resources, level + 1) {
+			if !free {
+				possResources = PayBlocks(resources, level + 1)
+			}
+			for _, newResources := range possResources {
 				newLevels := make(Levels)
 				for k, v := range levels {
 					newLevels[k] = v
@@ -150,12 +154,15 @@ func (r *Research) GetOptionsHelper(g *Game, p *Player, resources [4]int, levels
 						description: GenerateResearchDescription(resources, newResources, levels, newLevels),
 					})
 				} else {
-					options = append(options, r.GetOptionsHelper(g, p, newResources, newLevels, n - 1)...)
+					options = append(options, r.GetOptionsHelper(g, p, newResources, newLevels, n - 1, free)...)
 				}
 			}
 		} else {
 			advancedOptions := make([]Option, 0)
-			for _, newResources := range PayBlocks(resources, 1) {
+			if !free {
+				possResources = PayBlocks(resources, 1)
+			}
+			for _, newResources := range possResources {
 				switch Science(s) {
 				case Agriculture:
 					advancedOptions = append(advancedOptions, g.temples.GainTempleStep(p.color, Option{
@@ -200,7 +207,7 @@ func (r *Research) GetOptionsHelper(g *Game, p *Player, resources [4]int, levels
 				options = append(options, advancedOptions...)
 			} else {
 				for _, o1 := range advancedOptions {
-					for _, o2 := range r.GetOptionsHelper(g, p, resources, levels, n - 1) {
+					for _, o2 := range r.GetOptionsHelper(g, p, resources, levels, n - 1, free) {
 						options = append(options, Option{
 							Execute: func() {
 								o1.Execute()

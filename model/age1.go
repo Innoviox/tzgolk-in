@@ -1,5 +1,9 @@
 package model
 
+import (
+    "math/rand"
+)
+
 func Building1() Building {
     return Building {
         id: 1,
@@ -11,7 +15,7 @@ func Building1() Building {
                 },
                 description: "1 free worker",
             }}
-        }
+        },
     }
 }
 
@@ -27,7 +31,7 @@ func Building2() Building {
                 },
                 description: "1 BT, 1 GT",
             }}
-        }
+        },
     }
 }
 
@@ -51,7 +55,7 @@ func Building4() Building {
                 },
                 description: "free agr",
             }}
-        }
+        },
     }
 }
 
@@ -66,7 +70,7 @@ func Building5() Building {
                 }, 
                 description: "1 worker deduction",
             }}
-        }
+        },
     }
 }
 
@@ -81,7 +85,7 @@ func Building6() Building {
                 },
                 description: "free const",
             }}
-        }
+        },
     }
 }
 
@@ -97,7 +101,7 @@ func Building7() Building {
             }
 
             return options
-        }
+        },
     }
 }
 
@@ -113,7 +117,7 @@ func Building8() Building {
                 },
                 description: "1 BT 1 YT",
             }}
-        }
+        },
     }
 }
 
@@ -129,7 +133,7 @@ func Building9() Building {
                 },
                 description: "free res, 1 corn",
             }}
-        }
+        },
     }
 }
 
@@ -145,7 +149,7 @@ func Building10() Building {
                 },
                 description: "free theo, 1 GT",
             }}
-        }
+        },
     }
 }
 
@@ -165,12 +169,12 @@ func Building12() Building {
         GetEffects: func (g *Game, p *Player) []Option {
             return []Option {Option{
                 Execute: func() {
-                    g.research.FreeResearch(p.color, Resource)
+                    g.research.FreeResearch(p.color, Resources)
                     p.resources[Gold] += 1
                 },
                 description: "free res, 1 G",
             }}
-        }
+        },
     }
 }
 
@@ -186,7 +190,7 @@ func Building13() Building {
                 },
                 description: "free agr, 1 S",
             }}
-        }
+        },
     }
 }
 

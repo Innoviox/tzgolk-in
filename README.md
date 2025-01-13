@@ -5,16 +5,17 @@ Goals
 Things left to do
 
 - [x] Enhance display to display player resources
+- [x] add corn accumulation
 - [x] Add in wealth tiles
 - [x] Add age 1 buildings
-- [ ] add age 2 buildings
+- [x] add age 2 buildings
+- [x] add free research to getoptions
 - [ ] Add first player space
-- [x] add corn accumulation
 - [ ] add light side / dark side
 - [ ] add monuments
 - [ ] add corn exchange
 - [ ] add pay corn to get less
-- [ ] add theo 1 (& confirm rest of research is in there)
+- [ ] add theo 1
 - [ ] add ages, food days, wealth days, point days, and such
 - [ ] add second building
 - [ ] add "player doesn't pay for 1 worker" and "player pays 1 food for worker" effects
@@ -22,6 +23,11 @@ Things left to do
 - [ ] display research 
 - [ ] display templs
 - [ ] add building color
+- [ ]  confirm all of research is there
+
+errors
+
+- [ ] temples out of bounds errors
 
 ## AI 
 

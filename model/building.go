@@ -1,8 +1,8 @@
 package model
 
-// import (
-// 	"tzgolkin/model/wheels"
-// )
+import (
+	"fmt"
+)
 
 type Building struct {
 	id int
