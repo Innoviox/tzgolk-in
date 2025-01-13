@@ -69,11 +69,11 @@ func (g *Game) TileSetup() {
 	tiles := MakeWealthTiles()
 	t := 0
 	for i := 0; i < 4; i++ {
-		tiles[t].Execute(g, g.GetPlayer(i))
-		t++
-
-		tiles[t].Execute(g, g.GetPlayer(i))
-		t++
+		for j := 0; j < 2; j++ {
+			fmt.Fprintf(os.Stdout, "Placing tile %d for player %s\n", tiles[t].n, g.GetPlayer(i).color.String())
+			tiles[t].Execute(g, g.GetPlayer(i))
+			t++
+		}
 	}
 }
 
@@ -91,6 +91,10 @@ func (g *Game) Round() {
 	g.calendar.Rotate(g)
 
 	fmt.Fprintf(os.Stdout, "Calendar State: \n%s\n", g.calendar.String(g.workers))
+
+	for i := 0; i < len(g.players); i++ {
+		fmt.Fprintf(os.Stdout, g.players[i].String())
+	}
 }
 
 func (g *Game) TakeTurn() {

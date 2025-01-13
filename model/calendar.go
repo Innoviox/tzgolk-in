@@ -113,8 +113,9 @@ func (c *Calendar) Rotate(g *Game) {
 func (c *Calendar) String(workers []*Worker) string {
 	var br strings.Builder
 
+	fmt.Fprintf(&br, "----Calendar------------\n")
 	for _, wheel := range c.wheels {
-		fmt.Fprintf(&br, "%s: ", wheel.name)
+		fmt.Fprintf(&br, "| %s: ", wheel.name)
 
 		out := make([]string, wheel.size)
 
@@ -133,7 +134,7 @@ func (c *Calendar) String(workers []*Worker) string {
 		}
 		fmt.Fprintf(&br, "(%v %v)\n", wheel.occupied, wheel.workers)
 	}
-
+	fmt.Fprintf(&br, "------------------------\n")
 
 	return br.String()
 }

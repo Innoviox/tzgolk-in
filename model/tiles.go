@@ -5,6 +5,7 @@ import (
 )
 
 type Tile struct {
+	n int
 	Execute func(*Game, *Player) // todo color type
 }
 
@@ -130,27 +131,27 @@ func Tile21(g *Game, p *Player) {
 func MakeWealthTiles() []Tile {
 	tiles := make([]Tile, 0)
 
-	tiles = append(tiles, Tile{ Tile1 })
-	tiles = append(tiles, Tile{ Tile2 })
-	tiles = append(tiles, Tile{ Tile3 })
-	tiles = append(tiles, Tile{ Tile4 })
-	tiles = append(tiles, Tile{ Tile5 })
-	tiles = append(tiles, Tile{ Tile6 })
-	tiles = append(tiles, Tile{ Tile7 })
-	tiles = append(tiles, Tile{ Tile8 })
-	tiles = append(tiles, Tile{ Tile9 })
-	tiles = append(tiles, Tile{ Tile10 })
-	tiles = append(tiles, Tile{ Tile11 })
-	tiles = append(tiles, Tile{ Tile12 })
-	tiles = append(tiles, Tile{ Tile13 })
-	tiles = append(tiles, Tile{ Tile14 })
-	tiles = append(tiles, Tile{ Tile15 })
-	tiles = append(tiles, Tile{ Tile16 })
-	tiles = append(tiles, Tile{ Tile17 })
-	tiles = append(tiles, Tile{ Tile18 })
-	tiles = append(tiles, Tile{ Tile19 })
-	tiles = append(tiles, Tile{ Tile20 })
-	tiles = append(tiles, Tile{ Tile21 })
+	tiles = append(tiles, Tile{ 1, Tile1 })
+	tiles = append(tiles, Tile{ 2, Tile2 })
+	tiles = append(tiles, Tile{ 3, Tile3 })
+	tiles = append(tiles, Tile{ 4, Tile4 })
+	tiles = append(tiles, Tile{ 5, Tile5 })
+	tiles = append(tiles, Tile{ 6, Tile6 })
+	tiles = append(tiles, Tile{ 7, Tile7 })
+	tiles = append(tiles, Tile{ 8, Tile8 })
+	tiles = append(tiles, Tile{ 9, Tile9 })
+	tiles = append(tiles, Tile{ 10, Tile10 })
+	tiles = append(tiles, Tile{ 11, Tile11 })
+	tiles = append(tiles, Tile{ 12, Tile12 })
+	tiles = append(tiles, Tile{ 13, Tile13 })
+	tiles = append(tiles, Tile{ 14, Tile14 })
+	tiles = append(tiles, Tile{ 15, Tile15 })
+	tiles = append(tiles, Tile{ 16, Tile16 })
+	tiles = append(tiles, Tile{ 17, Tile17 })
+	tiles = append(tiles, Tile{ 18, Tile18 })
+	tiles = append(tiles, Tile{ 19, Tile19 })
+	tiles = append(tiles, Tile{ 20, Tile20 })
+	tiles = append(tiles, Tile{ 21, Tile21 })
 
 	// shuffle tiles
 	for i := range tiles {
