@@ -134,7 +134,7 @@ func (r *Research) GetOptionsHelper(g *Game, p *Player, resources [4]int, levels
 	for s := 0; s < 4; s++ {
 		level := levels[Science(s)]
 		if level < 3 {
-			for _, newResources := range PayBlocks(resources, level) {
+			for _, newResources := range PayBlocks(resources, level + 1) {
 				newLevels := make(Levels)
 				for k, v := range levels {
 					newLevels[k] = v
