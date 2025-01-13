@@ -19,6 +19,7 @@ type Game struct {
 	// currentMonuments []Monument
 	// allMonuments []Monument 
 	
+	nBuildings int
 	currentBuildings []Building
 	age1Buildings []Building
 	age2Buildings []Building 
@@ -66,6 +67,9 @@ func (g *Game) Init() {
 	g.age1Buildings = MakeAge1Buildings()
 	g.age2Buildings = MakeAge2Buildings()
 
+	g.nBuildings = 6
+	g.DealBuildings()
+
 	// todo currentbuildings
 	// todo monuments
 
@@ -102,6 +106,8 @@ func (g *Game) Round() {
 		g.TakeTurn()
 		g.currPlayer = (g.currPlayer + 1) % len(g.players)
 	}
+
+	g.DealBuildings()
 
 	if g.calendar.firstPlayer != -1 {
 		g.FirstPlayer()
@@ -192,7 +198,8 @@ func (g *Game) CheckDay() {
 
 			g.age += 1
 			if g.age == 2 {
-				// todo deal age 2 buildings
+				g.currentBuildings = nil
+				g.DealBuildings()
 			} else {
 				// todo end game
 			}
@@ -230,6 +237,19 @@ func (g *Game) TakeTurn() {
 	fmt.Fprintf(os.Stdout, "Playing move %s for %s\n", move.String(), player.color)
 	
 	g.calendar.Execute(move, g)
+}
+
+func (g *Game) DealBuildings() {
+	for len(g.currentBuildings) < g.nBuildings {
+		var b Building
+		if g.age == 1 {
+			b, g.age1Buildings = g.age1Buildings[0], g.age1Buildings[1:]
+			g.currentBuildings = append(g.currentBuildings, b)
+		} else {
+			b, g.age2Buildings = g.age2Buildings[0], g.age2Buildings[1:]
+			g.currentBuildings = append(g.currentBuildings, b)
+		}
+	}
 }
 
 func (g *Game) GenerateMoves(p *Player) []Move {

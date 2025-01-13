@@ -13,8 +13,8 @@ Things left to do
 - [x] Add first player space
 - [x] add light side / dark side
 - [x] add ages, food days, wealth days, point days, and such
-- [ ] set up currentBuildings
-- [ ] deal out age 2 buildings
+- [x] set up currentBuildings
+- [x] deal out age 2 buildings
 - [ ] add corn exchange
 - [ ] add pay corn to get less
 - [ ] add theo 1
@@ -26,6 +26,8 @@ Things left to do
 - [ ]  confirm all of research is there
 - [ ] add building color
 - [ ] add monuments and set up currentMonuments
+- [ ] end game
+- [ ] change age1 and age2 stuff to just be arrays
 
 ## AI 
 
