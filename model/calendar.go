@@ -7,10 +7,10 @@ import (
 )
 
 type Calendar struct {
-	wheels []*Wheel
-	rotation int
-	firstPlayer int
-	clone bool
+	Wheels []*Wheel
+	Rotation int
+	FirstPlayer int
+	Clone bool
 	// tojm9 do food days & such
 }
 

@@ -1,13 +1,13 @@
 package model
 
 type Worker struct {
-	id int
+	Id int
 
-	color Color
+	Color Color
 
-	available bool
-	wheel_id int// | nil // use -1's
-	position int// | nil
+	Available bool
+	Wheel_id int// | nil // use -1's
+	Position int// | nil
 }
 
 func MakeWorker(id int, color Color) *Worker {

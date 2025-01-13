@@ -6,21 +6,21 @@ import (
 )
 
 type Player struct {
-	resources [4]int
-	corn int 
-	color Color
+	Resources [4]int
+	Corn int 
+	Color Color
 
-	points int
-	cornTiles int
-	woodTiles int
+	Points int
+	CornTiles int
+	WoodTiles int
 
-	freeWorkers int
-	workerDeduction int
+	FreeWorkers int
+	WorkerDeduction int
 
-	lightSide bool
+	LightSide bool
 
-	buildings []Building
-	monuments []Monument
+	Buildings []Building
+	Monuments []Monument
 }
 
 

@@ -6,12 +6,12 @@ import (
 )
 
 type Move struct {
-	placing bool
-	workers []int
+	Placing bool
+	Workers []int
 
-	positions []*SpecificPosition
+	Positions []*SpecificPosition
 
-	corn int
+	Corn int
 
 	Execute func()
 }

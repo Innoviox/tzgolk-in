@@ -5,10 +5,10 @@ import (
 )
 
 type Building struct {
-	id int
-	cost [4]int
+	Id int
+	Cost [4]int
 	GetEffects Options
-	color Color
+	Color Color
 }
 
 func MakeBuilding(id int, cost [4]int, getEffects Options, color Color) Building {

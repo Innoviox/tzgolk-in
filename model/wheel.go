@@ -8,17 +8,17 @@ import (
 
 type Wheel struct {
 	// this is all todo
-	id int
-	size int
+	Id int
+	Size int
 
 	// occupied []int
 	// workers []int
 	// map from position => worker id
-	occupied map[int]int
+	Occupied map[int]int
 
 
-	positions []*Position
-	name string
+	Positions []*Position
+	Name string
 }
 
 func (w *Wheel) Clone() *Wheel {

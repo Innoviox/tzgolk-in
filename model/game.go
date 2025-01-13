@@ -9,37 +9,37 @@ import (
 
 type Game struct {
 	// todo multiskull edge case
-	players []*Player
-	workers []*Worker
+	Players []*Player
+	Workers []*Worker
 
-	calendar *Calendar 
-	temples *Temples
-	research *Research 
+	Calendar *Calendar 
+	Temples *Temples
+	Research *Research 
 	
-	nMonuments int
-	currentMonuments []Monument
-	allMonuments []Monument 
+	NMonuments int
+	CurrentMonuments []Monument
+	AllMonuments []Monument 
 	
-	nBuildings int
-	currentBuildings []Building
-	age1Buildings []Building
-	age2Buildings []Building 
+	NBuildings int
+	CurrentBuildings []Building
+	Age1Buildings []Building
+	Age2Buildings []Building 
 
-	currPlayer int
-	firstPlayer int 
+	CurrPlayer int
+	FirstPlayer int 
 
-	accumulatedCorn int
+	AccumulatedCorn int
 
-	age int
-	day int
-	resDays []int
-	pointDays []int
+	Age int
+	Day int
+	ResDays []int
+	PointDays []int
 
-	over bool
+	Over bool
 
-	rand *rand.Rand
+	Rand *rand.Rand
 
-	tiles []Tile
+	Tiles []Tile
 }
 
 func (g *Game) Init() {

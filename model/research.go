@@ -20,7 +20,7 @@ const ResearchDebug = "ARCT"
 
 
 type Research struct {
-	levels map[Color]Levels
+	Levels map[Color]Levels
 }
 
 func (r *Research) Clone() *Research {

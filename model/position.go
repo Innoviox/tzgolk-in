@@ -6,27 +6,27 @@ import (
 )
 
 type Position struct {
-	wheel_id int
-	corn int
+	Wheel_id int
+	Corn int
 	GetOptions Options
-	pData *PalenqueData
-	cData *ChichenData
+	PData *PalenqueData
+	CData *ChichenData
 }
 
 type SpecificPosition struct {
-	wheel_id int
-	corn int
+	Wheel_id int
+	Corn int
 	Execute Option
-	firstPlayer bool
+	FirstPlayer bool
 }
 
 type PalenqueData struct {
-	cornTiles int
-	woodTiles int
+	CornTiles int
+	WoodTiles int
 }
 
 type ChichenData struct {
-	full bool
+	Full bool
 }
 
 func MakePData(hasWood bool) *PalenqueData {

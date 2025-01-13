@@ -7,12 +7,12 @@ import (
 )
 
 type Temple struct {
-	steps int
-	playerLocations map[Color]int
-	age1Prize int
-	age2Prize int
-	points []int
-	resources map[int]Resource
+	Steps int
+	PlayerLocations map[Color]int
+	Age1Prize int
+	Age2Prize int
+	Points []int
+	Resources map[int]Resource
 }
 
 func MakeTemple(steps int, playerLocations map[Color]int, age1Prize int, age2Prize int, points []int, resources map[int]Resource) *Temple {
@@ -49,7 +49,7 @@ func (t *Temple) Clone() *Temple {
 }
 
 type Temples struct {
-	temples []*Temple
+	Temples []*Temple
 }
 
 func (t *Temples) Clone() *Temples {

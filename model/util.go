@@ -13,23 +13,8 @@ func remove[T any](slice []T, s int) []T {
 
 type Option struct {
 	Execute func(*Game, *Player)
-	description string
-	buildingNum int
-}
-
-func MakeOption(Execute func(*Game, *Player), description string) Option {
-	return Option{
-		Execute: Execute,
-		description: description,
-	}
-}
-
-func MakeOptionNum(Execute func(*Game, *Player), description string, buildingNum int) Option {
-	return Option{
-		Execute: Execute,
-		description: description,
-		buildingNum: buildingNum,
-	}
+	Description string
+	BuildingNum int
 }
 
 type Options func(*Game, *Player) []Option

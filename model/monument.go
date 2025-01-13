@@ -1,10 +1,10 @@
 package model
 
 type Monument struct {
-    id int
-    cost [4]int
+    Id int
+    Cost [4]int
     GetPoints func (g *Game, p *Player) int
-    color Color
+    Color Color
 }
 
 func MakeMonument(id int, cost [4]int, getPoints func (g *Game, p *Player) int, color Color) *Monument {
