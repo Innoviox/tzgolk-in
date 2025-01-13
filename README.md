@@ -12,18 +12,20 @@ Things left to do
 - [x] add free research to getoptions
 - [x] Add first player space
 - [x] add light side / dark side
-- [ ] add monuments
+- [x] add ages, food days, wealth days, point days, and such
+- [ ] set up currentBuildings
+- [ ] deal out age 2 buildings
 - [ ] add corn exchange
 - [ ] add pay corn to get less
 - [ ] add theo 1
-- [ ] add ages, food days, wealth days, point days, and such
 - [ ] add second building
 - [ ] add "player doesn't pay for 1 worker" and "player pays 1 food for worker" effects
 - [ ] pay corn for moves
 - [ ] display research 
 - [ ] display templs
-- [ ] add building color
 - [ ]  confirm all of research is there
+- [ ] add building color
+- [ ] add monuments and set up currentMonuments
 
 ## AI 
 

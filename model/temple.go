@@ -2,6 +2,7 @@ package model
 
 import (
 	"fmt"
+	"os"
 )
 
 type Temple struct {
@@ -120,4 +121,56 @@ func (t *Temples) GainTempleStep(p *Player, o Option, dir int) []Option {
 	}
 
 	return options
+}
+
+func (t *Temples) GainResources(p *Player) {
+	for i := 0; i < 3; i++ {
+		step := t.temples[i].playerLocations[p.color]
+		for k, v := range t.temples[i].resources {
+			if step >= k {
+				p.resources[v] += 1
+				fmt.Fprintf(os.Stdout, "giving %s to %s from temple %d\n", string(ResourceDebug[v]), p.color.String(), i)
+			}
+		}
+	}
+}
+
+func (t *Temples) GainPoints(p *Player, age int) {
+	for i := 0; i < 3; i++ {
+		j := 0
+		j += t.temples[i].points[t.temples[i].playerLocations[p.color]]
+
+		isHighest := t.temples[i].IsHighest(p)
+		if isHighest == 0 {
+			if age == 1 {
+				j += t.temples[i].age1Prize / 2
+			} else {
+				j += t.temples[i].age2Prize / 2
+			}
+		} else if isHighest == 1 {
+			if age == 1 {
+				j += t.temples[i].age1Prize
+			} else {
+				j += t.temples[i].age2Prize
+			}
+		}
+		fmt.Fprintf(os.Stdout, "giving %d points to %s from temple %d\n", j, p.color.String(), i)
+		p.points += j
+	}
+}
+
+func (t *Temple) IsHighest(p *Player) int {
+	step := t.playerLocations[p.color]
+
+	highest := 1
+
+	for i := 0; i < 4; i++ {
+		if t.playerLocations[Color(i)] > step {
+			return -1
+		} else if Color(i) != p.color && t.playerLocations[Color(i)] == step {
+			highest = 0
+		}
+	}
+
+	return highest
 }

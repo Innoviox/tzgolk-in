@@ -16,10 +16,9 @@ type Game struct {
 	research *Research 
 	
 
-	currentMonuments []Monument
-	allMonuments []Monument 
-
-	age int
+	// currentMonuments []Monument
+	// allMonuments []Monument 
+	
 	currentBuildings []Building
 	age1Buildings []Building
 	age2Buildings []Building 
@@ -28,6 +27,11 @@ type Game struct {
 	firstPlayer int 
 
 	accumulatedCorn int
+
+	age int
+	day int
+	resDays []int
+	pointDays []int
 }
 
 func (g *Game) Init() {
@@ -70,8 +74,12 @@ func (g *Game) Init() {
 
 	g.currPlayer = 0
 	g.firstPlayer = 0
-	g.age = 1
 	g.accumulatedCorn = 0
+
+	g.age = 1
+	g.day = 0
+	g.resDays = []int{7, 20}
+	g.pointDays = []int{13, 26}
 }
 
 func (g *Game) TileSetup() {
@@ -95,35 +103,8 @@ func (g *Game) Round() {
 		g.currPlayer = (g.currPlayer + 1) % len(g.players)
 	}
 
-	// todo first player nonsense
 	if g.calendar.firstPlayer != -1 {
-		worker := g.GetWorker(g.calendar.firstPlayer)
-		worker.available = true
-		g.calendar.firstPlayer = -1
-		player := g.GetPlayerByColor(worker.color)
-		player.corn += g.accumulatedCorn
-		g.accumulatedCorn = 0
-
-		playerIdx := 0
-		for i := 0; i < len(g.players); i++ {
-			if g.players[i].color == player.color {
-				playerIdx = i
-				break
-			}
-		}
-
-		if g.firstPlayer == playerIdx {
-			g.firstPlayer = (g.firstPlayer + 1) % len(g.players)
-		} else {
-			g.firstPlayer = playerIdx
-		}
-
-		if player.lightSide && rand.Intn(2) == 0 {
-			// todo actually decide
-			player.lightSide = false
-			fmt.Fprintf(os.Stdout, "Player %s has gone dark\n", player.color)
-			g.Rotate()
-		}
+		g.FirstPlayer()
 	}
 
 	// todo food days
@@ -138,9 +119,107 @@ func (g *Game) Round() {
 	fmt.Fprintf(os.Stdout, "Accumulated corn: %d\n", g.accumulatedCorn)
 }
 
+func (g *Game) FirstPlayer() {
+	worker := g.GetWorker(g.calendar.firstPlayer)
+	worker.available = true
+	g.calendar.firstPlayer = -1
+	player := g.GetPlayerByColor(worker.color)
+	player.corn += g.accumulatedCorn
+	g.accumulatedCorn = 0
+
+	playerIdx := 0
+	for i := 0; i < len(g.players); i++ {
+		if g.players[i].color == player.color {
+			playerIdx = i
+			break
+		}
+	}
+
+	if g.firstPlayer == playerIdx {
+		g.firstPlayer = (g.firstPlayer + 1) % len(g.players)
+	} else {
+		g.firstPlayer = playerIdx
+	}
+
+	nextDayIsFoodDay := false
+	for _, day := range g.resDays {
+		if g.day == day - 1 {
+			nextDayIsFoodDay = true
+			break
+		}
+	}
+	for _, day := range g.pointDays {
+		if g.day == day - 1 {
+			nextDayIsFoodDay = true
+			break
+		}
+	}
+
+	if !nextDayIsFoodDay && player.lightSide && rand.Intn(2) == 0 {
+		// todo actually decide
+		player.lightSide = false
+		fmt.Fprintf(os.Stdout, "Player %s has gone dark\n", player.color)
+		g.Rotate()
+	}
+}
+
 func (g *Game) Rotate() {
 	g.calendar.Rotate(g)
 	g.accumulatedCorn += 1
+	g.day += 1
+	g.CheckDay()
+}
+
+func (g *Game) CheckDay() {
+	for _, day := range g.resDays {
+		if g.day == day {
+			g.FoodDay()
+
+			for _, player := range g.players {
+				g.temples.GainResources(player)
+			}
+			return
+		}
+	}
+
+	for _, day := range g.pointDays {
+		if g.day == day {
+			g.FoodDay()
+			
+			for _, player := range g.players {
+				g.temples.GainPoints(player, g.age)
+			}
+
+			g.age += 1
+			if g.age == 2 {
+				// todo deal age 2 buildings
+			} else {
+				// todo end game
+			}
+			return
+		}
+	}
+}
+
+func (g *Game) FoodDay() {
+	for _, player := range g.players {
+		paid := 0
+		unpaid := 0
+		for _, w := range g.workers {
+			if w.color == player.color {
+				if w.wheel_id != -1 || w.available {
+					if player.corn >= 2 {
+						player.corn -= 2
+						paid += 1
+					} else {
+						player.points -= 3
+						unpaid += 1
+					}
+				}
+			}
+		}
+		fmt.Fprintf(os.Stdout, "Player %s paid %d workers, didn't pay %d workers\n", player.color.String(), paid, unpaid)
+	}
 }
 
 func (g *Game) TakeTurn() {
