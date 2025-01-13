@@ -55,6 +55,14 @@ func (c *Controller) RunGame() {
     }
 }
 
+func (c *Controller) IsOver() bool {
+    return c.game.Over
+}
+
+func (c *Controller) GetGame() *Game {
+    return c.game
+}
+
 func (c *Controller) Round() {
 	if c.game.Over {
 		return 

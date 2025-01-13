@@ -138,7 +138,8 @@ func (r *Research) GetOptionsHelper(g *Game, p *Player, resources [4]int, levels
 	options := make([]Option, 0)
 	for s := 0; s < 4; s++ {
 		level := levels[Science(s)]
-		possResources := [][4]int{resources}
+		possResources := [][4]int{resources} // the resources you end up with after paying
+											 // (it's current resources since it's free)
 		if level < 3 {
 			if !free {
 				possResources = PayBlocks(resources, level + 1)
