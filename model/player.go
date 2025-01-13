@@ -71,3 +71,12 @@ func (p *Player) CanPay(cost [4]int) bool {
 	
 	return true
 }
+
+func (p *Player) TotalCorn() int {
+	Corn := p.Corn
+	Corn += 2 * p.Resources[Wood]
+	Corn += 3 * p.Resources[Stone]
+	Corn += 4 * p.Resources[Gold]
+	
+	return Corn
+}

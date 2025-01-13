@@ -8,19 +8,28 @@ import (
 type Science int
 type Levels map[Science]int
 
-// todo get actual names
-const (
-	Agriculture Science = iota
-	Resources
-	Construction
-	Theology
-)
-
-const ResearchDebug = "ARCT"
-
+func MakeLevels() Levels {
+	return Levels{
+		Agriculture: 0,
+		Resources: 0,
+		Construction: 0,
+		Theology: 0,
+	}
+}
 
 type Research struct {
 	Levels map[Color]Levels
+}
+
+func MakeResearch() *Research {
+	return &Research{
+		Levels: map[Color]Levels{
+			Red: MakeLevels(),
+			Green: MakeLevels(),
+			Blue: MakeLevels(),
+			Yellow: MakeLevels(),
+		},
+	}
 }
 
 func (r *Research) Clone() *Research {
@@ -39,24 +48,42 @@ func (r *Research) Clone() *Research {
 	}
 }
 
-func MakeLevels() Levels {
-	return Levels{
-		Agriculture: 0,
-		Resources: 0,
-		Construction: 0,
-		Theology: 0,
-	}
-}
+func (r *Research) String() string {
+	var br strings.Builder
 
-func MakeResearch() *Research {
-	return &Research{
-		Levels: map[Color]Levels{
-			Red: MakeLevels(),
-			Green: MakeLevels(),
-			Blue: MakeLevels(),
-			Yellow: MakeLevels(),
-		},
+	fmt.Fprintf(&br, "----Research------------\n")
+
+	var matrix [][]strings.Builder
+
+	for j := 0; j < 4; j++ {
+		row := make([]strings.Builder, 0)
+		for k := 0; k < 4; k++ {
+			row = append(row, strings.Builder{})
+		}
+		matrix = append(matrix, row)
 	}
+
+	for c, l := range r.Levels {
+		for s, n := range l {
+			fmt.Fprintf(&matrix[int(s)][n], "%s", c.String())
+		}
+	}
+	
+	for i := 0; i < 4; i++ {
+		fmt.Fprintf(&br, "|%s |", string(ResearchDebug[i]))
+
+		for j := 0; j < 4; j++ {
+			fmt.Fprintf(&br, "%-4s|", matrix[i][j].String())
+		}
+
+		fmt.Fprintf(&br, "\n")
+	}
+
+	fmt.Fprintf(&br, "------------------------\n")
+
+	matrix = nil
+
+	return br.String()
 }
 
 func (r *Research) HasLevel(c Color, s Science, level int) bool {
@@ -131,172 +158,6 @@ func (r *Research) Builder(c Color) bool {
 	return r.HasLevel(c, Construction, 3)
 }
 
-func (r *Research) GetOptions(g *Game, p *Player, n int, free bool) []Option{ 
-	resources := [4]int{}
-	for i := 0; i < 4; i++ {
-		resources[i] = p.Resources[i]
-	}
-
-	return r.GetOptionsHelper(g, p, resources, r.Levels[p.Color], n, free)
-}
-
-func GenerateResearchDescription(r [4]int, nr [4]int, l Levels, nl Levels) string {
-	return fmt.Sprintf("pay %s, gain %s", GeneratePaymentDescription(r, nr), GenerateLevelsDescription(l, nl))
-}
-
-func GeneratePaymentDescription(r [4]int, nr [4]int) string {
-	payments := make([]string, 0)
-	for i := 0; i < 4; i++ {
-		if nr[i] < r[i] {
-			payments = append(payments, fmt.Sprintf("%d %s", r[i] - nr[i], string(ResourceDebug[i])))
-		}
-	}
-	return fmt.Sprintf("%v", payments)
-}
-
-func GenerateLevelsDescription(l Levels, nl Levels) string {
-	Descriptions := make([]string, 0)
-	for s := 0; s < 4; s++ {
-		if nl[Science(s)] > l[Science(s)] {
-			Descriptions = append(Descriptions, fmt.Sprintf("%s %d", string(ResearchDebug[s]), nl[Science(s)] - l[Science(s)]))
-		}
-	}
-	return fmt.Sprintf("%v", Descriptions)
-}
-
-func (r *Research) GetOptionsHelper(g *Game, p *Player, resources [4]int, levels Levels, n int, free bool) []Option {
-	options := make([]Option, 0)
-	for s := 0; s < 4; s++ {
-		level := levels[Science(s)]
-		possResources := [][4]int{resources}
-		if level < 3 {
-			if !free {
-				possResources = PayBlocks(resources, level + 1)
-			}
-			for _, newResources := range possResources {
-				newLevels := make(Levels)
-				for k, v := range levels {
-					newLevels[k] = v
-				}
-				newLevels[Science(s)] += 1
-
-				if n == 1 {
-					options = append(options, Option{
-						Execute: func(g *Game, p *Player) {
-							p.Resources = newResources
-							g.Research.Levels[p.Color] = newLevels
-						},
-						Description: GenerateResearchDescription(resources, newResources, levels, newLevels),
-					})
-				} else {
-					options = append(options, r.GetOptionsHelper(g, p, newResources, newLevels, n - 1, free)...)
-				}
-			}
-		} else {
-			advancedOptions := make([]Option, 0)
-			if !free {
-				possResources = PayBlocks(resources, 1)
-			}
-			for _, newResources := range possResources {
-				switch Science(s) {
-				case Agriculture:
-					advancedOptions = append(advancedOptions, g.Temples.GainTempleStep(p, Option{
-						Execute: func(g *Game, p *Player) {
-							p.Resources = newResources
-						},
-						Description: fmt.Sprintf("[agr tier 4] pay %s", GeneratePaymentDescription(resources, newResources)),
-					}, 1)...)
-				case Resources:
-					for i := 0; i < 3; i++ {
-						for j := 0; j < 3; j++ {
-							advancedOptions = append(advancedOptions, Option{
-								Execute: func(g *Game, p *Player) {
-									p.Resources = newResources
-									p.Resources[i] += 1
-									p.Resources[j] += 1
-								},
-								Description: fmt.Sprintf("[res tier 4] pay %s, 1 %s, 1 %s", GeneratePaymentDescription(resources, newResources), string(ResourceDebug[i]), string(ResourceDebug[j])),
-							})
-						}
-					}
-				case Construction:
-					advancedOptions = append(advancedOptions, Option{
-						Execute: func(g *Game, p *Player) {
-							p.Resources = newResources
-							p.Points += 3
-						},
-						Description: fmt.Sprintf("[cons tier 4] pay %s, 3 points", GeneratePaymentDescription(resources, newResources)),
-					})
-				case Theology:
-					advancedOptions = append(advancedOptions, Option{
-						Execute: func(g *Game, p *Player) {
-							p.Resources = newResources
-							p.Resources[Skull] += 1
-						},
-						Description: fmt.Sprintf("[theo tier 4] pay %s, 1 skull", GeneratePaymentDescription(resources, newResources)),
-					})
-				}
-			}
-
-			if n == 1 {
-				options = append(options, advancedOptions...)
-			} else {
-				for _, o1 := range advancedOptions {
-					for _, o2 := range r.GetOptionsHelper(g, p, resources, levels, n - 1, free) {
-						options = append(options, Option{
-							Execute: func(g *Game, p *Player) {
-								o1.Execute(g, p)
-								o2.Execute(g, p)
-							},
-							Description: fmt.Sprintf("%s; %s", o1.Description, o2.Description),
-						})
-					}
-				}
-			}
-		}
-	}
-
-	return options
-}
-
 func (r *Research) FreeResearch(c Color, s Science) {
 	r.Levels[c][s] += 1
-}
-
-func (r *Research) String() string {
-	var br strings.Builder
-
-	fmt.Fprintf(&br, "----Research------------\n")
-
-	var matrix [][]strings.Builder
-
-	for j := 0; j < 4; j++ {
-		row := make([]strings.Builder, 0)
-		for k := 0; k < 4; k++ {
-			row = append(row, strings.Builder{})
-		}
-		matrix = append(matrix, row)
-	}
-
-	for c, l := range r.Levels {
-		for s, n := range l {
-			fmt.Fprintf(&matrix[int(s)][n], "%s", c.String())
-		}
-	}
-	
-	for i := 0; i < 4; i++ {
-		fmt.Fprintf(&br, "|%s |", string(ResearchDebug[i]))
-
-		for j := 0; j < 4; j++ {
-			fmt.Fprintf(&br, "%-4s|", matrix[i][j].String())
-		}
-
-		fmt.Fprintf(&br, "\n")
-	}
-
-	fmt.Fprintf(&br, "------------------------\n")
-
-	matrix = nil
-
-	return br.String()
 }

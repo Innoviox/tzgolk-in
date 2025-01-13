@@ -218,7 +218,7 @@ func (g *Game) CheckDay() {
 
 func (g *Game) EndGame() {
 	for _, p := range g.Players {
-		p.Points += TotalCorn(p) / 4
+		p.Points += p.TotalCorn() / 4
 		p.Points += p.Resources[Skull] * 3
 
 		for _, m := range p.Monuments {

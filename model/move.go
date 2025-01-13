@@ -17,6 +17,24 @@ type Move struct {
 }
 
 // -- MARK -- Basic methods
+func MakeEmptyRetrievalMove() Move {
+	return Move {
+		Placing: false,
+		Workers: make([]int, 0),
+		Positions: make([]*SpecificPosition, 0),
+		Corn: 0,
+	}
+}
+
+func MakeEmptyPlacementMove() Move {
+	return Move {
+		Placing: true,
+		Workers: make([]int, 0),
+		Positions: make([]*SpecificPosition, 0),
+		Corn: 0,
+	}
+}
+
 func (m *Move) String() string {
 	var br strings.Builder
 

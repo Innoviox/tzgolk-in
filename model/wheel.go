@@ -1,82 +1,18 @@
 package model
 
-import (
-	// "fmt"
-	// "os"
-	// "sort"
-)
-
 type Wheel struct {
 	// this is all todo
 	Id int
 	Size int
 
-	// occupied []int
-	// workers []int
 	// map from position => worker id
 	Occupied map[int]int
-
 
 	Positions []*Position
 	Name string
 }
 
-func (w *Wheel) Clone() *Wheel {
-	// new_occupied := make([]int, 0)
-	// new_occupied = append(new_occupied, w.Occupied...)
-
-	// new_workers := make([]int, 0)
-	// new_workers = append(new_workers, w.Workers...)
-	new_occupied := make(map[int]int)
-	for k, v := range w.Occupied {
-		new_occupied[k] = v
-	}
-
-	return &Wheel {
-		Id: w.Id,
-		Size: w.Size,
-		Occupied: new_occupied,
-		Positions: w.Positions,
-		Name: w.Name,
-	}
-}
-
-func (w *Wheel) AddWorker(position int, worker int) {
-	// fmt.Fprintf(os.Stdout, "Adding worker %d to %s position %d\n", worker, w.Name, position)
-	// w.Occupied = append(w.Occupied, position)
-	// w.Workers = append(w.Workers, worker)
-	w.Occupied[position] = worker
-}
-
-func (w *Wheel) Rotate(g *Game) {
-	workerToRemove := -1
-	new_occupied := make(map[int]int)
-	for k, v := range w.Occupied {
-		if k >= w.Size - 1 {
-			workerToRemove = v
-		} else {
-			new_occupied[k + 1] = v
-			worker := g.GetWorker(v)
-			worker.Position++
-		}
-	} 
-
-	if workerToRemove != -1 {
-		g.GetWorker(workerToRemove).ReturnFrom(w)
-	}
-
-	w.Occupied = new_occupied
-}
-
-func (w *Wheel) RemoveWorker(worker int) {
-	for k, v := range w.Occupied {
-		if v == worker {
-			delete(w.Occupied, k)
-			return
-		}
-	}
-}
-
+// -- MARK -- Basic methods
 func MakeWheel(options []Options, Wheel_id int, wheel_name string) *Wheel {
 	positions := make([]*Position, 0)
 
@@ -103,6 +39,55 @@ func MakeWheel(options []Options, Wheel_id int, wheel_name string) *Wheel {
 		Positions: positions, 
 		Name: wheel_name,
 	}
+}
+
+func (w *Wheel) Clone() *Wheel {
+	new_occupied := make(map[int]int)
+	for k, v := range w.Occupied {
+		new_occupied[k] = v
+	}
+
+	return &Wheel {
+		Id: w.Id,
+		Size: w.Size,
+		Occupied: new_occupied,
+		Positions: w.Positions,
+		Name: w.Name,
+	}
+}
+
+// -- MARK -- Unique methods
+func (w *Wheel) AddWorker(position int, worker int) {
+	w.Occupied[position] = worker
+}
+
+func (w *Wheel) RemoveWorker(worker int) {
+	for k, v := range w.Occupied {
+		if v == worker {
+			delete(w.Occupied, k)
+			return
+		}
+	}
+}
+
+func (w *Wheel) Rotate(g *Game) {
+	workerToRemove := -1 // only one worker per wheel can fall off
+	new_occupied := make(map[int]int)
+	for k, v := range w.Occupied {
+		if k >= w.Size - 1 {
+			workerToRemove = v
+		} else {
+			new_occupied[k + 1] = v
+			worker := g.GetWorker(v)
+			worker.Position++
+		}
+	} 
+
+	if workerToRemove != -1 {
+		g.GetWorker(workerToRemove).ReturnFrom(w)
+	}
+
+	w.Occupied = new_occupied
 }
 
 func (w *Wheel) LowestUnoccupied() int {

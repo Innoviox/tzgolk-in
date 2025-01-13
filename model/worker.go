@@ -32,7 +32,6 @@ func (w *Worker) Clone() *Worker {
 }
 
 // -- MARK -- Unique methods
-
 func (w *Worker) ReturnFrom(wheel *Wheel) {
 	w.Available = true
 	w.Wheel_id = -1
