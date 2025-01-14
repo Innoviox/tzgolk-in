@@ -77,11 +77,16 @@ func (w *Wheel) Clone() *Wheel {
 		new_occupied[k] = v
 	}
 
+	new_positions := make([]*Position, 0)
+	for _, p := range w.Positions {
+		new_positions = append(new_positions, p.Clone())
+	}
+
 	return &Wheel {
 		Id: w.Id,
 		Size: w.Size,
 		Occupied: new_occupied,
-		Positions: w.Positions,
+		Positions: new_positions,
 		Name: w.Name,
 	}
 }

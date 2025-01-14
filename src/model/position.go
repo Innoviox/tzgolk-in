@@ -13,6 +13,26 @@ type Position struct {
 	CData *ChichenData
 }
 
+func (p *Position) Clone() *Position {
+	var newPData *PalenqueData
+	if p.PData != nil {
+		newPData = p.PData.Clone()
+	}
+
+	var newCData *ChichenData
+	if p.CData != nil {
+		newCData = p.CData.Clone()
+	}
+
+	return &Position {
+		Wheel_id: p.Wheel_id,
+		Corn: p.Corn,
+		GetOptions: p.GetOptions,
+		PData: newPData,
+		CData: newCData,
+	}
+}
+
 type SpecificPosition struct {
 	Wheel_id int
 	Corn int
@@ -47,6 +67,13 @@ func MakePData(hasWood bool) *PalenqueData {
 	}
 }
 
+func (pd *PalenqueData) Clone() *PalenqueData {
+	return &PalenqueData {
+		CornTiles: pd.CornTiles,
+		WoodTiles: pd.WoodTiles,
+	}
+}
+
 func (pd *PalenqueData) HasCornShowing() bool {
 	return pd.CornTiles > pd.WoodTiles
 }
@@ -59,5 +86,11 @@ type ChichenData struct {
 func MakeCData() *ChichenData {
 	return &ChichenData {
 		Full: false,
+	}
+}
+
+func (cd *ChichenData) Clone() *ChichenData {
+	return &ChichenData {
+		Full: cd.Full,
 	}
 }

@@ -52,7 +52,7 @@ func Jungle(Corn int, wood int, position int) Options {
 				Execute: func (g *Game, p *Player) {
 					p.Resources[Wood] += wood + g.Research.ResourceBonus(p.Color, Wood)
 					p.WoodTiles += 1
-					g.Calendar.Wheels[0].Positions[3].PData.WoodTiles -= 1
+					g.Calendar.Wheels[0].Positions[position].PData.WoodTiles -= 1
 				},
 				Description: fmt.Sprintf("%d + %d wood", wood, g.Research.ResourceBonus(p.Color, Wood)),
 			})
@@ -61,8 +61,8 @@ func Jungle(Corn int, wood int, position int) Options {
 				Execute: func (g *Game, p *Player) {
 					p.Corn += Corn + g.Research.CornBonus(p.Color, Green)
 					p.CornTiles += 1
-					g.Calendar.Wheels[0].Positions[3].PData.WoodTiles -= 1
-					g.Calendar.Wheels[0].Positions[3].PData.CornTiles -= 1
+					g.Calendar.Wheels[0].Positions[position].PData.WoodTiles -= 1
+					g.Calendar.Wheels[0].Positions[position].PData.CornTiles -= 1
 				},
 				Description: fmt.Sprintf("%d + %d Corn, anger", Corn, g.Research.CornBonus(p.Color, Green)),
 			}, -1)...)
@@ -73,7 +73,7 @@ func Jungle(Corn int, wood int, position int) Options {
 				Execute: func (g *Game, p *Player) {
 					p.Corn += Corn + g.Research.CornBonus(p.Color, Green)
 					p.CornTiles += 1
-					g.Calendar.Wheels[0].Positions[3].PData.CornTiles -= 1
+					g.Calendar.Wheels[0].Positions[position].PData.CornTiles -= 1
 				},
 				Description: fmt.Sprintf("%d + %d Corn", Corn, g.Research.CornBonus(p.Color, Green)),
 			})
@@ -110,12 +110,12 @@ func PalenqueString(wheel *Wheel, workers []*Worker) string {
 
 	for k := 0; k < wheel.Size; k++ {
 		if wheel.Positions[k].PData != nil {
-			ct := []rune{'₀', '₁', '₂', '₃', '₄'}[wheel.Positions[k].PData.CornTiles]
-			wt := []rune{'₀', '₁', '₂', '₃', '₄'}[wheel.Positions[k].PData.WoodTiles]
+			// ct := []rune{'₀', '₁', '₂', '₃', '₄'}[wheel.Positions[k].PData.CornTiles]
+			// wt := []rune{'₀', '₁', '₂', '₃', '₄'}[wheel.Positions[k].PData.WoodTiles]
 
-			br.WriteRune(rune(wt))
-			br.WriteRune(rune(ct))
-			fmt.Fprintf(&br, " ")
+			// br.WriteRune(rune(wt))
+			// br.WriteRune(rune(ct))
+			fmt.Fprintf(&br, "%d%d ", wheel.Positions[k].PData.WoodTiles, wheel.Positions[k].PData.CornTiles)
 		} else {
 			fmt.Fprintf(&br, "   ")
 		}

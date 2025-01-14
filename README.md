@@ -17,7 +17,7 @@
 - [x] display who the first player is
 - [x] granular step
 - [x] display moves
-- [ ] display advanced wheel info
+- [x] display advanced wheel info
 - [ ] highlight current player / changes at each step
 - [ ] run through game and see if theres glitches
 - [ ] further disentangle options and research from model
