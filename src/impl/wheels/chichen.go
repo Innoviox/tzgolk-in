@@ -72,13 +72,6 @@ func ChichenX(n int, canForesight bool) Options {
 
 		options := make([]Option, 0)
 
-		options = append(options, Option{
-			Execute: func(g *Game, p *Player) {
-
-			},
-			Description: "skip",
-		})
-
 		if canForesight && g.Research.Foresight(p.Color) {
 			if n < 8 {
 				options = append(options, ChichenX(n + 1, false)(g, p)...)
@@ -91,7 +84,7 @@ func ChichenX(n int, canForesight bool) Options {
 		}
 
 		if g.Calendar.Wheels[4].Positions[spot.Position].CData.Full || p.Resources[Skull] == 0 {
-			return options 
+			return Skip() 
 		}
 
 		if g.Research.Devout(p.Color) {

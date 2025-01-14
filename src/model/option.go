@@ -23,6 +23,23 @@ func Flatten(options []Options) Options {
 	}
 }
 
+func Skip() []Option {
+    return []Option{Option{
+        Execute: func(g *Game, p *Player) {
+    
+        },
+        Description: "skip",
+    }}
+}
+
+func SkipWrapper(o []Option) []Option {
+	if len(o) == 0 {
+		return Skip()
+	} else {
+		return o
+	}
+}
+
 func (g *Game) GetBuildingOptions(p *Player, exclude int, useResearch bool) []Option {
 	options := make([]Option, 0)
 

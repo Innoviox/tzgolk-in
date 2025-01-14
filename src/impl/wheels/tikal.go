@@ -10,15 +10,15 @@ func Tikal0(g *Game, p *Player) []Option {
 }
 
 func Tikal1(g *Game, p *Player) []Option {
-	return g.Research.GetOptions(g, p, 1, false)
+	return SkipWrapper(g.Research.GetOptions(g, p, 1, false))
 }
 
 func Tikal2(g *Game, p *Player) []Option {
-	return g.GetBuildingOptions(p, -1, true)
+	return SkipWrapper(g.GetBuildingOptions(p, -1, true))
 }
 
 func Tikal3(g *Game, p *Player) []Option {
-	return g.Research.GetOptions(g, p, 2, false)
+	return SkipWrapper(g.Research.GetOptions(g, p, 2, false))
 }
 
 func Tikal4(g *Game, p *Player) []Option {
@@ -44,7 +44,7 @@ func Tikal4(g *Game, p *Player) []Option {
 
 	options = append(options, g.GetMonumentOptions(p)...)
 
-	return options
+	return SkipWrapper(options)
 }
 
 func Tikal5(g *Game, p *Player) []Option {
@@ -70,7 +70,7 @@ func Tikal5(g *Game, p *Player) []Option {
 		}
 	}
 
-	return options
+	return SkipWrapper(options)
 }
 
 func Tikal() []Options {

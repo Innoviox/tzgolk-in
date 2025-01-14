@@ -12,7 +12,7 @@ func Uxmal0(g *Game, p *Player) []Option {
 func Uxmal1(g *Game, p *Player) []Option {
 	options := make([]Option, 0)
 
-	if p.Corn > 3 {
+	if p.Corn >= 3 {
 		options = append(options, g.Temples.GainTempleStep(p, Option{
 			Execute: func(g *Game, p *Player) {
 				p.Corn -= 3
@@ -21,7 +21,7 @@ func Uxmal1(g *Game, p *Player) []Option {
 		}, 1)...,)
 	}
 
-	return options
+	return SkipWrapper(options)
 }
 
 func Uxmal2(g *Game, p *Player) []Option {
@@ -43,7 +43,7 @@ func Uxmal2(g *Game, p *Player) []Option {
 	// 	})
 	// }
 
-	return options
+	return SkipWrapper(options)
 }
 
 type CornOption struct {
@@ -120,14 +120,14 @@ func Uxmal4(g *Game, p *Player) []Option {
 		}
 	}
 
-	return options
+	return SkipWrapper(options)
 }
 
 func Uxmal5(g *Game, p *Player) []Option {
 	options := make([]Option, 0)
 
 	if p.Corn == 0 {
-		return options
+		return Skip()
 	}
 
 	allOptions := make([]Option, 0)

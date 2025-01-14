@@ -38,6 +38,8 @@ func Palenque2(g *Game, p *Player) []Option {
 			},
 			Description: fmt.Sprintf("4 + %d Corn (irrigation)", g.Research.CornBonus(p.Color, Green)),
 		})
+	} else {
+		options = Skip()
 	}
 
 	return options
