@@ -92,8 +92,8 @@ func (p *Player) TotalCorn() int {
 }
 
 func (p *Player) Evaluate(g *Game) float64 {
-	points := float64(p.Points)
-	points += float64(p.TotalCorn()) / 2
+	points := float64(p.Points) * 2
+	points += float64(p.TotalCorn())
 	points += float64(p.Resources[Skull]) * 3
 
 	for _, m := range p.Monuments {
@@ -103,9 +103,9 @@ func (p *Player) Evaluate(g *Game) float64 {
 	for _, w := range g.Workers {
 		if w.Color == p.Color {
 			if (w.Available) {
-				points += 1
+				points += 0.1
 			} else if w.Wheel_id != -1 {
-				points += float64(w.Position) / 2
+				points += float64(w.Position) / 10
 			}
 		}
 	}

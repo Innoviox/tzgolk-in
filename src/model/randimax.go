@@ -31,6 +31,8 @@ compute(game_state, ply):
 
 import (
     "github.com/schollz/progressbar/v3"
+    // "fmt"
+    // "os"
 )
 
 func ComputeMove(g *Game, p *Player, ply int, rec bool) (*Move, float64) {
@@ -51,10 +53,14 @@ func ComputeMove(g *Game, p *Player, ply int, rec bool) (*Move, float64) {
     for _, m := range moves {
         new_game := g.Clone()
         new_game.Calendar.Execute(m, new_game, func(s string){})
+        g.CurrPlayer = (g.CurrPlayer + 1) % len(g.Players)
         new_game.Run(func(s string){}, true, &p.Color)
 
         _, score := ComputeMove(new_game, p, ply - 1, true)
-        if score > best {
+        // if !rec {
+        //     fmt.Fprintf(os.Stdout, "Score: %f for move %s\n", score, m.String())
+        // }
+        if score >= best {
             best = score
             best_move = m
         }
