@@ -2,6 +2,7 @@ package wheels
 
 import (
 	"fmt"
+	"strings"
 	. "tzgolkin/model"
 )
 
@@ -102,6 +103,36 @@ func Palenque() []Options {
 	}
 }
 
+func PalenqueString(wheel *Wheel, workers []*Worker) string {
+	var br strings.Builder
+		
+	fmt.Fprintf(&br, "| %-12s:  ", wheel.Name)
+
+	out := make([]string, wheel.Size)
+
+	for k, v := range wheel.Occupied {
+		out[k] = workers[v].Color.String()
+	}
+
+	for k, o := range out {
+		if len(o) > 0 {
+			fmt.Fprintf(&br, " %s ", o)
+		} else if wheel.Positions[k].PData != nil {
+			// ct := "⁰¹²³⁴"[wheel.Positions[k].PData.CornTiles]
+			// wt := "₀₁₂₃₄"[wheel.Positions[k].PData.WoodTiles]
+			// fmt.Fprintf(&br, "⁰¹²³⁴₀₁₂₃₄%q%d%q", ct, k, wt)
+			char := '⁰'
+			// fmt.Fprintf(&br, " %q ", char)
+			br.WriteRune(rune(char))
+		} else {
+			fmt.Fprintf(&br, " %d ", k)
+		}
+	}
+	fmt.Fprintf(&br, "\n")
+
+	return br.String()
+}
+
 func MakePalenque() *Wheel {
 	positions := make([]*Position, 0)
 
@@ -130,5 +161,6 @@ func MakePalenque() *Wheel {
 		Occupied: make(map[int]int),
 		Positions: positions, 
 		Name: "Palenque",
+		String: PalenqueString,
 	}
 }

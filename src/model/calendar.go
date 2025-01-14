@@ -42,22 +42,13 @@ func (c *Calendar) String(workers []*Worker) string {
 
 	fmt.Fprintf(&br, "----Calendar------------\n")
 	for _, wheel := range c.Wheels {
-		fmt.Fprintf(&br, "| %s: ", wheel.Name)
-
-		out := make([]string, wheel.Size)
-
-		for k, v := range wheel.Occupied {
-			out[k] = workers[v].Color.String()
-		}
-
-		for _, o := range out {
-			if len(o) > 0 {
-				fmt.Fprintf(&br, "%s", o)
-			} else {
-				fmt.Fprintf(&br, "_")
-			}
-		}
-		fmt.Fprintf(&br, "(%v)\n", wheel.Occupied)
+		fmt.Fprintf(&br, "%s", wheel.String(wheel, workers))
+	}
+	fmt.Fprintf(&br, "| First Player Spot (0): ")
+	if c.FirstPlayer != -1 {
+		fmt.Fprintf(&br, "%s\n", workers[c.FirstPlayer].Color.String())
+	} else {
+		fmt.Fprintf(&br, "None\n")
 	}
 	fmt.Fprintf(&br, "------------------------\n")
 

@@ -2,6 +2,7 @@ package wheels
 
 import (
 	"fmt"
+	"strings"
 	. "tzgolkin/model"
 )
 
@@ -117,6 +118,7 @@ func ChichenX(n int, canForesight bool) Options {
 		return options
 	}
 }
+
 func Chichen() []Options {
 	options := make([]Options, 0)
 
@@ -127,6 +129,31 @@ func Chichen() []Options {
 	}
 
 	return options
+}
+
+func ChichenString(wheel *Wheel, workers []*Worker) string {
+	var br strings.Builder
+
+	fmt.Fprintf(&br, "| %-12s: ", wheel.Name)
+
+	out := make([]string, wheel.Size)
+
+	for k, v := range wheel.Occupied {
+		out[k] = workers[v].Color.String()
+	}
+
+	for k, o := range out {
+		if len(o) > 0 {
+			fmt.Fprintf(&br, "  %s", o)
+		} else if wheel.Positions[k].CData != nil && wheel.Positions[k].CData.Full {
+			fmt.Fprintf(&br, "  X")
+		} else {
+			fmt.Fprintf(&br, "%3d", k)
+		}
+	}
+	fmt.Fprintf(&br, "\n")
+
+	return br.String()
 }
 
 func MakeChichen() *Wheel {
@@ -155,5 +182,6 @@ func MakeChichen() *Wheel {
 		Occupied: make(map[int]int),
 		Positions: positions,
 		Name: "Chichen Itza",
+		String: ChichenString,
 	}
 }

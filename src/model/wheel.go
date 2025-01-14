@@ -1,5 +1,10 @@
 package model
 
+import (
+	"fmt"
+	"strings"
+)
+
 type Wheel struct {
 	// this is all todo
 	Id int
@@ -10,6 +15,7 @@ type Wheel struct {
 
 	Positions []*Position
 	Name string
+	String func(*Wheel, []*Worker) string
 }
 
 // -- MARK -- Basic methods
@@ -38,6 +44,28 @@ func MakeWheel(options []Options, Wheel_id int, wheel_name string) *Wheel {
 		Occupied: make(map[int]int),
 		Positions: positions, 
 		Name: wheel_name,
+		String: func (wheel *Wheel, workers []*Worker) string {
+			var br strings.Builder
+		
+			fmt.Fprintf(&br, "| %-12s: ", wheel.Name)
+		
+			out := make([]string, wheel.Size)
+		
+			for k, v := range wheel.Occupied {
+				out[k] = workers[v].Color.String()
+			}
+		
+			for k, o := range out {
+				if len(o) > 0 {
+					fmt.Fprintf(&br, "  %s", o)
+				} else {
+					fmt.Fprintf(&br, "%3d", k)
+				}
+			}
+			fmt.Fprintf(&br, "\n")
+		
+			return br.String()
+		},
 	}
 }
 

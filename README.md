@@ -13,7 +13,7 @@
 - [x] display game info (day, acc corn, etc...)
 - [x] display number of workers per player
 - [x] display day & food days
-- [ ] display first player spot
+- [x] display first player spot
 - [x] display who the first player is
 - [x] granular step
 - [x] display moves
