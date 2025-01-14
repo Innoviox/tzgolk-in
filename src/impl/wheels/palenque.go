@@ -110,18 +110,12 @@ func PalenqueString(wheel *Wheel, workers []*Worker) string {
 
 	for k := 0; k < wheel.Size; k++ {
 		if wheel.Positions[k].PData != nil {
-			// ct := "⁰¹²³⁴"[wheel.Positions[k].PData.CornTiles]
 			ct := []rune{'₀', '₁', '₂', '₃', '₄'}[wheel.Positions[k].PData.CornTiles]
 			wt := []rune{'₀', '₁', '₂', '₃', '₄'}[wheel.Positions[k].PData.WoodTiles]
-			// wt := "₀₁₂₃₄"[wheel.Positions[k].PData.WoodTiles]
-			// fmt.Fprintf(&br, "%q%d%q", ct, k, wt)
-			// char := '⁰'
-			// fmt.Fprintf(&br, " %q ", char)
+
 			br.WriteRune(rune(wt))
 			br.WriteRune(rune(ct))
 			fmt.Fprintf(&br, " ")
-			
-			// br.WriteRune(rune(wt))
 		} else {
 			fmt.Fprintf(&br, "   ")
 		}
