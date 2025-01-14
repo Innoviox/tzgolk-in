@@ -1,9 +1,9 @@
 package model
 
-import (
-    "fmt"
-    "os"
-)
+// import (
+//     "fmt"
+//     "os"
+// )
 
 func (g *Game) GenerateMoves(p *Player) []Move {
 	// all possible moves are:
@@ -62,7 +62,7 @@ func (g *Game) GenerateMoves(p *Player) []Move {
 		}
 	}
 
-	fmt.Fprintf(os.Stdout, "Generated %d moves for %s\n", len(out), p.Color.String())
+	// fmt.Fprintf(os.Stdout, "Generated %d moves for %s\n", len(out), p.Color.String())
 
 	return out
 }

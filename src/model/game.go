@@ -307,10 +307,16 @@ func (g *Game) FoodDay(MarkStep func(string)) {
 	}
 }
 
-func (g *Game) TakeTurn(MarkStep func(string)) {
+func (g *Game) TakeTurn(MarkStep func(string), random bool) {
 	player := g.Players[g.CurrPlayer]
-	moves := g.GenerateMoves(g.Players[g.CurrPlayer])
-	move := moves[g.Rand.Intn(len(moves))]
+
+	var move Move
+	if random {
+		moves := g.GenerateMoves(g.Players[g.CurrPlayer])
+		move = moves[g.Rand.Intn(len(moves))]
+	} else {
+		move, _ = ComputeMove(g, player, 5, false)
+	}
 
 	// fmt.Fprintf(os.Stdout, "Playing move %s for %s\n", move.String(), player.Color)
 	MarkStep(fmt.Sprintf("Playing move %s for %s", move.String(), player.Color.String()))
@@ -319,6 +325,25 @@ func (g *Game) TakeTurn(MarkStep func(string)) {
 	// player.Corn -= move.Corn
 
 	g.DealBuildings()
+}
+
+func (g *Game) Run(MarkStep func(string), random bool, stopColor *Color) {
+	for !g.IsOver() {
+		g.CurrPlayer = g.FirstPlayer
+		for i := 0; i < len(g.Players); i++ {
+			if stopColor != nil && g.Players[g.CurrPlayer].Color == *stopColor {
+				return
+			}
+			g.TakeTurn(MarkStep, random)
+			g.CurrPlayer = (g.CurrPlayer + 1) % len(g.Players)
+		}
+
+		if g.Calendar.FirstPlayer != -1 {
+			g.FirstPlayerSpace(MarkStep)
+		}
+
+		g.Rotate(MarkStep)
+	}
 }
 
 // -- MARK -- Getters
