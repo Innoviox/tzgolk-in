@@ -15,17 +15,6 @@ type Temple struct {
 	Resources map[int]Resource
 }
 
-func MakeTemple(steps int, playerLocations map[Color]int, age1Prize int, age2Prize int, points []int, resources map[int]Resource) *Temple {
-	return &Temple {
-		Steps: steps,
-		PlayerLocations: playerLocations,
-		Age1Prize: age1Prize,
-		Age2Prize: age2Prize,
-		Points: points,
-		Resources: resources,
-	}
-}
-
 func (t *Temple) Clone() *Temple {
 	newLocations := make(map[Color]int)
 	for k, v := range t.PlayerLocations {

@@ -48,12 +48,10 @@ func (g *Game) GenerateMoves(p *Player) []Move {
 		}
 	}
 
-	fmt.Fprintf(os.Stdout, "\t%s R %v P %v\n", p.Color, retrieval, placement)
-
-	retrieval_moves := append(make([]Move, 0), MakeEmptyRetrievalMove())
+	retrieval_moves := g.AddBegging(MakeEmptyRetrievalMove(p.Color), p)
 	moves = append(moves, g.MakeRetrievalMoves(retrieval_moves, retrieval)...)
 	
-	placement_moves := append(make([]Move, 0), MakeEmptyPlacementMove())
+	placement_moves := g.AddBegging(MakeEmptyPlacementMove(p.Color), p)
 	moves = append(moves, g.MakePlacementMoves(placement_moves, placement)...)
 
 	// todo find filter method
@@ -64,9 +62,25 @@ func (g *Game) GenerateMoves(p *Player) []Move {
 		}
 	}
 
-	// todo filter by Corn cost
+	fmt.Fprintf(os.Stdout, "Generated %d moves for %s\n", len(out), p.Color.String())
 
 	return out
+}
+
+func (g *Game) AddBegging(move Move, player *Player) []Move {
+	moves := []Move{move}
+
+	if player.Corn >= 3 {
+		return moves
+	}
+	
+	for i := 0; i < 3; i++ {
+		if g.Temples.CanStep(player, i, -1) {
+			moves = append(moves, move.Beg(i))
+		}
+	}
+
+	return moves
 }
 
 func (g *Game) GetOptions(worker *Worker) []Option {

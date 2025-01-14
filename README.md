@@ -2,9 +2,10 @@
 
 # Needed for Complete Gameplay 
 
-- [ ] beg for corn
+- [ ] begging for corn angers the gods (maybe add like a move.Beg method like move.Place & such?) & add it to the arrays in GenerateMove before generating
 - [ ] pay corn to go lower (first attempt broke)
 - [ ] uxmal exchange (first attempt broke)
+- [ ] fix age2building16 (it can build itself)
 
 # Current Goal: Full-screeen display
 

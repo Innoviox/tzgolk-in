@@ -58,12 +58,16 @@ func (c *Calendar) String(workers []*Worker) string {
 
 // -- MARK -- Unique methods
 func (c *Calendar) Execute(move Move, game *Game, MarkStep func(string)) {
-	if len(move.Workers) > 0 {
-		player := game.GetPlayerByColor(game.GetWorker(move.Workers[0]).Color)
-		player.Corn -= move.Corn
-		if !c.IsClone { MarkStep(fmt.Sprintf("Executing move %s for %s (-%d corn)", move.String(), player.Color.String(), move.Corn)) }
+	player := game.GetPlayerByColor(move.Player)
+
+	if (move.Begged != -1) {
+		player.Corn = 3
+		game.Temples.Step(player, move.Begged, -1)
+		if !c.IsClone { MarkStep(fmt.Sprintf("Begging for corn on temple %s", string(TempleDebug[move.Begged]))) }
 	}
-	
+
+	player.Corn -= move.Corn
+	if !c.IsClone { MarkStep(fmt.Sprintf("Executing move %s for %s (-%d corn)", move.String(), player.Color.String(), move.Corn)) }
 	
 	if (move.Placing) {
 		// if !c.IsClone { fmt.Fprintf(os.Stdout, "Placing workers %s\n", move.String()) }

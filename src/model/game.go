@@ -309,10 +309,6 @@ func (g *Game) FoodDay(MarkStep func(string)) {
 
 func (g *Game) TakeTurn(MarkStep func(string)) {
 	player := g.Players[g.CurrPlayer]
-	if player.Corn < 3 {
-		player.Corn = 3 // todo actually have begging
-		MarkStep(fmt.Sprintf("Player %s begged (TODO)", player.Color.String()))
-	}
 	moves := g.GenerateMoves(g.Players[g.CurrPlayer])
 	move := moves[g.Rand.Intn(len(moves))]
 
