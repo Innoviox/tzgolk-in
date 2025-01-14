@@ -105,8 +105,30 @@ func Palenque() []Options {
 
 func PalenqueString(wheel *Wheel, workers []*Worker) string {
 	var br strings.Builder
+
+	fmt.Fprintf(&br, "|                ")
+
+	for k := 0; k < wheel.Size; k++ {
+		if wheel.Positions[k].PData != nil {
+			// ct := "⁰¹²³⁴"[wheel.Positions[k].PData.CornTiles]
+			ct := []rune{'₀', '₁', '₂', '₃', '₄'}[wheel.Positions[k].PData.CornTiles]
+			wt := []rune{'₀', '₁', '₂', '₃', '₄'}[wheel.Positions[k].PData.WoodTiles]
+			// wt := "₀₁₂₃₄"[wheel.Positions[k].PData.WoodTiles]
+			// fmt.Fprintf(&br, "%q%d%q", ct, k, wt)
+			// char := '⁰'
+			// fmt.Fprintf(&br, " %q ", char)
+			br.WriteRune(rune(wt))
+			br.WriteRune(rune(ct))
+			fmt.Fprintf(&br, " ")
+			
+			// br.WriteRune(rune(wt))
+		} else {
+			fmt.Fprintf(&br, "   ")
+		}
+	}
+	fmt.Fprintf(&br, "\n")
 		
-	fmt.Fprintf(&br, "| %-12s:  ", wheel.Name)
+	fmt.Fprintf(&br, "| %-12s: ", wheel.Name)
 
 	out := make([]string, wheel.Size)
 
@@ -116,16 +138,9 @@ func PalenqueString(wheel *Wheel, workers []*Worker) string {
 
 	for k, o := range out {
 		if len(o) > 0 {
-			fmt.Fprintf(&br, " %s ", o)
-		} else if wheel.Positions[k].PData != nil {
-			// ct := "⁰¹²³⁴"[wheel.Positions[k].PData.CornTiles]
-			// wt := "₀₁₂₃₄"[wheel.Positions[k].PData.WoodTiles]
-			// fmt.Fprintf(&br, "⁰¹²³⁴₀₁₂₃₄%q%d%q", ct, k, wt)
-			char := '⁰'
-			// fmt.Fprintf(&br, " %q ", char)
-			br.WriteRune(rune(char))
+			fmt.Fprintf(&br, "  %s", o)
 		} else {
-			fmt.Fprintf(&br, " %d ", k)
+			fmt.Fprintf(&br, "%3d", k)
 		}
 	}
 	fmt.Fprintf(&br, "\n")
@@ -138,7 +153,16 @@ func MakePalenque() *Wheel {
 
 	options := Palenque()
 
-	for i := 0; i < len(options); i++ {
+	for i := 0; i < 2; i++ {
+		positions = append(positions, &Position{
+			Wheel_id: 0,
+			Corn: i,
+			GetOptions: options[i],
+			// PData: MakePData(i > 2),
+		})
+	}
+
+	for i := 2; i < len(options); i++ {
 		positions = append(positions, &Position{
 			Wheel_id: 0,
 			Corn: i,

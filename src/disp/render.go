@@ -24,27 +24,27 @@ func (d *Display) Render(step string) {
     d.screen.Put(10, 25, Convert(step))
 }
 
-func (d *Display) RenderPlayer(p *Player, g *Game) [][]byte {
+func (d *Display) RenderPlayer(p *Player, g *Game) [][]rune {
     return Convert(p.String(g))
 }
 
-func (d *Display) RenderCalendar(c *Calendar) [][]byte {
+func (d *Display) RenderCalendar(c *Calendar) [][]rune {
     return Convert(c.String(d.controller.GetGame().Workers))
 }
 
-func (d *Display) RenderTemples(t *Temples) [][]byte {
+func (d *Display) RenderTemples(t *Temples) [][]rune {
     return Convert(t.String())
 }
 
-func (d *Display) RenderResearch(r *Research) [][]byte {
+func (d *Display) RenderResearch(r *Research) [][]rune {
     return Convert(r.String())
 }
 
-func (d *Display) RenderBuilding(b Building) [][]byte {
+func (d *Display) RenderBuilding(b Building) [][]rune {
     return Convert(b.String())
 }
 
-func (d *Display) RenderGame(g *Game) [][]byte {
+func (d *Display) RenderGame(g *Game) [][]rune {
     var br strings.Builder
 
     days := make([]string, 27)
@@ -79,7 +79,7 @@ func (d *Display) RenderGame(g *Game) [][]byte {
 
 // }
 
-func (d *Display) RenderMove(m *Move) [][]byte {
+func (d *Display) RenderMove(m *Move) [][]rune {
     // todo make sure retrieval moves show the retrieval being chosen
     return Convert(m.String())
 }
