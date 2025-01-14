@@ -53,8 +53,8 @@ func ComputeMove(g *Game, p *Player, ply int, rec bool) (*Move, float64) {
     for _, m := range moves {
         new_game := g.Clone()
         new_game.Calendar.Execute(m, new_game, func(s string){})
-        g.CurrPlayer = (g.CurrPlayer + 1) % len(g.Players)
-        new_game.Run(func(s string){}, true, &p.Color)
+        new_game.CurrPlayer = (new_game.CurrPlayer + 1) % len(new_game.Players)
+        new_game.RunStop(func(s string){/*fmt.Println(s)*/}, p)
 
         _, score := ComputeMove(new_game, p, ply - 1, true)
         // if !rec {

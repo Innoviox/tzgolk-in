@@ -318,7 +318,7 @@ func (g *Game) TakeTurn(MarkStep func(string), random bool) {
 			move = &moves[g.Rand.Intn(len(moves))]
 		}
 	} else {
-		move, _ = ComputeMove(g, player, 3, false)
+		move, _ = ComputeMove(g, player, 2, false)
 	}
 
 	// fmt.Fprintf(os.Stdout, "Playing move %s for %s\n", move.String(), player.Color)
@@ -334,11 +334,14 @@ func (g *Game) TakeTurn(MarkStep func(string), random bool) {
 	g.DealBuildings()
 }
 
-func (g *Game) Run(MarkStep func(string), random bool, stopColor *Color) {
+func (g *Game) Run(MarkStep func(string), random bool, stopPlayer *Player) {
 	for !g.IsOver() {
-		g.CurrPlayer = g.FirstPlayer
+		if stopPlayer == nil {
+			g.CurrPlayer = g.FirstPlayer
+		}
 		for i := 0; i < len(g.Players); i++ {
-			if stopColor != nil && g.Players[g.CurrPlayer].Color == *stopColor {
+			if stopPlayer != nil && g.Players[g.CurrPlayer].Color == stopPlayer.Color {
+				MarkStep("Stopped by color")
 				return
 			}
 			g.TakeTurn(MarkStep, random)
@@ -351,6 +354,43 @@ func (g *Game) Run(MarkStep func(string), random bool, stopColor *Color) {
 
 		g.Rotate(MarkStep)
 	}
+}
+
+func mod(a, b int) int {
+    return (a % b + b) % b
+}
+
+func (g *Game) RunStop(MarkStep func(string), stopPlayer *Player) {
+	// current player is set to stopPlayer + 1
+	run1 := mod(g.FirstPlayer - int(stopPlayer.Color) + 3, 4)
+	MarkStep(fmt.Sprintf("Running for %d players (%d %d)", run1, g.FirstPlayer, int(stopPlayer.Color)))
+	for i := 0; i < run1; i++ {
+		g.TakeTurn(MarkStep, true)
+		g.CurrPlayer = (g.CurrPlayer + 1) % len(g.Players)
+	}
+
+	if g.Calendar.FirstPlayer != -1 {
+		g.FirstPlayerSpace(MarkStep)
+	}
+
+	g.Rotate(MarkStep)
+
+	run2 := 3 - run1
+	for i := 0; i < run2; i++ {
+		g.TakeTurn(MarkStep, true)
+		g.CurrPlayer = (g.CurrPlayer + 1) % len(g.Players)
+	}
+	MarkStep(fmt.Sprintf("Stopped by color %s", stopPlayer.Color.String()))
+	/*
+	fp sp 0 1 2 3
+	0     3 2 1 0
+	1     0 3 2 1
+	2     1 0 3 2
+	3     2 1 0 3
+	*/
+	// run for the next n players, n = mod(4 - fp - sp - 1, 4)
+
+	
 }
 
 // -- MARK -- Getters
