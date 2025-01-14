@@ -136,6 +136,7 @@ func (g *Game) Clone() *Game {
 		ResDays: g.ResDays,
 		PointDays: g.PointDays,
 		Over: g.Over,
+		Rand: g.Rand,
 	}
 }
 
@@ -310,18 +311,24 @@ func (g *Game) FoodDay(MarkStep func(string)) {
 func (g *Game) TakeTurn(MarkStep func(string), random bool) {
 	player := g.Players[g.CurrPlayer]
 
-	var move Move
+	var move *Move
 	if random {
 		moves := g.GenerateMoves(g.Players[g.CurrPlayer])
-		move = moves[g.Rand.Intn(len(moves))]
+		if len(moves) > 0 {
+			move = &moves[g.Rand.Intn(len(moves))]
+		}
 	} else {
 		move, _ = ComputeMove(g, player, 5, false)
 	}
 
 	// fmt.Fprintf(os.Stdout, "Playing move %s for %s\n", move.String(), player.Color)
-	MarkStep(fmt.Sprintf("Playing move %s for %s", move.String(), player.Color.String()))
 	
-	g.Calendar.Execute(move, g, MarkStep)
+	if move != nil {
+		MarkStep(fmt.Sprintf("Playing move %s for %s", move.String(), player.Color.String()))
+		g.Calendar.Execute(*move, g, MarkStep)
+	} else {
+		MarkStep(fmt.Sprintf("[FATAL ERROR] No move for %s", player.Color.String()))
+	}
 	// player.Corn -= move.Corn
 
 	g.DealBuildings()

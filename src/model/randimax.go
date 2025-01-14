@@ -33,10 +33,10 @@ import (
     "github.com/schollz/progressbar/v3"
 )
 
-func ComputeMove(g *Game, p *Player, ply int, rec bool) (Move, int) {
+func ComputeMove(g *Game, p *Player, ply int, rec bool) (*Move, float64) {
     if ply == 0 || g.Over {
         // return MakeEmptyMove(p.Color)
-        return Move{}, p.Evaluate(g)
+        return nil, p.Evaluate(g)
     }
 
     moves := g.GenerateMoves(p)
@@ -46,7 +46,7 @@ func ComputeMove(g *Game, p *Player, ply int, rec bool) (Move, int) {
         bar = progressbar.Default(int64(len(moves)))
     }
 
-    best := -100
+    best := float64(-100)
     var best_move Move
     for _, m := range moves {
         new_game := g.Clone()
@@ -64,5 +64,5 @@ func ComputeMove(g *Game, p *Player, ply int, rec bool) (Move, int) {
         }
     }   
 
-    return best_move, best
+    return &best_move, best
 }
