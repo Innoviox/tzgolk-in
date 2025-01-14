@@ -37,7 +37,7 @@ func (d *Display) Run() {
 
 func (d *Display) MarkStep(step string) {
     fmt.Println(d.String(step))
-    d.Hang()
+    // d.Hang()
 }
 
 func (d *Display) Hang() {

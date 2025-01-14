@@ -151,16 +151,26 @@ func (r *Research) GetOptionsHelper(g *Game, p *Player, resources [4]int, levels
 				}
 				newLevels[Science(s)] += 1
 
+				opt := Option{
+					Execute: func(g *Game, p *Player) {
+						p.Resources = newResources
+						g.Research.Levels[p.Color] = newLevels
+					},
+					Description: GenerateResearchDescription(resources, newResources, levels, newLevels),
+				}
+
 				if n == 1 {
-					options = append(options, Option{
-						Execute: func(g *Game, p *Player) {
-							p.Resources = newResources
-							g.Research.Levels[p.Color] = newLevels
-						},
-						Description: GenerateResearchDescription(resources, newResources, levels, newLevels),
-					})
+					options = append(options, opt)
 				} else {
-					options = append(options, r.GetOptionsHelper(g, p, newResources, newLevels, n - 1, free)...)
+					for _, o := range r.GetOptionsHelper(g, p, newResources, newLevels, n - 1, free) {
+						options = append(options, Option{
+							Execute: func(g *Game, p *Player) {
+								opt.Execute(g, p)
+								o.Execute(g, p)
+							},
+							Description: fmt.Sprintf("%s; %s", opt.Description, o.Description),
+						})
+					}
 				}
 			}
 		} else {
