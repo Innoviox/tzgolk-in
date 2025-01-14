@@ -335,7 +335,7 @@ func (g *Game) TakeTurn(MarkStep func(string), random bool) {
 }
 
 func (g *Game) Run(MarkStep func(string), random bool, stopPlayer *Player) {
-	for !g.IsOver() {
+	for !g.IsOver() && g.Day < 4 {
 		if stopPlayer == nil {
 			g.CurrPlayer = g.FirstPlayer
 		}

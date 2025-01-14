@@ -60,7 +60,7 @@ func ComputeMove(g *Game, p *Player, ply int, rec bool) (*Move, float64) {
         // if !rec {
         //     fmt.Fprintf(os.Stdout, "Score: %f for move %s\n", score, m.String())
         // }
-        if score >= best {
+        if score > best {
             best = score
             best_move = m
         }

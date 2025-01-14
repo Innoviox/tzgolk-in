@@ -2,7 +2,7 @@ package model
 
 import (
 	"fmt"
-	"os"
+	// "os"
 	"strings"
 )
 
@@ -134,7 +134,7 @@ func (t *Temples) GainResources(p *Player) {
 		for k, v := range t.Temples[i].Resources {
 			if step >= k {
 				p.Resources[v] += 1
-				fmt.Fprintf(os.Stdout, "giving %s to %s from temple %d\n", string(ResourceDebug[v]), p.Color.String(), i)
+				// fmt.Fprintf(os.Stdout, "giving %s to %s from temple %d\n", string(ResourceDebug[v]), p.Color.String(), i)
 			}
 		}
 	}
@@ -159,7 +159,7 @@ func (t *Temples) GainPoints(p *Player, age int) {
 				j += t.Temples[i].Age2Prize
 			}
 		}
-		fmt.Fprintf(os.Stdout, "giving %d points to %s from temple %d\n", j, p.Color.String(), i)
+		// fmt.Fprintf(os.Stdout, "giving %d points to %s from temple %d\n", j, p.Color.String(), i)
 		p.Points += j
 	}
 }

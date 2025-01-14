@@ -1,8 +1,16 @@
 # tzgolk-in
 
+# Helpful commands
+
+GODEBUG=gctrace=1 go run .
+
+go build && ./tzgolkin -cpuprofile=test2.prof
+
+go tool pprof tzgolkin test3.prof
+
 # Needed for Complete Gameplay 
 
-- [ ] begging for corn angers the gods (maybe add like a move.Beg method like move.Place & such?) & add it to the arrays in GenerateMove before generating
+- [x] begging for corn angers the gods (maybe add like a move.Beg method like move.Place & such?) & add it to the arrays in GenerateMove before generating
 - [ ] pay corn to go lower (first attempt broke)
 - [ ] uxmal exchange (first attempt broke)
 - [ ] fix age2building16 (it can build itself)
