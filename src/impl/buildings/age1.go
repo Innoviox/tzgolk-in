@@ -1,6 +1,7 @@
 package buildings
 
 import (
+    "fmt"
     "math/rand"
     . "tzgolkin/model"
 )
@@ -53,12 +54,16 @@ func Building4() Building {
         Id: 4,
         Cost: [4]int{2, 0, 0, 0},
         GetEffects: func (g *Game, p *Player) []Option {
-            return []Option {Option{
-                Execute: func(g *Game, p *Player) {
-                    g.Research.FreeResearch(p.Color, Agriculture)
-                },
-                Description: "free agr",
-            }}
+            options := make([]Option, 0)
+            for _, o := range g.Research.FreeResearch(g, p, Agriculture) {
+                options = append(options, Option{
+                    Execute: func(g *Game, p *Player) {
+                        o.Execute(g, p)
+                    },
+                    Description: fmt.Sprintf("free agr [%s]", o.Description),
+                })
+            }
+            return options
         },
         Color: Green,
     }
@@ -85,12 +90,16 @@ func Building6() Building {
         Id: 6,
         Cost: [4]int{0, 0, 1, 0},
         GetEffects: func (g *Game, p *Player) []Option {
-            return []Option {Option{
-                Execute: func(g *Game, p *Player) {
-                   g.Research.FreeResearch(p.Color, Construction)
-                },
-                Description: "free const",
-            }}
+            options := make([]Option, 0)
+            for _, o := range g.Research.FreeResearch(g, p, Construction) {
+                options = append(options, Option{
+                    Execute: func(g *Game, p *Player) {
+                        o.Execute(g, p)
+                    },
+                    Description: fmt.Sprintf("free const %s", o.Description),
+                })
+            }
+            return options
         },
         Color: Blue,
     }
@@ -139,13 +148,17 @@ func Building9() Building {
         Id: 9,
         Cost: [4]int{1, 1, 0, 0},
         GetEffects: func (g *Game, p *Player) []Option {
-            return []Option {Option{
-                Execute: func(g *Game, p *Player) {
-                    g.Research.FreeResearch(p.Color, Resources)
-                    p.Corn += 1
-                },
-                Description: "free res, 1 Corn",
-            }}
+            options := make([]Option, 0)
+            for _, o := range g.Research.FreeResearch(g, p, Resources) {
+                options = append(options, Option{
+                    Execute: func(g *Game, p *Player) {
+                        o.Execute(g, p)
+                        p.Corn += 1
+                    },
+                    Description: fmt.Sprintf("free res [%s], 1 G", o.Description),
+                })
+            }
+            return options
         },
         Color: Green,
     }
@@ -156,13 +169,17 @@ func Building10() Building {
         Id: 10,
         Cost: [4]int{0, 1, 1, 0},
         GetEffects: func (g *Game, p *Player) []Option {
-            return []Option {Option{
-                Execute: func(g *Game, p *Player) {
-                    g.Research.FreeResearch(p.Color, Theology)
-                    g.Temples.Step(p, 2, 1)
-                },
-                Description: "free theo, 1 GT",
-            }}
+            options := make([]Option, 0)
+            for _, o := range g.Research.FreeResearch(g, p, Theology) {
+                options = append(options, Option{
+                    Execute: func(g *Game, p *Player) {
+                        o.Execute(g, p)
+                        g.Temples.Step(p, 2, 1)
+                    },
+                    Description: fmt.Sprintf("free theo %s, 1 GT", o.Description),
+                })
+            }
+            return options
         },
         Color: Blue,
     }
@@ -183,13 +200,17 @@ func Building12() Building {
         Id: 12,
         Cost: [4]int{2, 1, 0, 0},
         GetEffects: func (g *Game, p *Player) []Option {
-            return []Option {Option{
-                Execute: func(g *Game, p *Player) {
-                    g.Research.FreeResearch(p.Color, Resources)
-                    p.Resources[Gold] += 1
-                },
-                Description: "free res, 1 G",
-            }}
+            options := make([]Option, 0)
+            for _, o := range g.Research.FreeResearch(g, p, Resources) {
+                options = append(options, Option{
+                    Execute: func(g *Game, p *Player) {
+                        o.Execute(g, p)
+                        p.Resources[Gold] += 1
+                    },
+                    Description: fmt.Sprintf("free res [%s], 1 G", o.Description),
+                })
+            }
+            return options
         },
         Color: Green,
     }
@@ -200,13 +221,17 @@ func Building13() Building {
         Id: 13,
         Cost: [4]int{3, 0, 0, 0},
         GetEffects: func (g *Game, p *Player) []Option {
-            return []Option {Option{
-                Execute: func(g *Game, p *Player) {
-                    g.Research.FreeResearch(p.Color, Agriculture)
-                    p.Resources[Stone] += 1
-                },
-                Description: "free agr, 1 S",
-            }}
+            options := make([]Option, 0)
+            for _, o := range g.Research.FreeResearch(g, p, Agriculture) {
+                options = append(options, Option{
+                    Execute: func(g *Game, p *Player) {
+                        o.Execute(g, p)
+                        p.Resources[Stone] += 1
+                    },
+                    Description: fmt.Sprintf("free agr [%s], 1 S", o.Description),
+                })
+            }
+            return options
         },
         Color: Green,
     }

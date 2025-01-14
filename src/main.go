@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	r := rand.New(rand.NewSource(3))
+	r := rand.New(rand.NewSource(4))
 
 	ctrl := MakeController(r)
 	disp := MakeDisplay(ctrl)

@@ -174,50 +174,7 @@ func (r *Research) GetOptionsHelper(g *Game, p *Player, resources [4]int, levels
 				}
 			}
 		} else {
-			advancedOptions := make([]Option, 0)
-			if !free {
-				possResources = PayBlocks(resources, 1)
-			}
-			for _, newResources := range possResources {
-				switch Science(s) {
-				case Agriculture:
-					advancedOptions = append(advancedOptions, g.Temples.GainTempleStep(p, Option{
-						Execute: func(g *Game, p *Player) {
-							p.Resources = newResources
-						},
-						Description: fmt.Sprintf("[agr tier 4] pay %s", GeneratePaymentDescription(resources, newResources)),
-					}, 1)...)
-				case Resources:
-					for i := 0; i < 3; i++ {
-						for j := 0; j < 3; j++ {
-							advancedOptions = append(advancedOptions, Option{
-								Execute: func(g *Game, p *Player) {
-									p.Resources = newResources
-									p.Resources[i] += 1
-									p.Resources[j] += 1
-								},
-								Description: fmt.Sprintf("[res tier 4] pay %s, 1 %s, 1 %s", GeneratePaymentDescription(resources, newResources), string(ResourceDebug[i]), string(ResourceDebug[j])),
-							})
-						}
-					}
-				case Construction:
-					advancedOptions = append(advancedOptions, Option{
-						Execute: func(g *Game, p *Player) {
-							p.Resources = newResources
-							p.Points += 3
-						},
-						Description: fmt.Sprintf("[cons tier 4] pay %s, 3 points", GeneratePaymentDescription(resources, newResources)),
-					})
-				case Theology:
-					advancedOptions = append(advancedOptions, Option{
-						Execute: func(g *Game, p *Player) {
-							p.Resources = newResources
-							p.Resources[Skull] += 1
-						},
-						Description: fmt.Sprintf("[theo tier 4] pay %s, 1 skull", GeneratePaymentDescription(resources, newResources)),
-					})
-				}
-			}
+			advancedOptions := r.GetAdvancedOptions(g, p, resources, free, Science(s))
 
 			if n == 1 {
 				options = append(options, advancedOptions...)
@@ -238,4 +195,67 @@ func (r *Research) GetOptionsHelper(g *Game, p *Player, resources [4]int, levels
 	}
 
 	return options
+}
+
+func (r *Research) GetAdvancedOptions(g *Game, p *Player, resources [4]int, free bool, s Science) []Option {
+	advancedOptions := make([]Option, 0)
+	possResources := [][4]int{resources}
+	if !free {
+		possResources = PayBlocks(resources, 1)
+	}
+	for _, newResources := range possResources {
+		switch Science(s) {
+		case Agriculture:
+			advancedOptions = append(advancedOptions, g.Temples.GainTempleStep(p, Option{
+				Execute: func(g *Game, p *Player) {
+					p.Resources = newResources
+				},
+				Description: fmt.Sprintf("[agr tier 4] pay %s", GeneratePaymentDescription(resources, newResources)),
+			}, 1)...)
+		case Resources:
+			for i := 0; i < 3; i++ {
+				for j := 0; j < 3; j++ {
+					advancedOptions = append(advancedOptions, Option{
+						Execute: func(g *Game, p *Player) {
+							p.Resources = newResources
+							p.Resources[i] += 1
+							p.Resources[j] += 1
+						},
+						Description: fmt.Sprintf("[res tier 4] pay %s, 1 %s, 1 %s", GeneratePaymentDescription(resources, newResources), string(ResourceDebug[i]), string(ResourceDebug[j])),
+					})
+				}
+			}
+		case Construction:
+			advancedOptions = append(advancedOptions, Option{
+				Execute: func(g *Game, p *Player) {
+					p.Resources = newResources
+					p.Points += 3
+				},
+				Description: fmt.Sprintf("[cons tier 4] pay %s, 3 points", GeneratePaymentDescription(resources, newResources)),
+			})
+		case Theology:
+			advancedOptions = append(advancedOptions, Option{
+				Execute: func(g *Game, p *Player) {
+					p.Resources = newResources
+					p.Resources[Skull] += 1
+				},
+				Description: fmt.Sprintf("[theo tier 4] pay %s, 1 skull", GeneratePaymentDescription(resources, newResources)),
+			})
+		}
+	}
+	return advancedOptions
+}
+
+
+func (r *Research) FreeResearch(g *Game, p *Player, s Science) []Option {
+	if g.Research.HasLevel(p.Color, s, 3) {
+		return r.GetAdvancedOptions(g, p, p.Resources, true, s)
+	} else {
+		return []Option{Option{
+			Execute: func(g *Game, p *Player) {
+				g.Research.Levels[p.Color][s] += 1
+			},
+			Description: fmt.Sprintf("free %s", string(ResearchDebug[s])),
+		}}
+	}
 }

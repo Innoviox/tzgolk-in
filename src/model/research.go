@@ -157,7 +157,3 @@ func (r *Research) BuiltString(p *Player) string {
 func (r *Research) Builder(c Color) bool {
 	return r.HasLevel(c, Construction, 3)
 }
-
-func (r *Research) FreeResearch(c Color, s Science) {
-	r.Levels[c][s] += 1
-}

@@ -73,14 +73,18 @@ func Age2Building5() Building {
         Id: 5,
         Cost: [4]int{0, 2, 1, 0},
         GetEffects: func (g *Game, p *Player) []Option {
-            return []Option {Option{
-                Execute: func(g *Game, p *Player) {
-                    g.Research.FreeResearch(p.Color, Theology)
-                    g.Temples.Step(p, 0, 1)
-                    g.Temples.Step(p, 2, 1)
-                },
-                Description: "free theo, 1 BT, 1 GT",
-            }}
+            options := make([]Option, 0)
+            for _, o := range g.Research.FreeResearch(g, p, Theology) {
+                options = append(options, Option{
+                    Execute: func(g *Game, p *Player) {
+                        o.Execute(g, p)
+                        g.Temples.Step(p, 0, 1)
+                        g.Temples.Step(p, 2, 1)
+                    },
+                    Description: fmt.Sprintf("free theo [%s], 1 BT, 1 GT", o.Description),
+                })
+            }
+            return options
         },
         Color: Blue,
     }
@@ -232,13 +236,17 @@ func Age2Building13() Building {
         Id: 13,
         Cost: [4]int{0, 1, 1, 0},
         GetEffects: func (g *Game, p *Player) []Option {
-            return []Option {Option{
-                Execute: func(g *Game, p *Player) {
-                    g.Research.FreeResearch(p.Color, Construction)
-                    p.Points += 3
-                },
-                Description: "free const, 3 points",
-            }}
+            options := make([]Option, 0)
+            for _, o := range g.Research.FreeResearch(g, p, Construction) {
+                options = append(options, Option{
+                    Execute: func(g *Game, p *Player) {
+                        o.Execute(g, p)
+                        p.Points += 3
+                    },
+                    Description: fmt.Sprintf("free const [%s], 3 points", o.Description),
+                })
+            }
+            return options
         },
         Color: Blue,
     }

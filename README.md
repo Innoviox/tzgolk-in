@@ -22,6 +22,7 @@
 - [ ] run through game and see if theres glitches
 - [ ] further disentangle options and research from model
 - [ ] store list of gamestates
+- [x] fix freeresearch: rework so that if ur at tier 3 it returns a list of options
 
 
 

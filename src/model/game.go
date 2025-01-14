@@ -327,7 +327,7 @@ func (g *Game) TakeTurn(MarkStep func(string)) {
 
 // -- MARK -- Getters
 func (g *Game) DealBuildings() {
-	for len(g.CurrentBuildings) < g.NBuildings {
+	for len(g.CurrentBuildings) < g.NBuildings && g.CanDealBuilding() {
 		g.CurrentBuildings = append(g.CurrentBuildings, g.DealBuilding())
 	}
 
@@ -335,11 +335,19 @@ func (g *Game) DealBuildings() {
 		b := g.CurrentBuildings[i]
 		for _, p := range g.Players {
 			for _, b2 := range p.Buildings {
-				if b2.Id == b.Id {
+				if b2.Id == b.Id && g.CanDealBuilding() {
 					g.CurrentBuildings[i] = g.DealBuilding()
 				}
 			}
 		}
+	}
+}
+
+func (g *Game) CanDealBuilding() bool {
+	if g.Age == 1 {
+		return len(g.Age1Buildings) > 0 
+	} else {
+		return len(g.Age2Buildings) > 0
 	}
 }
 
