@@ -71,7 +71,7 @@ func (c *Controller) Run(MarkStep func(string)) {
         // fmt.Fprintf(os.Stdout, "%s", c.game.String())
     }
 
-    MarkStep("Game over\n")
+    // MarkStep("Game over\n")
 }
 
 func (c *Controller) IsOver() bool {

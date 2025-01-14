@@ -59,7 +59,10 @@ func (d *Display) RenderGame(g *Game) [][]rune {
     for _, d := range g.PointDays {
         days[d] = "P"
     }
-    days[g.Day] = "X"
+
+    if g.Day < 27 {
+        days[g.Day] = "X"
+    }
     
     fmt.Fprintf(&br, "-----Game-----\n")
     fmt.Fprintf(&br, "|Age: %d\n", g.Age)

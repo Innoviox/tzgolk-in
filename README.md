@@ -21,6 +21,7 @@
 - [ ] highlight current player / changes at each step
 - [ ] run through game and see if theres glitches
 - [ ] further disentangle options and research from model
+- [ ] store list of gamestates
 
 
 

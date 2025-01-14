@@ -27,7 +27,11 @@ func Tikal4(g *Game, p *Player) []Option {
 	for _, o := range g.GetBuildingOptions(p, -1, true) {
 		options = append(options, o)
 
-		for _, o2 := range g.GetBuildingOptions(p, o.BuildingNum, false) {
+		new_game := g.Clone()
+		new_player := new_game.Players[p.Color]
+		o.Execute(new_game, new_player)
+
+		for _, o2 := range new_game.GetBuildingOptions(new_player, o.BuildingNum, false) {
 			options = append(options, Option{
 				Execute: func(g *Game, p *Player) {
 					o.Execute(g, p)

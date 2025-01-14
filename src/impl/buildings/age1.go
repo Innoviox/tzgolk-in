@@ -102,9 +102,13 @@ func Building7() Building {
         Cost: [4]int{1, 0, 1, 0},
         GetEffects: func (g *Game, p *Player) []Option {
             options := make([]Option, 0)
+
+            new_player := p.Clone()
+            new_player.Resources[Wood] -= 1
+            new_player.Resources[Gold] -= 1
             
-            for _, o := range g.GetBuildingOptions(p, 7, true) {
-                options = append(options, g.Temples.GainTempleStep(p, o, 1)...)
+            for _, o := range g.GetBuildingOptions(new_player, 7, true) {
+                options = append(options, g.Temples.GainTempleStep(new_player, o, 1)...)
             }
 
             return options

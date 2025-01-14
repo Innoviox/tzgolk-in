@@ -258,7 +258,7 @@ func (g *Game) CheckDay(MarkStep func(string)) {
 
 			g.Age += 1
 			if g.Age == 2 {
-				g.CurrentBuildings = nil
+				g.CurrentBuildings = nil // make([]Building, 0)
 				g.DealBuildings()
 				MarkStep("Dealt new buildings")
 			} else {
@@ -293,8 +293,10 @@ func (g *Game) FoodDay(MarkStep func(string)) {
 					if player.Corn >= 2 - player.WorkerDeduction {
 						player.Corn -= 2 - player.WorkerDeduction
 						paid += 1
-					} else if unpaid < player.FreeWorkers{
+					} else if unpaid >= player.FreeWorkers {
 						player.Points -= 3
+						unpaid += 1
+					} else {
 						unpaid += 1
 					}
 				}
