@@ -91,6 +91,21 @@ func (w *Wheel) Clone() *Wheel {
 	}
 }
 
+func (w *Wheel) Copy(other *Wheel) {
+	w.Id = other.Id
+	w.Size = other.Size
+	w.Name = other.Name
+
+	w.Occupied = make(map[int]int)
+	for k, v := range other.Occupied {
+		w.Occupied[k] = v
+	}
+
+	for i, p := range other.Positions {
+		w.Positions[i].Copy(p)
+	}
+}
+
 // -- MARK -- Unique methods
 func (w *Wheel) AddWorker(position int, worker int) {
 	w.Occupied[position] = worker

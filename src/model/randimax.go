@@ -48,15 +48,16 @@ func ComputeMove(g *Game, p *Player, ply int, rec bool) (*Move, float64) {
         bar = progressbar.Default(int64(len(moves)))
     }
 
+    prev := g.Clone()
+
     best := float64(-100)
     var best_move Move
     for _, m := range moves {
-        new_game := g.Clone()
-        new_game.Calendar.Execute(m, new_game, func(s string){})
-        new_game.CurrPlayer = (new_game.CurrPlayer + 1) % len(new_game.Players)
-        new_game.RunStop(func(s string){/*fmt.Println(s)*/}, p)
-
-        _, score := ComputeMove(new_game, p, ply - 1, true)
+        g.Calendar.Execute(m, g, func(s string){})
+        g.CurrPlayer = (g.CurrPlayer + 1) % len(g.Players)
+        g.RunStop(func(s string){/*fmt.Println(s)*/}, p)
+        
+        _, score := ComputeMove(g, p, ply - 1, true)
         // if !rec {
         //     fmt.Fprintf(os.Stdout, "Score: %f for move %s\n", score, m.String())
         // }
@@ -68,6 +69,8 @@ func ComputeMove(g *Game, p *Player, ply int, rec bool) (*Move, float64) {
         if bar != nil {
             bar.Add(1)
         }
+        
+        g.Copy(prev)
     }   
 
     return &best_move, best

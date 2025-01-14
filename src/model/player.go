@@ -40,6 +40,25 @@ func (p *Player) Clone() *Player {
 	}
 }
 
+func (p *Player) Copy(other *Player) {
+	p.Resources = [4]int{other.Resources[0], other.Resources[1], other.Resources[2], other.Resources[3]}
+	
+	p.Corn = other.Corn
+	p.Color = other.Color
+	p.Points = other.Points
+	p.CornTiles = other.CornTiles
+	p.WoodTiles = other.WoodTiles
+	p.FreeWorkers = other.FreeWorkers
+	p.WorkerDeduction = other.WorkerDeduction
+	p.LightSide = other.LightSide
+
+	p.Buildings = make([]Building, 0)
+	p.Buildings = append(p.Buildings, other.Buildings...)
+
+	p.Monuments = make([]Monument, 0)
+	p.Monuments = append(p.Monuments, other.Monuments...)
+}
+
 func (p *Player) String(g *Game) string {
 	var br strings.Builder
 

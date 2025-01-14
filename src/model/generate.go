@@ -1,9 +1,9 @@
 package model
 
-// import (
-//     "fmt"
-//     "os"
-// )
+import (
+    // "fmt"
+    // "os"
+)
 
 func (g *Game) GenerateMoves(p *Player) []Move {
 	// all possible moves are:
@@ -85,6 +85,7 @@ func (g *Game) AddBegging(move Move, player *Player) []Move {
 
 func (g *Game) GetOptions(worker *Worker) []Option {
 	wheel := g.Calendar.Wheels[worker.Wheel_id]
+	// fmt.Fprintln(os.Stdout, "\twheel %s worker %v\n", wheel.Name, worker)
 	position := wheel.Positions[worker.Position]
 	player := g.GetPlayerByColor(worker.Color)
 
@@ -113,6 +114,8 @@ func (g *Game) MakeRetrievalMoves(moves []Move, retrieval []int) []Move {
 
 	out := make([]Move, 0)
 	out = append(out, moves...)
+
+	prev := g.Clone()
 	
 	for _, w := range retrieval {
 		worker := g.GetWorker(w)
@@ -121,13 +124,13 @@ func (g *Game) MakeRetrievalMoves(moves []Move, retrieval []int) []Move {
 		m = append(m, moves...)
 
 		// fmt.Fprintf(os.Stdout, "\t\tR %v W %v\n", retrieval, w)
+		// fmt.Fprintf(os.Stdout, "%v %v\n", prev.GetWorker(w), g.GetWorker(w))
 		rest := except(retrieval, w)
 		// fmt.Fprintf(os.Stdout, "\t\tRest %v\n", rest)
 
 		for i := 0; i < len(moves); i++ {
-			new_game := g.Clone()
-			new_game.Calendar.Execute(moves[i], new_game, func(s string){})
-			for _, option := range new_game.GetOptions(worker) {
+			g.Calendar.Execute(moves[i], g, func(s string){})
+			for _, option := range g.GetOptions(worker) {
 				// if worker.Wheel_id != 4 {
 				// 	for j := 1; j < worker.Position; j++ {
 
@@ -144,6 +147,7 @@ func (g *Game) MakeRetrievalMoves(moves []Move, retrieval []int) []Move {
 					Execute: option,
 				}, 0))
 			}
+			g.Copy(prev)
 		}
 
 		out = append(out, g.MakeRetrievalMoves(m, rest)...)
@@ -177,14 +181,16 @@ func (g *Game) MakePlacementMoves(moves []Move, placement []int) []Move {
 	worker := placement[0]
 	rest := placement[1:]
 
+	prev := g.Clone()
+
 	l := len(moves)
 	for i := 0; i < l; i++ {
-		new_game := g.Clone()
-		new_game.Calendar.Execute(moves[i], new_game, func(s string){})
+		g.Calendar.Execute(moves[i], g, func(s string){})
 
-		for _, position := range new_game.Calendar.LegalPositions() {
+		for _, position := range g.Calendar.LegalPositions() {
 			moves = append(moves, moves[i].Place(worker, position))
 		}
+		g.Copy(prev)
 	}
 
 	return g.MakePlacementMoves(moves, rest)

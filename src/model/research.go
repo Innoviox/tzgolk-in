@@ -48,6 +48,14 @@ func (r *Research) Clone() *Research {
 	}
 }
 
+func (r *Research) Copy(other *Research) {
+	for k, v := range other.Levels {
+		for k2, v2 := range v {
+			r.Levels[k][k2] = v2
+		}
+	}
+}
+
 func (r *Research) String() string {
 	var br strings.Builder
 

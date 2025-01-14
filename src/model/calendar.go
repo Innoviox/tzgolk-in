@@ -37,6 +37,16 @@ func (c *Calendar) Clone() *Calendar {
 	}
 }
 
+func (c *Calendar) Copy(other *Calendar) {
+	c.Rotation = other.Rotation
+	c.FirstPlayer = other.FirstPlayer
+	c.IsClone = other.IsClone
+
+	for i, wheel := range other.Wheels {
+		c.Wheels[i].Copy(wheel)
+	}
+}
+
 func (c *Calendar) String(workers []*Worker) string {
 	var br strings.Builder
 

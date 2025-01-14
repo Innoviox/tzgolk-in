@@ -140,6 +140,49 @@ func (g *Game) Clone() *Game {
 	}
 }
 
+func (g *Game) Copy(other *Game) {
+	for i := 0; i < len(g.Players); i++ {
+		g.Players[i].Copy(other.Players[i])
+	}
+
+	for i := 0; i < len(g.Workers); i++ {
+		g.Workers[i].Copy(other.Workers[i])
+	}
+
+	g.Calendar.Copy(other.Calendar)
+	g.Temples.Copy(other.Temples)
+	g.Research.Copy(other.Research)
+
+	g.NMonuments = other.NMonuments
+	g.CurrentMonuments = make([]Monument, 0)
+	g.CurrentMonuments = append(g.CurrentMonuments, other.CurrentMonuments...)
+
+	g.AllMonuments = make([]Monument, 0)
+	g.AllMonuments = append(g.AllMonuments, other.AllMonuments...)
+
+	g.NBuildings = other.NBuildings
+	g.CurrentBuildings = make([]Building, 0)
+	g.CurrentBuildings = append(g.CurrentBuildings, other.CurrentBuildings...)
+
+	g.Age1Buildings = make([]Building, 0)
+	g.Age1Buildings = append(g.Age1Buildings, other.Age1Buildings...)
+
+	g.Age2Buildings = make([]Building, 0)
+	g.Age2Buildings = append(g.Age2Buildings, other.Age2Buildings...)
+
+	g.CurrPlayer = other.CurrPlayer
+	g.FirstPlayer = other.FirstPlayer
+	g.AccumulatedCorn = other.AccumulatedCorn
+	g.Age = other.Age
+	g.Day = other.Day
+	g.ResDays = other.ResDays
+	g.PointDays = other.PointDays
+	g.Over = other.Over
+	g.Rand = other.Rand
+
+	// fmt.Fprintf(os.Stdout, "%v %v\n", g.Workers[0], other.Workers[0])
+}
+
 func (g *Game) String() string {
 	var br strings.Builder
 

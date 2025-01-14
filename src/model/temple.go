@@ -31,6 +31,18 @@ func (t *Temple) Clone() *Temple {
 	}
 }
 
+func (t *Temple) Copy(other *Temple) {
+	t.Steps = other.Steps
+	t.Age1Prize = other.Age1Prize
+	t.Age2Prize = other.Age2Prize
+	t.Points = other.Points
+	t.Resources = other.Resources
+
+	for k, v := range other.PlayerLocations {
+		t.PlayerLocations[k] = v
+	}
+}
+
 type Temples struct {
 	Temples []*Temple
 }
@@ -49,6 +61,12 @@ func (t *Temples) Clone() *Temples {
 
 	return &Temples {
 		Temples: newTemples,
+	}
+}
+
+func (t *Temples) Copy(other *Temples) {
+	for i := 0; i < 3; i++ {
+		t.Temples[i].Copy(other.Temples[i])
 	}
 }
 

@@ -31,6 +31,14 @@ func (w *Worker) Clone() *Worker {
 	}
 }
 
+func (w *Worker) Copy(other *Worker) {
+	w.Id = other.Id
+	w.Color = other.Color
+	w.Available = other.Available
+	w.Wheel_id = other.Wheel_id
+	w.Position = other.Position
+}
+
 // -- MARK -- Unique methods
 func (w *Worker) ReturnFrom(wheel *Wheel) {
 	w.Available = true

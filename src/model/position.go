@@ -33,6 +33,24 @@ func (p *Position) Clone() *Position {
 	}
 }
 
+func (p *Position) Copy(other *Position) {
+	var newPData *PalenqueData
+	if other.PData != nil {
+		newPData = other.PData.Clone()
+	}
+
+	var newCData *ChichenData
+	if other.CData != nil {
+		newCData = other.CData.Clone()
+	}
+
+	p.Wheel_id = other.Wheel_id
+	p.Corn = other.Corn
+	p.GetOptions = other.GetOptions
+	p.PData = newPData
+	p.CData = newCData
+}
+
 type SpecificPosition struct {
 	Wheel_id int
 	Corn int
