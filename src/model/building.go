@@ -47,7 +47,9 @@ func (b *Building) GetCosts(game *Game, player *Player) [][4]int {
 			if b.Cost[i] > 0 {
 				cost := b.Cost
 				cost[i] -= 1
-				options = append(options, cost)
+				if player.CanPay(cost) {
+					options = append(options, cost)
+				}
 			}
 		}
 	}

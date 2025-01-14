@@ -258,7 +258,7 @@ func (g *Game) CheckDay(MarkStep func(string)) {
 
 			g.Age += 1
 			if g.Age == 2 {
-				g.CurrentBuildings = nil // make([]Building, 0)
+				g.CurrentBuildings = make([]Building, 0)
 				g.DealBuildings()
 				MarkStep("Dealt new buildings")
 			} else {

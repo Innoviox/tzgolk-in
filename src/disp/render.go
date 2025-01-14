@@ -21,6 +21,11 @@ func (d *Display) Render(step string) {
         d.screen.Put(d.screen.width - 8 - 6 * i, 25, d.RenderBuilding(b))
     }
 
+    // wrap step to 90 characters
+    if len(step) > 90 {
+        step = step[:90] + "\n" + step[90:]
+    }
+
     d.screen.Put(10, 25, Convert(step))
 }
 
