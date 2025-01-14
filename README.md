@@ -10,11 +10,11 @@
 
 - [x] display buildings
 - [ ] display monuments
-- [ ] display game info (day, acc corn, etc...)
-- [ ] display number of workers per player
-- [ ] display day & food days
-- [ ] display first player step
-- [ ] display who the first player is
+- [x] display game info (day, acc corn, etc...)
+- [x] display number of workers per player
+- [x] display day & food days
+- [ ] display first player spot
+- [x] display who the first player is
 - [x] granular step
 - [x] display moves
 - [ ] display advanced wheel info

@@ -40,8 +40,15 @@ func (p *Player) Clone() *Player {
 	}
 }
 
-func (p *Player) String() string {
+func (p *Player) String(g *Game) string {
 	var br strings.Builder
+
+	nWorkers := 0
+	for _, w := range g.Workers {
+		if w.Color == p.Color && (w.Available || w.Wheel_id > 0) {
+			nWorkers++
+		}
+	}
 
 	fmt.Fprintf(&br, "----Player %s------------\n", p.Color.String())
 	fmt.Fprintf(&br, "| Resources: ")
@@ -55,6 +62,9 @@ func (p *Player) String() string {
 	fmt.Fprintf(&br, "| Free Workers: %d\n", p.FreeWorkers)
 	fmt.Fprintf(&br, "| Worker Deduction: %d\n", p.WorkerDeduction)
 	fmt.Fprintf(&br, "| Light Side: %t\n", p.LightSide)
+	fmt.Fprintf(&br, "| Buildings: %d\n", len(p.Buildings))
+	fmt.Fprintf(&br, "| Monuments: %d\n", len(p.Monuments))
+	fmt.Fprintf(&br, "| Workers: %d\n", nWorkers)
 	fmt.Fprintf(&br, "------------------------\n")
 
 

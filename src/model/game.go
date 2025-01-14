@@ -145,7 +145,7 @@ func (g *Game) String() string {
 	fmt.Fprintf(&br, "Calendar State: \n%s\n", g.Calendar.String(g.Workers))
 
 	for i := 0; i < len(g.Players); i++ {
-		fmt.Fprintf(&br, "%s", g.Players[i].String())
+		fmt.Fprintf(&br, "%s", g.Players[i].String(g))
 	}
 	fmt.Fprintf(&br, "Accumulated Corn: %d\n", g.AccumulatedCorn)
 
@@ -226,9 +226,9 @@ func (g *Game) Rotate(MarkStep func(string)) {
 	MarkStep("Rotating Calendar")
 	g.Calendar.Rotate(g)
 	g.AccumulatedCorn += 1
-	g.Day += 1
 	MarkStep("Rotated Calendar")
 	g.CheckDay(MarkStep)
+	g.Day += 1
 }
 
 func (g *Game) CheckDay(MarkStep func(string)) {
