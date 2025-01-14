@@ -90,3 +90,15 @@ func (p *Player) TotalCorn() int {
 	
 	return Corn
 }
+
+func (p *Player) Evaluate(g *Game) int {
+	points := p.Points
+	points += p.TotalCorn() / 4
+	points += p.Resources[Skull] * 3
+
+	for _, m := range p.Monuments {
+		points += m.GetPoints(g, p)
+	}
+
+	return points
+}
