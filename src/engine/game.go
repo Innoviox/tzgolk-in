@@ -313,80 +313,90 @@ func (g *Game) FirstPlayerSpace(MarkStep func(string)) {
 	}
 }
 
-func (g *Game) Rotate(MarkStep func(string)) {
-	// fmt.Fprintf(os.Stdout, "Rotating Calendar\n")
+func (g *Game) Rotate(MarkStep func(string)) Delta {
 	MarkStep("Rotating Calendar")
-	g.Calendar.Rotate(g)
-	g.AccumulatedCorn += 1
+	delta := g.Calendar.Rotate(g)
+	delta.AccumulatedCorn = 1
 	MarkStep("Rotated Calendar")
-	g.CheckDay(MarkStep)
-	g.Day += 1
+	delta = AddDelta(d, g.CheckDay(MarkStep))
+	delta.Day = 1
+
+	return delta
 }
 
-func (g *Game) CheckDay(MarkStep func(string)) {
+func (g *Game) CheckDay(MarkStep func(string)) *Delta {
+	d := &Delta{}
 	for _, day := range g.ResDays {
 		if g.Day == day {
-			g.FoodDay(MarkStep)
+			d.Add(g.FoodDay(MarkStep))
 
 			for _, player := range g.Players {
-				g.Temples.GainResources(player)
+				d.Add(g.Temples.GainResources(player))
 			}
 
 			MarkStep("Gained resources")
 
-			return
+			return d
 		}
 	}
 
 	for _, day := range g.PointDays {
 		if g.Day == day {
-			g.FoodDay(MarkStep)
+			d.Add(g.FoodDay(MarkStep))
 			
 			for _, player := range g.Players {
-				g.Temples.GainPoints(player, g.Age)
+				d.Add(g.Temples.GainPoints(player, g.Age))
 			}
 
 			MarkStep("Gained points")
 
-			g.Age += 1
-			if g.Age == 2 {
+			d.Add(&Delta{Age: 1})
+			if g.Age == 1 {
+				// todo buildings
 				g.CurrentBuildings = make([]Building, 0)
 				g.DealBuildings()
 				MarkStep("Dealt new buildings")
 			} else {
-				g.EndGame(MarkStep)
+				d.Add(g.EndGame(MarkStep))
 			}
-			return
+			return d
 		}
 	}
+	return d
 }
 
-func (g *Game) EndGame(MarkStep func(string)) {
+func (g *Game) EndGame(MarkStep func(string)) *Delta {
+	d := &Delta{PlayerDeltas: map[Color]PlayerDelta{}}
 	for _, p := range g.Players {
-		p.Points += p.TotalCorn() / 4
-		p.Points += p.Resources[Skull] * 3
+		i := 0
+		i += p.TotalCorn() / 4
+		i += p.Resources[Skull] * 3
 
 		for _, m := range p.Monuments {
-			p.Points += m.GetPoints(g, p)
+			i += m.GetPoints(g, p)
 		}
 		MarkStep(fmt.Sprintf("Gained endgame points for %s", p.Color.String()))
+		d.PlayerDeltas[p.Color] = PlayerDelta{Points: i}
 	}
 
-	g.Over = true
+	d.Over = 1
+	return d
 }
 
-func (g *Game) FoodDay(MarkStep func(string)) {
+func (g *Game) FoodDay(MarkStep func(string)) *Delta {
+	d := &Delta{PlayerDeltas: map[Color]PlayerDelta{}}
 	for _, player := range g.Players {
 		paid := 0
 		unpaid := 0
+		pd := PlayerDelta{}
 		for _, w := range g.Workers {
 			if w.Color == player.Color {
 				if w.Wheel_id != -1 || w.Available {
 					if player.Corn >= 2 - player.WorkerDeduction {
-						player.Corn -= 2 - player.WorkerDeduction
+						pd.Corn -= 2 - player.WorkerDeduction
 						paid += 1
 					} else if unpaid >= player.FreeWorkers {
-						player.Points -= 3
+						pd.Points -= 3
 						unpaid += 1
 					} else {
 						unpaid += 1
@@ -394,12 +404,15 @@ func (g *Game) FoodDay(MarkStep func(string)) {
 				}
 			}
 		}
+		d.PlayerDeltas[player.Color] = pd
 		// fmt.Fprintf(os.Stdout, "Player %s paid %d workers, didn't pay %d workers\n", player.Color.String(), paid, unpaid)
 		MarkStep(fmt.Sprintf("Player %s paid %d workers, didn't pay %d workers", player.Color.String(), paid, unpaid))
 	}
+	return d
 }
 
-func (g *Game) TakeTurn(MarkStep func(string), random bool) {
+func (g *Game) TakeTurn(MarkStep func(string), random bool) *Delta {
+	d := &Delta{}
 	player := g.Players[g.CurrPlayer]
 
 	var move *Move
@@ -417,13 +430,15 @@ func (g *Game) TakeTurn(MarkStep func(string), random bool) {
 	
 	if move != nil {
 		MarkStep(fmt.Sprintf("Playing move %s for %s", move.String(), player.Color.String()))
-		g.Calendar.Execute(*move, g, MarkStep)
+		d.Add(g.Calendar.Execute(*move, g, MarkStep))
 	} else {
 		MarkStep(fmt.Sprintf("[FATAL ERROR] No move for %s", player.Color.String()))
 	}
 	// player.Corn -= move.Corn
 
+	// todo buildings
 	g.DealBuildings()
+	return d
 }
 
 func (g *Game) Run(MarkStep func(string), random bool) {

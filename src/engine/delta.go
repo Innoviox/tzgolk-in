@@ -20,6 +20,8 @@ type Delta struct {
     Age int
     Day int
 
+    Over int
+
     Description string
     BuildingNum int // todo do we need this?
 }
@@ -46,7 +48,7 @@ type WorkerDelta struct {
 }
 
 type CalendarDelta struct {
-    WheelDeltas []WheelDelta
+    WheelDeltas map[int]WheelDelta
     Rotation int
 
     FirstPlayer int
@@ -55,7 +57,7 @@ type CalendarDelta struct {
 type WheelDelta struct {
     // todo how should this work?
     Occupied map[int]int
-    PositionDeltas []PositionDelta
+    PositionDeltas map[int]PositionDelta
 }
 
 type PositionDelta struct {
@@ -88,7 +90,17 @@ func Bool(d int, m int) bool {
     return d * m > 0
 }
 
-func AddDelta(d1 Delta, d2 Delta) Delta {
+func (d *Delta) Add(o *Delta) *Delta {
     // todo
-    return Delta{}
+    return d
 }
+
+func ResourcesDelta(color Color, old [4]int, new [4]int) Delta {
+    return Delta{PlayerDeltas: map[Color]PlayerDelta{color: PlayerDelta{Resources: 
+        [4]int{new[0] - old[0], new[1] - old[1], new[2] - old[2], new[3] - old[3]},
+    }}}
+}
+
+// func ResearchDelta(color Color, old Levels, new Levels) Delta {
+
+// }

@@ -132,7 +132,9 @@ func (w *Wheel) RemoveWorker(worker int) {
 	}
 }
 
-func (w *Wheel) Rotate(g *Game) {
+func (w *Wheel) Rotate(g *Game) Delta {
+	d := Delta{}
+
 	workerToRemove := -1 // only one worker per wheel can fall off
 	new_occupied := make(map[int]int)
 	for k, v := range w.Occupied {
@@ -141,15 +143,19 @@ func (w *Wheel) Rotate(g *Game) {
 		} else {
 			new_occupied[k + 1] = v
 			worker := g.GetWorker(v)
-			worker.Position++
+			d = AddDelta(d, Delta{WorkerDeltas: map[int]WorkerDelta{worker.Id: WorkerDelta{Position: 1}}})
 		}
 	} 
 
 	if workerToRemove != -1 {
-		g.GetWorker(workerToRemove).ReturnFrom(w)
+		d = AddDelta(d, g.GetWorker(workerToRemove).ReturnFrom(w))
 	}
 
-	w.Occupied = new_occupied
+	d = AddDelta(d, Delta{CalendarDelta: CalendarDelta{WheelDeltas: map[int]WheelDelta{w.Id: WheelDelta{
+		Occupied: new_occupied,
+	}}}})
+
+	return d
 }
 
 func (w *Wheel) LowestUnoccupied() int {

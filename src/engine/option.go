@@ -162,19 +162,17 @@ func (r *Research) GetOptionsHelper(g *Game, p *Player, resources [4]int, levels
 				}
 				newLevels[Science(s)] += 1
 
-				opt := Option{
-					Execute: func(g *Game, p *Player) {
-						p.Resources = newResources
-						g.Research.Levels[p.Color] = newLevels
-					},
-					Description: GenerateResearchDescription(resources, newResources, levels, newLevels),
-				}
+				d := ResourcesDelta(p.Color, p.Resources, newResources)
+				d = AddDelta(d, Delta{ResearchDelta: ResearchDelta{Levels: map[Color]Levels{p.Color: map[Science]int{
+					Science(s): 1,
+				}}}})
+				d.Description = GenerateResearchDescription(resources, newResources, levels, newLevels)
 
 				if n == 1 {
-					options = append(options, opt)
+					options = append(options, d)
 				} else {
 					for _, o := range r.GetOptionsHelper(g, p, newResources, newLevels, n - 1, free) {
-						options = append(options, AddDelta(opt, o))
+						options = append(options, AddDelta(d, o))
 					}
 				}
 			}
@@ -205,12 +203,9 @@ func (r *Research) GetAdvancedOptions(g *Game, p *Player, resources [4]int, free
 	for _, newResources := range possResources {
 		switch Science(s) {
 		case Agriculture:
-			advancedOptions = append(advancedOptions, g.Temples.GainTempleStep(p, Option{
-				Execute: func(g *Game, p *Player) {
-					p.Resources = newResources
-				},
-				Description: fmt.Sprintf("[agr tier 4] pay %s", GeneratePaymentDescription(resources, newResources)),
-			}, 1)...)
+			d := ResourcesDelta(p.Color, p.Resources, newResources)
+			d.Description = fmt.Sprintf("[agr tier 4] pay %s", GeneratePaymentDescription(resources, newResources))
+			advancedOptions = append(advancedOptions, g.Temples.GainTempleStep(p, d, 1)...)
 		case Resources:
 			for i := 0; i < 3; i++ {
 				for j := 0; j < 3; j++ {

@@ -152,9 +152,10 @@ func (c *Calendar) LegalPositions() []*SpecificPosition {
 	return positions
 }
 
-// todo rework when days are implemented?
-func (c *Calendar) Rotate(g *Game) {
+func (c *Calendar) Rotate(g *Game) Delta {
+	d := Delta{}
 	for i := 0; i < len(c.Wheels); i++ {
-		c.Wheels[i].Rotate(g)
+		d = AddDelta(d, c.Wheels[i].Rotate(g))
 	}
+	return d
 }
