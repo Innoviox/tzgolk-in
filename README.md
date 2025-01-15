@@ -8,12 +8,16 @@ go build && ./tzgolkin -cpuprofile=test4.prof
 
 go tool pprof tzgolkin test3.prof
 
+## Delta switch
+
+- [ ] rework buildings to be stored as integers
+
 # Needed for Complete Gameplay
 
 - [x] begging for corn angers the gods (maybe add like a move.Beg method like move.Place & such?) & add it to the arrays in GenerateMove before generating
 - [ ] pay corn to go lower (first attempt broke)
-- [ ] uxmal exchange (first attempt broke)
-- [ ] fix age2building16 (it can build itself)
+- [ ] uxmal2 (first attempt broke)
+- [ ] fix age 2 building 16 (it can build itself)
 
 # Current Goal: Full-screeen display
 
