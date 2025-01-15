@@ -5,7 +5,7 @@ import (
     // "os"
 )
 
-func (g *Game) GenerateMoves(p *Player) []Move {
+func (g *Game) GenerateMoves(p *Player, key int) []Move {
 	// all possible moves are:
 	// - retrieve any combination of workers
 	// - place any legal combination of workers
@@ -49,10 +49,10 @@ func (g *Game) GenerateMoves(p *Player) []Move {
 	}
 
 	retrieval_moves := g.AddBegging(MakeEmptyRetrievalMove(p.Color), p)
-	moves = append(moves, g.MakeRetrievalMoves(retrieval_moves, retrieval)...)
+	moves = append(moves, g.MakeRetrievalMoves(retrieval_moves, retrieval, 10000 * key)...)
 	
 	placement_moves := g.AddBegging(MakeEmptyPlacementMove(p.Color), p)
-	moves = append(moves, g.MakePlacementMoves(placement_moves, placement)...)
+	moves = append(moves, g.MakePlacementMoves(placement_moves, placement, 20000 * key)...)
 
 	// todo find filter method
 	out := make([]Move, 0)
@@ -107,7 +107,7 @@ func (g *Game) GetOptions(worker *Worker) []Option {
 			m.Append(j + i)
 		return make_retrieval_moves(m, r)
 */
-func (g *Game) MakeRetrievalMoves(moves []Move, retrieval []int) []Move {
+func (g *Game) MakeRetrievalMoves(moves []Move, retrieval []int, key int) []Move {
 	if len(retrieval) == 0 {
 		return moves
 	}
@@ -115,7 +115,7 @@ func (g *Game) MakeRetrievalMoves(moves []Move, retrieval []int) []Move {
 	out := make([]Move, 0)
 	out = append(out, moves...)
 
-	prev := g.Clone()
+	g.Save(key)
 	
 	for _, w := range retrieval {
 		worker := g.GetWorker(w)
@@ -147,10 +147,10 @@ func (g *Game) MakeRetrievalMoves(moves []Move, retrieval []int) []Move {
 					Execute: option,
 				}, 0))
 			}
-			g.Copy(prev)
+			g.Load(key)
 		}
 
-		out = append(out, g.MakeRetrievalMoves(m, rest)...)
+		out = append(out, g.MakeRetrievalMoves(m, rest, key + 1)...)
 	}
 	return out
 }
@@ -172,7 +172,7 @@ func (g *Game) MakeRetrievalMoves(moves []Move, retrieval []int) []Move {
 
 		return mpm(m, p, wheels)
 */
-func (g *Game) MakePlacementMoves(moves []Move, placement []int) []Move {
+func (g *Game) MakePlacementMoves(moves []Move, placement []int, key int) []Move {
 	// fmt.Fprintf(os.Stdout, "\nMakePlacementMoves %v %v\n", len(moves), placement)
 	if len(placement) == 0 {
 		return moves
@@ -181,7 +181,7 @@ func (g *Game) MakePlacementMoves(moves []Move, placement []int) []Move {
 	worker := placement[0]
 	rest := placement[1:]
 
-	prev := g.Clone()
+	g.Save(key)
 
 	l := len(moves)
 	for i := 0; i < l; i++ {
@@ -190,8 +190,8 @@ func (g *Game) MakePlacementMoves(moves []Move, placement []int) []Move {
 		for _, position := range g.Calendar.LegalPositions() {
 			moves = append(moves, moves[i].Place(worker, position))
 		}
-		g.Copy(prev)
+		g.Load(key)
 	}
 
-	return g.MakePlacementMoves(moves, rest)
+	return g.MakePlacementMoves(moves, rest, key + 1)
 }

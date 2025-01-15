@@ -41,14 +41,14 @@ func ComputeMove(g *Game, p *Player, ply int, rec bool) (*Move, float64) {
         return nil, p.Evaluate(g)
     }
 
-    moves := g.GenerateMoves(p)
+    moves := g.GenerateMoves(p, ply)
 
     var bar *progressbar.ProgressBar
     if (!rec) {
         bar = progressbar.Default(int64(len(moves)))
     }
 
-    prev := g.Clone()
+    g.Save(ply)
 
     best := float64(-100)
     var best_move Move
@@ -70,7 +70,7 @@ func ComputeMove(g *Game, p *Player, ply int, rec bool) (*Move, float64) {
             bar.Add(1)
         }
         
-        g.Copy(prev)
+        g.Load(ply)
     }   
 
     return &best_move, best

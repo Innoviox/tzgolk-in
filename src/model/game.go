@@ -40,6 +40,8 @@ type Game struct {
 	Rand *rand.Rand
 
 	Tiles []Tile
+
+	Freeze map[int]*Game
 }
 
 // -- MARK -- Basic methods
@@ -91,10 +93,13 @@ func (g *Game) Init() {
 
 	g.Over = false
 
+	g.Freeze = make(map[int]*Game)
+
 	fmt.Fprintf(os.Stdout, "%s", g.String())
 }
 
 func (g *Game) Clone() *Game {
+	fmt.Println("Cloning game!")
 	players := make([]*Player, 0)
 	for _, p := range g.Players {
 		players = append(players, p.Clone())
@@ -137,6 +142,7 @@ func (g *Game) Clone() *Game {
 		PointDays: g.PointDays,
 		Over: g.Over,
 		Rand: g.Rand,
+		Freeze: g.Freeze,
 	}
 }
 
@@ -154,20 +160,20 @@ func (g *Game) Copy(other *Game) {
 	g.Research.Copy(other.Research)
 
 	g.NMonuments = other.NMonuments
-	g.CurrentMonuments = make([]Monument, 0)
+	g.CurrentMonuments = nil
 	g.CurrentMonuments = append(g.CurrentMonuments, other.CurrentMonuments...)
 
-	g.AllMonuments = make([]Monument, 0)
+	g.AllMonuments = nil
 	g.AllMonuments = append(g.AllMonuments, other.AllMonuments...)
 
 	g.NBuildings = other.NBuildings
-	g.CurrentBuildings = make([]Building, 0)
+	g.CurrentBuildings = nil
 	g.CurrentBuildings = append(g.CurrentBuildings, other.CurrentBuildings...)
 
-	g.Age1Buildings = make([]Building, 0)
+	g.Age1Buildings = nil
 	g.Age1Buildings = append(g.Age1Buildings, other.Age1Buildings...)
 
-	g.Age2Buildings = make([]Building, 0)
+	g.Age2Buildings = nil
 	g.Age2Buildings = append(g.Age2Buildings, other.Age2Buildings...)
 
 	g.CurrPlayer = other.CurrPlayer
@@ -178,9 +184,19 @@ func (g *Game) Copy(other *Game) {
 	g.ResDays = other.ResDays
 	g.PointDays = other.PointDays
 	g.Over = other.Over
-	g.Rand = other.Rand
+}
 
-	// fmt.Fprintf(os.Stdout, "%v %v\n", g.Workers[0], other.Workers[0])
+func (g *Game) Save(key int) {
+	res, ok := g.Freeze[key]
+	if ok {
+		res.Copy(g)
+	} else {
+		g.Freeze[key] = g.Clone()
+	}
+}
+
+func (g *Game) Load(key int) {
+	g.Copy(g.Freeze[key])
 }
 
 func (g *Game) String() string {
@@ -356,7 +372,8 @@ func (g *Game) TakeTurn(MarkStep func(string), random bool) {
 
 	var move *Move
 	if random {
-		moves := g.GenerateMoves(g.Players[g.CurrPlayer])
+		// this number is equal to ply + 1
+		moves := g.GenerateMoves(g.Players[g.CurrPlayer], 3)
 		if len(moves) > 0 {
 			move = &moves[g.Rand.Intn(len(moves))]
 		}
