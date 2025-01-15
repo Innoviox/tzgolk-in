@@ -10,10 +10,12 @@ func Building1() Building {
     return Building {
         Id: 1,
         Cost: [4]int{1, 0, 0, 0},
-        GetEffects: func (g *Game, p *Player) []Option {
-            return []Option {Option{
-                Execute: func(g *Game, p *Player) {
-                    p.FreeWorkers += 1
+        GetEffects: func (g *Game, p *Player) []Delta {
+            return []Delta{Delta{
+                PlayerDeltas: map[Color]PlayerDelta{
+                    p.Color: PlayerDelta{
+                        FreeWorkers: 1,
+                    },
                 },
                 Description: "1 free worker",
             }}

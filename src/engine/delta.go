@@ -19,6 +19,9 @@ type Delta struct {
     AccumulatedCorn int
     Age int
     Day int
+
+    Description string
+    BuildingNum int // todo do we need this?
 }
 
 type PlayerDelta struct {
@@ -70,7 +73,7 @@ type ChichenDataDelta struct {
 }
 
 type TemplesDelta struct {
-    TempleDeltas []TempleDelta
+    TempleDeltas map[int]TempleDelta
 }
 
 type TempleDelta struct {
@@ -78,11 +81,14 @@ type TempleDelta struct {
 }
 
 type ResearchDelta struct {
-    Levels map[Color]LevelsDelta
+    Levels map[Color]Levels
 }
-
-type LevelsDelta map[Science]int
 
 func Bool(d int, m int) bool {
     return d * m > 0
+}
+
+func AddDelta(d1 Delta, d2 Delta) Delta {
+    // todo
+    return Delta{}
 }

@@ -77,6 +77,7 @@ func (t *Temples) Copy(other *Temples) {
 }
 
 func (t *Temples) AddDelta(delta TemplesDelta, mul int) {
+	// todo call Step function? or how to reach lightside??
 	for i := 0; i < 3; i++ {
 		t.Temples[i].AddDelta(delta.TempleDeltas[i], mul)
 	}

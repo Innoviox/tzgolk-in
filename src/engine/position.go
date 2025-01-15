@@ -65,7 +65,7 @@ func (p *Position) AddDelta(delta PositionDelta, mul int) {
 type SpecificPosition struct {
 	Wheel_id int
 	Corn int
-	Execute Option
+	Execute Delta
 	FirstPlayer bool
 }
 

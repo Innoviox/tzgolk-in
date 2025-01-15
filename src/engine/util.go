@@ -98,3 +98,11 @@ func CostString(cost [4]int) string {
 	}
 	return result
 }
+
+func InvCost(cost [4]int) [4]int {
+	result := [4]int{}
+	for i := 0; i < 4; i++ {
+		result[i] = -cost[i]
+	}
+	return result
+}

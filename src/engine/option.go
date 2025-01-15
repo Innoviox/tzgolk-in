@@ -4,18 +4,18 @@ import (
     "fmt"
 )
 
-type Option struct {
-	Execute func(*Game, *Player)
-	Description string
-	BuildingNum int
-}
+// type Option struct {
+// 	Execute func(*Game, *Player)
+// 	Description string
+// 	BuildingNum int
+// }
 
-type Options func(*Game, *Player) []Option
+type Options func(*Game, *Player) []Delta
 
 func Flatten(options []Options) Options {
 	// todo add "mirror" to Description?
-	return func (g *Game, p *Player) []Option {
-		result := make([]Option, 0)
+	return func (g *Game, p *Player) []Delta {
+		result := make([]Delta, 0)
 		for _, o := range options {
 			result = append(result, o(g, p)...)
 		}
@@ -23,16 +23,11 @@ func Flatten(options []Options) Options {
 	}
 }
 
-func Skip() []Option {
-    return []Option{Option{
-        Execute: func(g *Game, p *Player) {
-    
-        },
-        Description: "skip",
-    }}
+func Skip() []Delta {
+	return []Delta{Delta{Description: "skip"}}
 }
 
-func SkipWrapper(o []Option) []Option {
+func SkipWrapper(o []Delta) []Delta {
 	if len(o) == 0 {
 		return Skip()
 	} else {
@@ -40,8 +35,8 @@ func SkipWrapper(o []Option) []Option {
 	}
 }
 
-func (g *Game) GetBuildingOptions(p *Player, exclude int, useResearch bool) []Option {
-	options := make([]Option, 0)
+func (g *Game) GetBuildingOptions(p *Player, exclude int, useResearch bool) []Delta {
+	options := make([]Delta, 0)
 
 	for _, b := range g.CurrentBuildings {
 		if b.Id == exclude {
@@ -51,25 +46,21 @@ func (g *Game) GetBuildingOptions(p *Player, exclude int, useResearch bool) []Op
 		costs := b.GetCosts(g, p)
 		for _, cost := range costs {
 			for _, effect := range b.GetEffects(g, p) {
-				options = append(options, Option{
-					Execute: func(g *Game, p *Player) {
-						for i := 0; i < 4; i++ {
-							p.Resources[i] -= cost[i]
-						}
-
-						effect.Execute(g, p)
-
-						if useResearch {
-							g.Research.Built(p)
-						}
-
-						p.Buildings = append(p.Buildings, b)
-
-						// g.RemoveBuilding(b)
+				d := Delta{
+					PlayerDeltas: map[Color]PlayerDelta{
+						p.Color: PlayerDelta{
+							Resources: InvCost(b.Cost),
+							// todo building delta
+						},
 					},
-					Description: fmt.Sprintf("[build %d] pay %s, %s +%s", b.Id, CostString(cost), effect.Description, g.Research.BuiltString(p)),
+					Description: fmt.Sprintf("[build %d] pay %s ", b.Id, CostString(cost)),
 					BuildingNum: b.Id,
-				})
+				}
+				d = AddDelta(d, effect) // effect.Descriptio
+				if useResearch {
+					d = AddDelta(d, g.Research.Built(p)) // g.Research.BuiltString(p)
+				}
+				options = append(options, d)
 			}
 		}
 	}
@@ -77,20 +68,17 @@ func (g *Game) GetBuildingOptions(p *Player, exclude int, useResearch bool) []Op
 	return options
 }
 
-func (g *Game) GetMonumentOptions(p *Player) []Option {
-	options := make([]Option, 0)
+func (g *Game) GetMonumentOptions(p *Player) []Delta {
+	options := make([]Delta, 0)
 
 	for _, m := range g.CurrentMonuments {
 		if p.CanPay(m.Cost) {
-			options = append(options, Option{
-				Execute: func(g *Game, p *Player) {
-					for i := 0; i < 4; i++ {
-						p.Resources[i] -= m.Cost[i]
-					}
-
-					p.Monuments = append(p.Monuments, m)
-
-					// g.RemoveMonument(m)
+			options = append(options, Delta{
+				PlayerDeltas: map[Color]PlayerDelta{
+					p.Color: PlayerDelta{
+						Resources: InvCost(m.Cost),
+						// todo monument delta
+					},
 				},
 				Description: fmt.Sprintf("[build %d] pay %s, get monument %d", m.Id, CostString(m.Cost), m.Id),
 			})
@@ -100,25 +88,31 @@ func (g *Game) GetMonumentOptions(p *Player) []Option {
 	return options
 }
 
-func (t *Temples) GainTempleStep(p *Player, o Option, dir int) []Option {
-	options := make([]Option, 0)
+func (t *Temples) GainTempleStep(p *Player, o Delta, dir int) []Delta {
+	options := make([]Delta, 0)
 
 	for i := 0; i < 3; i++ {
 		if t.CanStep(p, i, dir) {
-			options = append(options, Option{
-				Execute: func(g *Game, p *Player) {
-					g.Temples.Step(p, i, dir)
-					o.Execute(g, p)
+			d := Delta {
+				TemplesDelta: TemplesDelta{
+					TempleDeltas: map[int]TempleDelta{
+						i: TempleDelta{
+							PlayerLocations: map[Color]int{
+								p.Color: dir,
+							},
+						},
+					},
 				},
-				Description: fmt.Sprintf("%s, %s temple %d", o.Description, p.Color.String(), dir),
-			})
+				Description: fmt.Sprintf(" %s temple %d", p.Color.String(), dir),
+			}
+			options = append(options, AddDelta(o, d))
 		}
 	}
 
 	return options
 }
 
-func (r *Research) GetOptions(g *Game, p *Player, n int, free bool) []Option{ 
+func (r *Research) GetOptions(g *Game, p *Player, n int, free bool) []Delta{ 
 	resources := [4]int{}
 	for i := 0; i < 4; i++ {
 		resources[i] = p.Resources[i]
@@ -151,8 +145,8 @@ func GenerateLevelsDescription(l Levels, nl Levels) string {
 	return fmt.Sprintf("%v", Descriptions)
 }
 
-func (r *Research) GetOptionsHelper(g *Game, p *Player, resources [4]int, levels Levels, n int, free bool) []Option {
-	options := make([]Option, 0)
+func (r *Research) GetOptionsHelper(g *Game, p *Player, resources [4]int, levels Levels, n int, free bool) []Delta {
+	options := make([]Delta, 0)
 	for s := 0; s < 4; s++ {
 		level := levels[Science(s)]
 		possResources := [][4]int{resources} // the resources you end up with after paying
@@ -180,13 +174,7 @@ func (r *Research) GetOptionsHelper(g *Game, p *Player, resources [4]int, levels
 					options = append(options, opt)
 				} else {
 					for _, o := range r.GetOptionsHelper(g, p, newResources, newLevels, n - 1, free) {
-						options = append(options, Option{
-							Execute: func(g *Game, p *Player) {
-								opt.Execute(g, p)
-								o.Execute(g, p)
-							},
-							Description: fmt.Sprintf("%s; %s", opt.Description, o.Description),
-						})
+						options = append(options, AddDelta(opt, o))
 					}
 				}
 			}
@@ -198,13 +186,7 @@ func (r *Research) GetOptionsHelper(g *Game, p *Player, resources [4]int, levels
 			} else {
 				for _, o1 := range advancedOptions {
 					for _, o2 := range r.GetOptionsHelper(g, p, resources, levels, n - 1, free) {
-						options = append(options, Option{
-							Execute: func(g *Game, p *Player) {
-								o1.Execute(g, p)
-								o2.Execute(g, p)
-							},
-							Description: fmt.Sprintf("%s; %s", o1.Description, o2.Description),
-						})
+						options = append(options, AddDelta(o1, o2))
 					}
 				}
 			}
@@ -214,8 +196,8 @@ func (r *Research) GetOptionsHelper(g *Game, p *Player, resources [4]int, levels
 	return options
 }
 
-func (r *Research) GetAdvancedOptions(g *Game, p *Player, resources [4]int, free bool, s Science) []Option {
-	advancedOptions := make([]Option, 0)
+func (r *Research) GetAdvancedOptions(g *Game, p *Player, resources [4]int, free bool, s Science) []Delta {
+	advancedOptions := make([]Delta, 0)
 	possResources := [][4]int{resources}
 	if !free {
 		possResources = PayBlocks(resources, 1)
@@ -264,13 +246,17 @@ func (r *Research) GetAdvancedOptions(g *Game, p *Player, resources [4]int, free
 }
 
 
-func (r *Research) FreeResearch(g *Game, p *Player, s Science) []Option {
+func (r *Research) FreeResearch(g *Game, p *Player, s Science) []Delta {
 	if g.Research.HasLevel(p.Color, s, 3) {
 		return r.GetAdvancedOptions(g, p, p.Resources, true, s)
 	} else {
-		return []Option{Option{
-			Execute: func(g *Game, p *Player) {
-				g.Research.Levels[p.Color][s] += 1
+		return []Delta{Delta{
+			ResearchDelta: ResearchDelta{
+				Levels: map[Color]Levels{
+					p.Color: Levels{
+						s: 1,
+					},
+				},
 			},
 			Description: fmt.Sprintf("free %s", string(ResearchDebug[s])),
 		}}
