@@ -56,6 +56,14 @@ func (r *Research) Copy(other *Research) {
 	}
 }
 
+func (r *Research) AddDelta(delta ResearchDelta, mul int) {
+	for c, l := range delta.Levels {
+		for s, n := range l {
+			r.Levels[c][s] += n * mul
+		}
+	}
+}
+
 func (r *Research) String() string {
 	var br strings.Builder
 

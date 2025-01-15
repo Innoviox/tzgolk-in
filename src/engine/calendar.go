@@ -47,6 +47,15 @@ func (c *Calendar) Copy(other *Calendar) {
 	}
 }
 
+func (c *Calendar) AddDelta(delta CalendarDelta, mul int) {
+	c.Rotation += delta.Rotation * mul
+	c.FirstPlayer += delta.FirstPlayer * mul
+
+	for i, wheel := range delta.WheelDeltas {
+		c.Wheels[i].AddDelta(wheel, mul)
+	}
+}
+
 func (c *Calendar) String(workers []*Worker) string {
 	var br strings.Builder
 

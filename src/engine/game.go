@@ -186,6 +186,38 @@ func (g *Game) Copy(other *Game) {
 	g.Over = other.Over
 }
 
+func (g *Game) AddDelta(delta Delta, mul int) {
+	for _, p := range g.Players {
+		res, ok := delta.PlayerDeltas[p.Color]
+		if ok {
+			p.AddDelta(res, mul)
+		}
+	}
+
+	for _, w := range g.Workers {
+		w.AddDelta(delta.WorkerDeltas[w.Id], mul)
+	}
+
+	g.Calendar.AddDelta(delta.CalendarDelta, mul)
+	g.Temples.AddDelta(delta.TemplesDelta, mul)
+	g.Research.AddDelta(delta.ResearchDelta, mul)
+
+	// TODO buildings & monuments are ints
+	// for _, m := range delta.Monuments {
+	// 	g.CurrentMonuments = append(g.CurrentMonuments, m)
+	// }
+
+	// for _, b := range delta.Buildings {
+	// 	g.CurrentBuildings = append(g.CurrentBuildings, b)
+	// }
+
+	g.CurrPlayer = delta.CurrPlayer
+	g.FirstPlayer = delta.FirstPlayer
+	g.AccumulatedCorn = delta.AccumulatedCorn
+	g.Age = delta.Age
+	g.Day = delta.Day
+}
+
 func (g *Game) Save(key int) {
 	res, ok := g.Freeze[key]
 	if ok {
@@ -394,16 +426,9 @@ func (g *Game) TakeTurn(MarkStep func(string), random bool) {
 	g.DealBuildings()
 }
 
-func (g *Game) Run(MarkStep func(string), random bool, stopPlayer *Player) {
+func (g *Game) Run(MarkStep func(string), random bool) {
 	for !g.IsOver() && g.Day < 4 {
-		if stopPlayer == nil {
-			g.CurrPlayer = g.FirstPlayer
-		}
 		for i := 0; i < len(g.Players); i++ {
-			if stopPlayer != nil && g.Players[g.CurrPlayer].Color == stopPlayer.Color {
-				MarkStep("Stopped by color")
-				return
-			}
 			g.TakeTurn(MarkStep, random)
 			g.CurrPlayer = (g.CurrPlayer + 1) % len(g.Players)
 		}

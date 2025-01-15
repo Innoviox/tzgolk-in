@@ -50,7 +50,7 @@ func MakeController(rand *rand.Rand) *Controller {
 }
 
 func (c *Controller) Run(MarkStep func(string)) {
-    c.game.Run(MarkStep, false, nil)
+    c.game.Run(MarkStep, true, nil)
 }
 
 func (c *Controller) IsOver() bool {

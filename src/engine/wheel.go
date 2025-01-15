@@ -106,6 +106,18 @@ func (w *Wheel) Copy(other *Wheel) {
 	}
 }
 
+func (w *Wheel) AddDelta(delta WheelDelta, mul int) {
+	// todo how should this work?
+	w.Occupied = make(map[int]int)
+	for k, v := range delta.Occupied {
+		w.Occupied[k] = v
+	}
+
+	for i, p := range delta.PositionDeltas {
+		w.Positions[i].AddDelta(p, mul)
+	}
+}
+
 // -- MARK -- Unique methods
 func (w *Wheel) AddWorker(position int, worker int) {
 	w.Occupied[position] = worker

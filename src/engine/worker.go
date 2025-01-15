@@ -39,6 +39,12 @@ func (w *Worker) Copy(other *Worker) {
 	w.Position = other.Position
 }
 
+func (w *Worker) AddDelta(delta WorkerDelta, mul int) {
+	w.Available = Bool(delta.Available, mul)
+	w.Wheel_id += delta.Wheel_id * mul
+	w.Position += delta.Position * mul
+}
+
 // -- MARK -- Unique methods
 func (w *Worker) ReturnFrom(wheel *Wheel) {
 	w.Available = true

@@ -43,6 +43,12 @@ func (t *Temple) Copy(other *Temple) {
 	}
 }
 
+func (t *Temple) AddDelta(delta TempleDelta, mul int) {
+	for k, v := range delta.PlayerLocations {
+		t.PlayerLocations[k] += v * mul
+	}
+}
+
 type Temples struct {
 	Temples []*Temple
 }
@@ -67,6 +73,12 @@ func (t *Temples) Clone() *Temples {
 func (t *Temples) Copy(other *Temples) {
 	for i := 0; i < 3; i++ {
 		t.Temples[i].Copy(other.Temples[i])
+	}
+}
+
+func (t *Temples) AddDelta(delta TemplesDelta, mul int) {
+	for i := 0; i < 3; i++ {
+		t.Temples[i].AddDelta(delta.TempleDeltas[i], mul)
 	}
 }
 

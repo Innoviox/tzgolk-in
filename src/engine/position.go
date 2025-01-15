@@ -51,6 +51,17 @@ func (p *Position) Copy(other *Position) {
 	p.CData = newCData
 }
 
+func (p *Position) AddDelta(delta PositionDelta, mul int) {
+	if p.PData != nil {
+		p.PData.CornTiles += delta.PData.CornTiles * mul
+		p.PData.WoodTiles += delta.PData.WoodTiles * mul
+	} 
+
+	if p.CData != nil{
+		p.CData.Full = Bool(delta.CData.Full, mul)
+	}
+}
+
 type SpecificPosition struct {
 	Wheel_id int
 	Corn int

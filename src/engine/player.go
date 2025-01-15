@@ -59,6 +59,22 @@ func (p *Player) Copy(other *Player) {
 	p.Monuments = append(p.Monuments, other.Monuments...)
 }
 
+func (p *Player) AddDelta(delta PlayerDelta, mul int) {
+	for i := 0; i < 4; i++ {
+		p.Resources[i] += delta.Resources[i] * mul
+	}
+
+	p.Corn += delta.Corn * mul
+	p.Points += delta.Points * mul
+	p.CornTiles += delta.CornTiles * mul
+	p.WoodTiles += delta.WoodTiles * mul
+	p.FreeWorkers += delta.FreeWorkers * mul
+	p.WorkerDeduction += delta.WorkerDeduction * mul
+
+	p.LightSide = Bool(delta.LightSide, mul)
+	// todo buildings & monuments
+}
+
 func (p *Player) String(g *Game) string {
 	var br strings.Builder
 

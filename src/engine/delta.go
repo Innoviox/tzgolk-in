@@ -1,7 +1,7 @@
 package engine
 
-// anything with "Delta" in the name represents change
-// anything without is just a setter
+// everything represents a delta
+// booleans are ints; positive means true, negative means false
 
 type Delta struct {
     PlayerDeltas map[Color]PlayerDelta
@@ -22,49 +22,51 @@ type Delta struct {
 }
 
 type PlayerDelta struct {
-    ResourcesDelta [4]int
-    CornDelta int
-    PointsDelta int
-    CornTilesDelta int
-    WoodTilesDelta int
-    FreeWorkersDelta int
-    WorkerDeductionDelta int
+    Resources [4]int
+    Corn int
+    Points int
+    CornTiles int
+    WoodTiles int
+    FreeWorkers int
+    WorkerDeduction int
 
-    LightSide bool
-    Buildings []Building
-    Monuments []Monument
+    LightSide int
+    Buildings []int
+    Monuments []int
 }
 
 type WorkerDelta struct {
-    Available bool
+    // all args required
+    Available int
     Wheel_id int
     Position int
 }
 
 type CalendarDelta struct {
     WheelDeltas []WheelDelta
-    RotationDelta int
+    Rotation int
 
     FirstPlayer int
 }
 
 type WheelDelta struct {
+    // todo how should this work?
     Occupied map[int]int
     PositionDeltas []PositionDelta
 }
 
 type PositionDelta struct {
-    PDataDelta PalenqueDataDelta
-    CDataDelta ChichenDataDelta
+    PData PalenqueDataDelta
+    CData ChichenDataDelta
 }
 
 type PalenqueDataDelta struct {
-    CornTilesDelta int
-    WoodTilesDelta int
+    CornTiles int
+    WoodTiles int
 }
 
 type ChichenDataDelta struct {
-    Full bool
+    Full int
 }
 
 type TemplesDelta struct {
@@ -72,11 +74,15 @@ type TemplesDelta struct {
 }
 
 type TempleDelta struct {
-    PlayerLocationsDelta map[Color]int
+    PlayerLocations map[Color]int
 }
 
 type ResearchDelta struct {
-    LevelsDelta map[Color]LevelsDelta
+    Levels map[Color]LevelsDelta
 }
 
 type LevelsDelta map[Science]int
+
+func Bool(d int, m int) bool {
+    return d * m > 0
+}
