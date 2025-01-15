@@ -1,4 +1,4 @@
-package model
+package engine
 
 type Worker struct {
 	Id int

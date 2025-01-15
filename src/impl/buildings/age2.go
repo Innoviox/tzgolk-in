@@ -3,7 +3,7 @@ package buildings
 import (
     "fmt"
     "math/rand"
-    . "tzgolkin/model"
+    . "tzgolkin/engine"
     . "tzgolkin/impl/wheels"
 )
 

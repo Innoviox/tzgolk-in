@@ -2,7 +2,7 @@ package buildings
 
 import (
     "math/rand"
-    . "tzgolkin/model"
+    . "tzgolkin/engine"
 )
 
 func Monument1() Monument {

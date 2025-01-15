@@ -1,4 +1,4 @@
-package model
+package engine
 
 type Monument struct {
     Id int

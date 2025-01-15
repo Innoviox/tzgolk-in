@@ -2,7 +2,7 @@ package wheels
 
 import (
 	"fmt"
-	. "tzgolkin/model"
+	. "tzgolkin/engine"
 )
 
 func Uxmal0(g *Game, p *Player) []Option {

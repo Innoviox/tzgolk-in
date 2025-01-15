@@ -8,7 +8,7 @@ go build && ./tzgolkin -cpuprofile=test4.prof
 
 go tool pprof tzgolkin test3.prof
 
-# Needed for Complete Gameplay 
+# Needed for Complete Gameplay
 
 - [x] begging for corn angers the gods (maybe add like a move.Beg method like move.Place & such?) & add it to the arrays in GenerateMove before generating
 - [ ] pay corn to go lower (first attempt broke)
@@ -29,11 +29,9 @@ go tool pprof tzgolkin test3.prof
 - [x] display advanced wheel info
 - [ ] highlight current player / changes at each step
 - [ ] run through game and see if theres glitches
-- [ ] further disentangle options and research from model
+- [ ] further disentangle options and research from engine
 - [ ] store list of gamestates
 - [x] fix freeresearch: rework so that if ur at tier 3 it returns a list of options
-
-
 
 Goals
 
@@ -57,7 +55,7 @@ Things left to do
 - [x] add theo 1
 - [x] add second building
 - [x] add "player doesn't pay for 1 worker" and "player pays 1 food for worker" effects
-- [x] display research 
+- [x] display research
 - [x] display temples
 - [x] add building color
 - [x] add monuments and set up currentMonuments
@@ -83,7 +81,7 @@ Things left to do
 - [ ] make players a color-player map
 - [ ] move shuffles out of Make functions
 
-## AI 
+## AI
 
 - [ ] Be able to generate all legal moves
   - [x] Placement
@@ -92,11 +90,11 @@ Things left to do
     - [ ] can pay corn to access lower actions
     - [ ] decisions
       - [ ] needs to be wheel-specific?
-      - [ ] how about: decisions is a number on *wheels*, not *positions*
+      - [ ] how about: decisions is a number on _wheels_, not _positions_
         - [ ] palenque
           - [ ] 1: go to 1, take corn
           - [ ] 2: go to 1, take no tile but get corn (only w/ research)
-          - [ ] 3: go to 1, 
+          - [ ] 3: go to 1,
       - [ ] or: decisions is a number on positions
       - [ ] when generating retrieval moves
         - [ ] each position returns a list of possibilities

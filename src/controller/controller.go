@@ -4,7 +4,7 @@ import (
     // "fmt"
     // "os"
     "math/rand"
-    . "tzgolkin/model"
+    . "tzgolkin/engine"
     . "tzgolkin/impl"
     . "tzgolkin/impl/wheels"
     . "tzgolkin/impl/buildings"

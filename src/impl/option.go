@@ -1,16 +1,9 @@
-package model
+package impl
 
 import (
-    "fmt"
+	"fmt"
+	. "tzgolkin/engine"
 )
-
-type Option struct {
-	Execute func(*Game, *Player)
-	Description string
-	BuildingNum int
-}
-
-type Options func(*Game, *Player) []Option
 
 func Flatten(options []Options) Options {
 	// todo add "mirror" to Description?

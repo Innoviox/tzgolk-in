@@ -3,7 +3,7 @@ package wheels
 import (
 	"fmt"
 	"strings"
-	. "tzgolkin/model"
+	. "tzgolkin/engine"
 )
 
 func Chichen0(g *Game, p *Player) []Option {

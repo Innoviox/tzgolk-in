@@ -2,7 +2,7 @@ package impl
 
 import (
 	"math/rand"
-	. "tzgolkin/model"
+	. "tzgolkin/engine"
 )
 
 func Tile1(g *Game, p *Player) {

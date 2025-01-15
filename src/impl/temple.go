@@ -1,7 +1,7 @@
 package impl 
 
 import (
-    . "tzgolkin/model"
+    . "tzgolkin/engine"
 )
 
 // todo real temple names

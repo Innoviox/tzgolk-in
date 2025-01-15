@@ -3,7 +3,7 @@ package disp
 import (
     "fmt"
     "strings"
-    . "tzgolkin/model"
+    . "tzgolkin/engine"
 )
 
 func (d *Display) Render(step string) {
