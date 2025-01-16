@@ -2,6 +2,7 @@ package engine
 
 import (
 	"fmt"
+	"math/rand"
 	// "os"
 )
 
@@ -54,11 +55,6 @@ type Tile struct {
 	Execute func(*Game, *Player) // todo color type
 }
 
-// https://stackoverflow.Com/questions/37334119/how-to-delete-an-element-from-a-slice-in-golang
-func remove[T any](slice []T, s int) []T {
-	// fmt.Fprintf(os.Stderr, "removing %d from %v\n", s, slice)
-    return append(slice[:s], slice[s+1:]...)
-}
 
 func except(arr []int, n int) []int {
 	new := make([]int, 0)
@@ -105,4 +101,31 @@ func InvCost(cost [4]int) [4]int {
 		result[i] = -cost[i]
 	}
 	return result
+}
+
+func CopyMap[K comparable, V any](m map[K]V) map[K]V {
+	new := make(map[K]V)
+	for k, v := range m {
+		new[k] = v
+	}
+	return new
+}
+
+func RandZeros(m map[int]int, lo int, hi int, n int) []int {
+	result := make([]int, 0)
+
+	for i := lo; i < hi; i++ {
+		if m[i] == 0 {
+			result = append(result, i)
+		}
+	}
+
+	if len(result) <= n {
+		return result
+	}
+
+	rand.Shuffle(len(result), func(i, j int) { 
+		result[i], result[j] = result[j], result[i] 
+	})
+	return result[:n]
 }

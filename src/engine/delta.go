@@ -11,8 +11,8 @@ type Delta struct {
     TemplesDelta TemplesDelta
     ResearchDelta ResearchDelta
 
-    Monuments []int
-    Buildings []int
+    Monuments map[int]int
+    Buildings map[int]int
 
     CurrPlayer int
     FirstPlayer int
@@ -36,8 +36,10 @@ type PlayerDelta struct {
     WorkerDeduction int
 
     LightSide int
-    Buildings []int
-    Monuments []int
+    // 0 => unbuilt
+    // 1 => built
+    Buildings map[int]int
+    Monuments map[int]int
 }
 
 type WorkerDelta struct {
@@ -56,7 +58,8 @@ type CalendarDelta struct {
 
 type WheelDelta struct {
     // todo how should this work?
-    Occupied map[int]int
+    OldOccupied map[int]int
+    NewOccupied map[int]int
     PositionDeltas map[int]PositionDelta
 }
 

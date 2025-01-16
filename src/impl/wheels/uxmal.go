@@ -94,17 +94,26 @@ func Uxmal3(g *Game, p *Player) []*Delta {
 func Uxmal4(g *Game, p *Player) []*Delta {
 	options := make([]*Delta, 0)
 
-	for _, b := range g.CurrentBuildings {
+	for k, v := range g.CurrentBuildings {
+		if v != 1 {
+			continue
+		}
+		b := g.Buildings[k]
+
 		cost := b.CornCost(g, p) 
 		if p.Corn >= cost {
 			for _, effect := range b.GetEffects(g, p) {
 				d := PlayerDeltaWrapper(p.Color, PlayerDelta{
 					Corn: -cost,
+					Buildings: map[int]int{
+						b.Id: 1,
+					},
 				})
 
 				d.Add(effect)
 				d.Add(g.Research.Built(p))
-				// todo buildings add/remove/etc
+
+				d.Buildings[b.Id] = 1
 
 				d.Description = fmt.Sprintf("[build %d] pay %d Corn, %s", b.Id, cost, effect.Description)
 				options = append(options, d)

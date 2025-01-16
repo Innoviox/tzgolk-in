@@ -1,7 +1,6 @@
 package buildings
 
 import (
-    "math/rand"
     . "tzgolkin/engine"
 )
 
@@ -29,14 +28,14 @@ func Monument2() Monument {
         Cost: [4]int{2, 3, 1, 0},
         GetPoints: func (g *Game, p *Player) int {
             points := 0
-            for _, b := range p.Buildings {
-                if b.Color == Green {
+            for k, v := range p.Buildings {
+                if v == 1 && g.Buildings[k].Color == Green {
                     points += 4
                 }
             }
 
-            for _, b := range p.Monuments {
-                if b.Color == Green {
+            for k, v := range p.Monuments {
+                if v == 1 && g.Monuments[k].Color == Green {
                     points += 4
                 }
             }
@@ -68,9 +67,15 @@ func Monument4() Monument {
         Id: 4,
         Cost: [4]int{3, 2, 1, 0},
         GetPoints: func (g *Game, p *Player) int {
-            points := 4
-            for _, b := range p.Buildings {
-                if b.Color == Red {
+            points := 0
+            for k, v := range p.Buildings {
+                if v == 1 && g.Buildings[k].Color == Red {
+                    points += 4
+                }
+            }
+
+            for k, v := range p.Monuments {
+                if v == 1 && g.Monuments[k].Color == Red {
                     points += 4
                 }
             }
@@ -87,14 +92,14 @@ func Monument5() Monument {
         Cost: [4]int{0, 2, 3, 0},
         GetPoints: func (g *Game, p *Player) int {
             points := 0
-            for _, b := range p.Buildings {
-                if b.Color == Blue {
+            for k, v := range p.Buildings {
+                if v == 1 && g.Buildings[k].Color == Blue {
                     points += 4
                 }
             }
 
-            for _, b := range p.Monuments {
-                if b.Color == Blue {
+            for k, v := range p.Monuments {
+                if v == 1 && g.Monuments[k].Color == Blue {
                     points += 4
                 }
             }
@@ -224,7 +229,7 @@ func Monument13() Monument {
     }
 }
 
-func MakeMonuments(r *rand.Rand) []Monument {
+func MakeMonuments() map[int]Monument {
     monuments := make([]Monument, 0)
 
     monuments = append(monuments, Monument1())
@@ -241,10 +246,9 @@ func MakeMonuments(r *rand.Rand) []Monument {
     monuments = append(monuments, Monument12())
     monuments = append(monuments, Monument13())
 
-    for i := range monuments {
-		j := r.Intn(i + 1)
-		monuments[i], monuments[j] = monuments[j], monuments[i]
-	}
-
-    return monuments
+    m := map[int]Monument{}
+    for _, monument := range monuments {
+        m[monument.Id] = monument
+    }
+    return m
 }

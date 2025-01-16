@@ -19,8 +19,8 @@ type Player struct {
 
 	LightSide bool
 
-	Buildings []Building
-	Monuments []Monument
+	Buildings map[int]int
+	Monuments map[int]int
 }
 
 // -- MARK -- Basic methods
@@ -52,11 +52,8 @@ func (p *Player) Copy(other *Player) {
 	p.WorkerDeduction = other.WorkerDeduction
 	p.LightSide = other.LightSide
 
-	p.Buildings = make([]Building, 0)
-	p.Buildings = append(p.Buildings, other.Buildings...)
-
-	p.Monuments = make([]Monument, 0)
-	p.Monuments = append(p.Monuments, other.Monuments...)
+	p.Buildings = CopyMap(other.Buildings)
+	p.Monuments = CopyMap(other.Monuments)
 }
 
 func (p *Player) AddDelta(delta PlayerDelta, mul int) {
@@ -72,6 +69,12 @@ func (p *Player) AddDelta(delta PlayerDelta, mul int) {
 	p.WorkerDeduction += delta.WorkerDeduction * mul
 
 	p.LightSide = Bool(delta.LightSide, mul)
+	for k, v := range delta.Buildings {
+		p.Buildings[k] += v * mul
+	}
+	for k, v := range delta.Monuments {
+		p.Monuments[k] += v * mul
+	}
 	// todo buildings & monuments
 }
 
@@ -131,8 +134,10 @@ func (p *Player) Evaluate(g *Game) float64 {
 	points += float64(p.TotalCorn())
 	points += float64(p.Resources[Skull]) * 3
 
-	for _, m := range p.Monuments {
-		points += float64(m.GetPoints(g, p))
+	for k, v := range p.Monuments {
+		if v == 1 {
+			points += float64(g.Monuments[k].GetPoints(g, p))
+		}
 	}
 
 	for _, w := range g.Workers {

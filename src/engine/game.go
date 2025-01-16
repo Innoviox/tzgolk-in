@@ -17,13 +17,16 @@ type Game struct {
 	Research *Research 
 	
 	NMonuments int
-	CurrentMonuments []Monument
-	AllMonuments []Monument 
+	// 0 => in deck
+	// 1 => dealt (showing now)
+	// 2 => built
+	CurrentMonuments map[int]int
+	Monuments map[int]Monument
 	
 	NBuildings int
-	CurrentBuildings []Building
-	Age1Buildings []Building
-	Age2Buildings []Building 
+	CurrentBuildings map[int]int
+	Buildings map[int]Building
+	Age1Cutoff int
 
 	CurrPlayer int
 	FirstPlayer int 
@@ -73,12 +76,10 @@ func (g *Game) Init() {
 	g.Research = MakeResearch()
 
 	g.NBuildings = 6
-	g.CurrentBuildings = make([]Building, 0)
-	g.DealBuildings()
+	g.AddDelta(g.DealBuildings(), 1)
 
 	g.NMonuments = 6
-	g.CurrentMonuments = make([]Monument, 0)
-	g.DealMonuments()
+	g.AddDelta(g.DealMonuments(), 1)
 
 	g.TileSetup()
 
@@ -114,11 +115,9 @@ func (g *Game) Clone() *Game {
 	new_temples := g.Temples.Clone()
 	new_research := g.Research.Clone()
 
-	currentBuildings := make([]Building, 0)
-	currentBuildings = append(currentBuildings, g.CurrentBuildings...)
+	currentBuidings := CopyMap(g.CurrentBuildings)
 
-	currentMonuments := make([]Monument, 0)
-	currentMonuments = append(currentMonuments, g.CurrentMonuments...)
+	currentMonuments := CopyMap(g.CurrentMonuments)
 
 	return &Game {
 		Players: players,
@@ -126,13 +125,12 @@ func (g *Game) Clone() *Game {
 		Calendar: new_calendar,
 		Temples: new_temples,
 		Research: new_research,
-		NMonuments: g.NMonuments,
 		CurrentMonuments: currentMonuments,
-		AllMonuments: g.AllMonuments,
+		NMonuments: g.NMonuments,
+		Monuments: g.Monuments,
 		NBuildings: g.NBuildings,
-		CurrentBuildings: currentBuildings,
-		Age1Buildings: g.Age1Buildings,
-		Age2Buildings: g.Age2Buildings,
+		CurrentBuildings: currentBuidings,
+		Buildings: g.Buildings,
 		CurrPlayer: g.CurrPlayer,
 		FirstPlayer: g.FirstPlayer,
 		AccumulatedCorn: g.AccumulatedCorn,
@@ -160,21 +158,11 @@ func (g *Game) Copy(other *Game) {
 	g.Research.Copy(other.Research)
 
 	g.NMonuments = other.NMonuments
-	g.CurrentMonuments = nil
-	g.CurrentMonuments = append(g.CurrentMonuments, other.CurrentMonuments...)
-
-	g.AllMonuments = nil
-	g.AllMonuments = append(g.AllMonuments, other.AllMonuments...)
+	g.CurrentMonuments = CopyMap(other.CurrentMonuments)
 
 	g.NBuildings = other.NBuildings
-	g.CurrentBuildings = nil
-	g.CurrentBuildings = append(g.CurrentBuildings, other.CurrentBuildings...)
+	g.CurrentBuildings = CopyMap(other.CurrentBuildings)
 
-	g.Age1Buildings = nil
-	g.Age1Buildings = append(g.Age1Buildings, other.Age1Buildings...)
-
-	g.Age2Buildings = nil
-	g.Age2Buildings = append(g.Age2Buildings, other.Age2Buildings...)
 
 	g.CurrPlayer = other.CurrPlayer
 	g.FirstPlayer = other.FirstPlayer
@@ -202,20 +190,19 @@ func (g *Game) AddDelta(delta *Delta, mul int) {
 	g.Temples.AddDelta(delta.TemplesDelta, mul)
 	g.Research.AddDelta(delta.ResearchDelta, mul)
 
-	// TODO buildings & monuments are ints
-	// for _, m := range delta.Monuments {
-	// 	g.CurrentMonuments = append(g.CurrentMonuments, m)
-	// }
+	for k, v := range delta.Buildings {
+		g.CurrentBuildings[k] += v * mul 
+	}
 
-	// for _, b := range delta.Buildings {
-	// 	g.CurrentBuildings = append(g.CurrentBuildings, b)
-	// }
+	for k, v := range delta.Monuments {
+		g.CurrentMonuments[k] += v * mul
+	}
 
-	g.CurrPlayer = delta.CurrPlayer
-	g.FirstPlayer = delta.FirstPlayer
-	g.AccumulatedCorn = delta.AccumulatedCorn
-	g.Age = delta.Age
-	g.Day = delta.Day
+	g.CurrPlayer += delta.CurrPlayer * mul
+	g.FirstPlayer += delta.FirstPlayer * mul
+	g.AccumulatedCorn += delta.AccumulatedCorn * mul
+	g.Age += delta.Age * mul
+	g.Day += delta.Day * mul
 }
 
 func (g *Game) Save(key int) {
@@ -353,7 +340,11 @@ func (g *Game) CheckDay(MarkStep func(string)) *Delta {
 			d.Add(&Delta{Age: 1})
 			if g.Age == 1 {
 				// todo buildings
-				g.CurrentBuildings = make([]Building, 0)
+				for k, v := range g.CurrentBuildings {
+					if v == 1 {
+						d.Buildings[k] = -1
+					}
+				}
 				g.DealBuildings()
 				MarkStep("Dealt new buildings")
 			} else {
@@ -372,8 +363,10 @@ func (g *Game) EndGame(MarkStep func(string)) *Delta {
 		i += p.TotalCorn() / 4
 		i += p.Resources[Skull] * 3
 
-		for _, m := range p.Monuments {
-			i += m.GetPoints(g, p)
+		for k, v := range p.Monuments {
+			if v == 1 {
+				i += g.Monuments[k].GetPoints(g, p)
+			}
 		}
 		MarkStep(fmt.Sprintf("Gained endgame points for %s", p.Color.String()))
 		d.PlayerDeltas[p.Color] = PlayerDelta{Points: i}
@@ -460,7 +453,7 @@ func mod(a, b int) int {
     return (a % b + b) % b
 }
 
-func (g *Game) RunStop(MarkStep func(string), stopPlayer *Player) *Delta {
+func (g *Game) RunStop(MarkStep func(string), stopPlayer *Player) /**Delta*/ {
 	// current player is set to stopPlayer + 1
 	run1 := mod(g.FirstPlayer - int(stopPlayer.Color) + 3, 4)
 	MarkStep(fmt.Sprintf("Running for %d players (%d %d)", run1, g.FirstPlayer, int(stopPlayer.Color)))
@@ -494,49 +487,34 @@ func (g *Game) RunStop(MarkStep func(string), stopPlayer *Player) *Delta {
 }
 
 // -- MARK -- Getters
-// todo buildings
-func (g *Game) DealBuildings() {
-	for len(g.CurrentBuildings) < g.NBuildings && g.CanDealBuilding() {
-		g.CurrentBuildings = append(g.CurrentBuildings, g.DealBuilding())
-	}
-
-	for i := 0; i < g.NBuildings; i++ {
-		b := g.CurrentBuildings[i]
-		for _, p := range g.Players {
-			for _, b2 := range p.Buildings {
-				if b2.Id == b.Id && g.CanDealBuilding() {
-					g.CurrentBuildings[i] = g.DealBuilding()
-				}
-			}
+func (g *Game) DealBuildings() *Delta {
+	d := &Delta{}
+	n := 0
+	for _, v := range g.CurrentBuildings {
+		if v == 1 {
+			n += 1
 		}
 	}
-}
-
-func (g *Game) CanDealBuilding() bool {
-	if g.Age == 1 {
-		return len(g.Age1Buildings) > 0 
-	} else {
-		return len(g.Age2Buildings) > 0
-	}
-}
-
-func (g *Game) DealBuilding() Building {
-	var b Building
-	if g.Age == 1 {
-		b, g.Age1Buildings = g.Age1Buildings[0], g.Age1Buildings[1:]
-	} else {
-		b, g.Age2Buildings = g.Age2Buildings[0], g.Age2Buildings[1:]
+	lo, hi := 0, g.Age1Cutoff
+	if g.Age == 2 {
+		lo, hi = g.Age1Cutoff, len(g.Buildings)
 	}
 
-	return b
+	r := RandZeros(g.CurrentBuildings, lo, hi, g.NBuildings - n)
+	for _, i := range r {
+		d.Buildings[i] = 1
+	}
+
+	return d
 }
 
-func (g *Game) DealMonuments() {
-	for len(g.CurrentMonuments) < g.NMonuments {
-		var m Monument
-		m, g.AllMonuments = g.AllMonuments[0], g.AllMonuments[1:]
-		g.CurrentMonuments = append(g.CurrentMonuments, m)
+func (g *Game) DealMonuments() *Delta {
+	d := &Delta{}
+	r := RandZeros(g.CurrentMonuments, 0, len(g.Monuments), g.NMonuments)
+	for _, n := range r {
+		d.Monuments[n] = 1
 	}
+	return d
 }
 
 func (g *Game) GetPlayer(num int) *Player {
@@ -571,28 +549,16 @@ func (g *Game) UnlockWorker(color Color) *Delta {
 	return d
 }
 
-func (g *Game) RemoveBuilding(b Building) {
-	i := 0
-	for _, b2 := range g.CurrentBuildings {
-		if b2.Id == b.Id {
-			break
-		}
-		i++
-	}
-
-	g.CurrentBuildings = remove(g.CurrentBuildings, i)
+func (g *Game) RemoveBuilding(b int) *Delta {
+	d := &Delta{}
+	d.Buildings[b] = 1
+	return d
 }
 
-func (g *Game) RemoveMonument(m Monument) {
-	i := 0
-	for _, m2 := range g.CurrentMonuments {
-		if m2.Id == m.Id {
-			break
-		}
-		i++
-	}
-
-	g.CurrentMonuments = remove(g.CurrentMonuments, i)
+func (g *Game) RemoveMonument(m int) *Delta {
+	d := &Delta{}
+	d.Buildings[m] = 1
+	return d
 }
 
 func (g *Game) IsOver() bool {

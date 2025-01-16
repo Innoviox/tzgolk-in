@@ -38,10 +38,11 @@ func SkipWrapper(o []*Delta) []*Delta {
 func (g *Game) GetBuildingOptions(p *Player, exclude int, useResearch bool) []*Delta {
 	options := make([]*Delta, 0)
 
-	for _, b := range g.CurrentBuildings {
-		if b.Id == exclude {
+	for k, v := range g.CurrentBuildings {
+		if v != 1 || k == exclude {
 			continue
 		}
+		b := g.Buildings[k]
 
 		costs := b.GetCosts(g, p)
 		for _, cost := range costs {
@@ -50,8 +51,13 @@ func (g *Game) GetBuildingOptions(p *Player, exclude int, useResearch bool) []*D
 					PlayerDeltas: map[Color]PlayerDelta{
 						p.Color: PlayerDelta{
 							Resources: InvCost(b.Cost),
-							// todo building delta
+							Buildings: map[int]int {
+								b.Id: 1,
+							},
 						},
+					},
+					Buildings: map[int]int {
+						b.Id: 1,
 					},
 					Description: fmt.Sprintf("[build %d] pay %s ", b.Id, CostString(cost)),
 					BuildingNum: b.Id,
@@ -71,14 +77,24 @@ func (g *Game) GetBuildingOptions(p *Player, exclude int, useResearch bool) []*D
 func (g *Game) GetMonumentOptions(p *Player) []*Delta {
 	options := make([]*Delta, 0)
 
-	for _, m := range g.CurrentMonuments {
+	for k, v := range g.CurrentMonuments {
+		if v != 1 {
+			continue
+		}
+		m := g.Monuments[k]
+
 		if p.CanPay(m.Cost) {
 			options = append(options, &Delta{
 				PlayerDeltas: map[Color]PlayerDelta{
 					p.Color: PlayerDelta{
 						Resources: InvCost(m.Cost),
-						// todo monument delta
+						Monuments: map[int]int{
+							m.Id: 1,
+						},
 					},
+				},
+				Monuments: map[int]int{
+					m.Id: 1,
 				},
 				Description: fmt.Sprintf("[build %d] pay %s, get monument %d", m.Id, CostString(m.Cost), m.Id),
 			})

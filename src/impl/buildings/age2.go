@@ -9,7 +9,7 @@ import (
 
 func Age2Building1() Building {
     return Building {
-        Id: 1,
+        Id: 15,
         Cost: [4]int{0, 0, 2, 0},
         GetEffects: func (g *Game, p *Player) []*Delta {
             return []*Delta {Combine(
@@ -25,7 +25,7 @@ func Age2Building1() Building {
 
 func Age2Building2() Building {
     return Building {
-        Id: 2,
+        Id: 16,
         Cost: [4]int{0, 2, 0, 0},
         GetEffects: func (g *Game, p *Player) []*Delta {
             return []*Delta {Combine(
@@ -41,7 +41,7 @@ func Age2Building2() Building {
 
 func Age2Building3() Building {
     return Building {
-        Id: 3,
+        Id: 17,
         Cost: [4]int{0, 0, 3, 0},
         GetEffects: func (g *Game, p *Player) []*Delta {
             return []*Delta {Combine(
@@ -57,7 +57,7 @@ func Age2Building3() Building {
 
 func Age2Building4() Building {
     return Building {
-        Id: 4,
+        Id: 18,
         Cost: [4]int{0, 1, 2, 0},
         GetEffects: func (g *Game, p *Player) []*Delta {
             return g.Research.GetOptions(g, p, 2, true)
@@ -68,7 +68,7 @@ func Age2Building4() Building {
 
 func Age2Building5() Building {
     return Building {
-        Id: 5,
+        Id: 19,
         Cost: [4]int{0, 2, 1, 0},
         GetEffects: func (g *Game, p *Player) []*Delta {
             options := make([]*Delta, 0)
@@ -86,7 +86,7 @@ func Age2Building5() Building {
 
 func Age2Building6() Building {
     return Building {
-        Id: 6,
+        Id: 20,
         Cost: [4]int{3, 0, 0, 0},
         GetEffects: func (g *Game, p *Player) []*Delta {
             options := make([]*Delta, 0)
@@ -107,7 +107,7 @@ func Age2Building6() Building {
 
 func Age2Building7() Building {
     return Building {
-        Id: 7,
+        Id: 21,
         Cost: [4]int{1, 1, 1, 0},
         GetEffects: func (g *Game, p *Player) []*Delta {
             return []*Delta {Combine(
@@ -124,7 +124,7 @@ func Age2Building7() Building {
 
 func Age2Building8() Building {
     return Building {
-        Id: 8,
+        Id: 22,
         Cost: [4]int{0, 0, 3, 0},
         GetEffects: func (g *Game, p *Player) []*Delta {
             options := make([]*Delta, 0)
@@ -146,7 +146,7 @@ func Age2Building8() Building {
 
 func Age2Building9() Building {
     return Building {
-        Id: 9,
+        Id: 23,
         Cost: [4]int{1, 0, 2, 0},
         GetEffects: func (g *Game, p *Player) []*Delta {
             return []*Delta{PlayerDeltaWrapper(p.Color, PlayerDelta{
@@ -159,7 +159,7 @@ func Age2Building9() Building {
 
 func Age2Building10() Building {
     return Building {
-        Id: 10,
+        Id: 24,
         Cost: [4]int{2, 0, 0, 0},
         GetEffects: func (g *Game, p *Player) []*Delta {
             return []*Delta{PlayerDeltaWrapper(p.Color, PlayerDelta{
@@ -172,7 +172,7 @@ func Age2Building10() Building {
 
 func Age2Building11() Building {
     return Building {
-        Id: 11,
+        Id: 25,
         Cost: [4]int{1, 2, 1, 0},
         GetEffects: func (g *Game, p *Player) []*Delta {
             d := PlayerDeltaWrapper(p.Color, PlayerDelta{
@@ -189,7 +189,7 @@ func Age2Building11() Building {
 
 func Age2Building12() Building {
     return Building {
-        Id: 12,
+        Id: 26,
         Cost: [4]int{2, 2, 0, 0},
         GetEffects: func (g *Game, p *Player) []*Delta {
             options := make([]*Delta, 0)
@@ -208,7 +208,7 @@ func Age2Building12() Building {
 
 func Age2Building13() Building {
     return Building {
-        Id: 13,
+        Id: 27,
         Cost: [4]int{0, 1, 1, 0},
         GetEffects: func (g *Game, p *Player) []*Delta {
             options := make([]*Delta, 0)
@@ -228,7 +228,7 @@ func Age2Building13() Building {
 func Age2Building14() Building {
     b := Age2Building10()
     return Building {
-        Id: 14,
+        Id: 28,
         Cost: b.Cost,
         GetEffects: b.GetEffects,
         Color: Yellow,
@@ -238,7 +238,7 @@ func Age2Building14() Building {
 func Age2Building15() Building {
     b := Age2Building10()
     return Building {
-        Id: 15,
+        Id: 29,
         Cost: b.Cost,
         GetEffects: b.GetEffects,
         Color: Yellow,
@@ -247,7 +247,7 @@ func Age2Building15() Building {
 
 func Age2Building16() Building {
     return Building {
-        Id: 16,
+        Id: 30,
         Cost: [4]int{2, 1, 1, 0},
         GetEffects: func (g *Game, p *Player) []*Delta {
             options := make([]*Delta, 0)
@@ -268,7 +268,7 @@ func Age2Building16() Building {
 
 func Age2Building17() Building {
     return Building {
-        Id: 17,
+        Id: 31,
         Cost: [4]int{3, 1, 0, 0},
         GetEffects: func (g *Game, p *Player) []*Delta {
             options := make([]*Delta, 0)
@@ -287,7 +287,7 @@ func Age2Building17() Building {
 
 func Age2Building18() Building {
     return Building {
-        Id: 18,
+        Id: 32,
         Cost: [4]int{2, 1, 0, 0},
         GetEffects: func (g *Game, p *Player) []*Delta {
             options := make([]*Delta, 0)
@@ -304,7 +304,7 @@ func Age2Building18() Building {
     }
 }
 
-func MakeAge2Buildings(r *rand.Rand) []Building {
+func MakeAge2Buildings() map[int]Building {
     buildings := make([]Building, 0)
 
     buildings = append(buildings, Age2Building1())
@@ -326,11 +326,9 @@ func MakeAge2Buildings(r *rand.Rand) []Building {
     buildings = append(buildings, Age2Building17())
     buildings = append(buildings, Age2Building18())
 
-    // shuffle buildings
-	for i := range buildings {
-		j := r.Intn(i + 1)
-		buildings[i], buildings[j] = buildings[j], buildings[i]
-	}
-
-    return buildings
+    b := map[int]Building{}
+    for _, building := range buildings {
+        b[building.Id] = building
+    }
+    return b
 }

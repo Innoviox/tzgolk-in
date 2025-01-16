@@ -108,9 +108,10 @@ func (w *Wheel) Copy(other *Wheel) {
 
 func (w *Wheel) AddDelta(delta WheelDelta, mul int) {
 	// todo how should this work?
-	w.Occupied = make(map[int]int)
-	for k, v := range delta.Occupied {
-		w.Occupied[k] = v
+	if mul == 1 {
+		w.Occupied = CopyMap(delta.NewOccupied)
+	} else {
+		w.Occupied = CopyMap(delta.OldOccupied)
 	}
 
 	for i, p := range delta.PositionDeltas {
@@ -147,7 +148,8 @@ func (w *Wheel) RemoveWorker(worker int) *Delta {
 
 func (w *Wheel) MakeDelta(Occupied map[int]int) *Delta {
 	return &Delta{CalendarDelta: CalendarDelta{WheelDeltas: map[int]WheelDelta{w.Id: WheelDelta{
-		Occupied: Occupied,
+		OldOccupied: CopyMap(w.Occupied),
+		NewOccupied: Occupied,
 	}}}}
 }
 
@@ -170,9 +172,7 @@ func (w *Wheel) Rotate(g *Game) *Delta {
 		d.Add(g.GetWorker(workerToRemove).ReturnFrom(w))
 	}
 
-	d.Add(&Delta{CalendarDelta: CalendarDelta{WheelDeltas: map[int]WheelDelta{w.Id: WheelDelta{
-		Occupied: new_occupied,
-	}}}})
+	d.Add(w.MakeDelta(new_occupied))
 
 	return d
 }
