@@ -5,12 +5,12 @@ import (
 	. "tzgolkin/engine"
 )
 
-func Yaxchilan0(g *Game, p *Player) []Option {
-	return make([]Option, 0)
+func Yaxchilan0(g *Game, p *Player) []*Delta {
+	return make([]*Delta, 0)
 }
 
-func Yaxchilan1(g *Game, p *Player) []Option {
-	return []Option {Option{
+func Yaxchilan1(g *Game, p *Player) []*Delta {
+	return []*Delta {Option{
 		Execute: func(g *Game, p *Player) {
 			p.Resources[Wood] += 1 + g.Research.ResourceBonus(p.Color, Wood)
 		},
@@ -18,8 +18,8 @@ func Yaxchilan1(g *Game, p *Player) []Option {
 	}}
 }
 
-func Yaxchilan2(g *Game, p *Player) []Option {
-	return []Option {Option{
+func Yaxchilan2(g *Game, p *Player) []*Delta {
+	return []*Delta {Option{
 		Execute: func (g *Game, p *Player) {
 			p.Resources[Stone] += 1 + g.Research.ResourceBonus(p.Color, Stone)
 			p.Corn += 1
@@ -28,8 +28,8 @@ func Yaxchilan2(g *Game, p *Player) []Option {
 	}}
 }
 
-func Yaxchilan3(g *Game, p *Player) []Option {
-	return []Option {Option{
+func Yaxchilan3(g *Game, p *Player) []*Delta {
+	return []*Delta {Option{
 		Execute: func (g *Game, p *Player) {
 			p.Resources[Gold] += 1 + g.Research.ResourceBonus(p.Color, Gold)
 			p.Corn += 1
@@ -38,8 +38,8 @@ func Yaxchilan3(g *Game, p *Player) []Option {
 	}}
 }
 
-func Yaxchilan4(g *Game, p *Player) []Option {
-	return []Option {Option{
+func Yaxchilan4(g *Game, p *Player) []*Delta {
+	return []*Delta {Option{
 		Execute: func (g *Game, p *Player) {
 			p.Resources[Skull] += 1 + g.Research.ResourceBonus(p.Color, Skull)
 		},
@@ -47,8 +47,8 @@ func Yaxchilan4(g *Game, p *Player) []Option {
 	}}
 }
 
-func Yaxchilan5(g *Game, p *Player) []Option {
-	return []Option {Option{
+func Yaxchilan5(g *Game, p *Player) []*Delta {
+	return []*Delta {Option{
 		Execute: func (g *Game, p *Player) {
 			p.Resources[Gold] += 1 + g.Research.ResourceBonus(p.Color, Gold)
 			p.Resources[Stone] += 1 + g.Research.ResourceBonus(p.Color, Stone)

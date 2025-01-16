@@ -5,12 +5,12 @@ import (
 	. "tzgolkin/engine"
 )
 
-func Uxmal0(g *Game, p *Player) []Option {
-	return make([]Option, 0)
+func Uxmal0(g *Game, p *Player) []*Delta {
+	return make([]*Delta, 0)
 }
 
-func Uxmal1(g *Game, p *Player) []Option {
-	options := make([]Option, 0)
+func Uxmal1(g *Game, p *Player) []*Delta {
+	options := make([]*Delta, 0)
 
 	if p.Corn >= 3 {
 		options = append(options, g.Temples.GainTempleStep(p, Option{
@@ -24,7 +24,7 @@ func Uxmal1(g *Game, p *Player) []Option {
 	return SkipWrapper(options)
 }
 
-func Uxmal2(g *Game, p *Player) []Option {
+func Uxmal2(g *Game, p *Player) []*Delta {
 	// Corn := TotalCorn(p)
 
 	// CornOptions := GenerateCornExchanges(Corn, []CornOption{CornOption{
@@ -32,7 +32,7 @@ func Uxmal2(g *Game, p *Player) []Option {
 	// 	resources: p.Resources,
 	// }})
 
-	options := make([]Option, 0)
+	options := make([]*Delta, 0)
 	// for _, o := range CornOptions {
 	// 	options = append(options, Option{
 	// 		Execute: func(g *Game, p *Player) {
@@ -88,8 +88,8 @@ func GenerateCornExchanges(Corn int, base []CornOption) []CornOption {
 	return options
 }
 
-func Uxmal3(g *Game, p *Player) []Option {
-	return []Option{Option{
+func Uxmal3(g *Game, p *Player) []*Delta {
+	return []*Delta{Option{
 		Execute: func(g *Game, p *Player) {
 			g.UnlockWorker(p.Color)
 		},
@@ -97,8 +97,8 @@ func Uxmal3(g *Game, p *Player) []Option {
 	}}
 }
 
-func Uxmal4(g *Game, p *Player) []Option {
-	options := make([]Option, 0)
+func Uxmal4(g *Game, p *Player) []*Delta {
+	options := make([]*Delta, 0)
 
 	for _, b := range g.CurrentBuildings {
 		cost := b.CornCost(g, p) 
@@ -123,14 +123,14 @@ func Uxmal4(g *Game, p *Player) []Option {
 	return SkipWrapper(options)
 }
 
-func Uxmal5(g *Game, p *Player) []Option {
-	options := make([]Option, 0)
+func Uxmal5(g *Game, p *Player) []*Delta {
+	options := make([]*Delta, 0)
 
 	if p.Corn == 0 {
 		return Skip()
 	}
 
-	allOptions := make([]Option, 0)
+	allOptions := make([]*Delta, 0)
 	for _, option := range Yaxchilan() {
 		allOptions = append(allOptions, option(g, p)...)
 	}

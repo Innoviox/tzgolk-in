@@ -5,24 +5,24 @@ import (
 	. "tzgolkin/engine"
 )
 
-func Tikal0(g *Game, p *Player) []Option {
-	return make([]Option, 0)
+func Tikal0(g *Game, p *Player) []*Delta {
+	return make([]*Delta, 0)
 }
 
-func Tikal1(g *Game, p *Player) []Option {
+func Tikal1(g *Game, p *Player) []*Delta {
 	return SkipWrapper(g.Research.GetOptions(g, p, 1, false))
 }
 
-func Tikal2(g *Game, p *Player) []Option {
+func Tikal2(g *Game, p *Player) []*Delta {
 	return SkipWrapper(g.GetBuildingOptions(p, -1, true))
 }
 
-func Tikal3(g *Game, p *Player) []Option {
+func Tikal3(g *Game, p *Player) []*Delta {
 	return SkipWrapper(g.Research.GetOptions(g, p, 2, false))
 }
 
-func Tikal4(g *Game, p *Player) []Option {
-	options := make([]Option, 0)
+func Tikal4(g *Game, p *Player) []*Delta {
+	options := make([]*Delta, 0)
 
 	for _, o := range g.GetBuildingOptions(p, -1, true) {
 		options = append(options, o)
@@ -47,8 +47,8 @@ func Tikal4(g *Game, p *Player) []Option {
 	return SkipWrapper(options)
 }
 
-func Tikal5(g *Game, p *Player) []Option {
-	options := make([]Option, 0)
+func Tikal5(g *Game, p *Player) []*Delta {
+	options := make([]*Delta, 0)
 
 	for i := 0; i < 3; i++ {
 		if p.Resources[i] > 0 {

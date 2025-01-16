@@ -11,8 +11,8 @@ func Age2Building1() Building {
     return Building {
         Id: 1,
         Cost: [4]int{0, 0, 2, 0},
-        GetEffects: func (g *Game, p *Player) []Option {
-            return []Option {Option{
+        GetEffects: func (g *Game, p *Player) []*Delta {
+            return []*Delta {Option{
                 Execute: func(g *Game, p *Player) {
                     g.Temples.Step(p, 2, 2)
                     p.Points += 3
@@ -28,8 +28,8 @@ func Age2Building2() Building {
     return Building {
         Id: 2,
         Cost: [4]int{0, 2, 0, 0},
-        GetEffects: func (g *Game, p *Player) []Option {
-            return []Option {Option{
+        GetEffects: func (g *Game, p *Player) []*Delta {
+            return []*Delta {Option{
                 Execute: func(g *Game, p *Player) {
                     g.Temples.Step(p, 0, 2)
                     p.Points += 2
@@ -45,8 +45,8 @@ func Age2Building3() Building {
     return Building {
         Id: 3,
         Cost: [4]int{0, 0, 3, 0},
-        GetEffects: func (g *Game, p *Player) []Option {
-            return []Option {Option{
+        GetEffects: func (g *Game, p *Player) []*Delta {
+            return []*Delta {Option{
                 Execute: func(g *Game, p *Player) {
                     g.Temples.Step(p, 1, 2)
                 },
@@ -61,7 +61,7 @@ func Age2Building4() Building {
     return Building {
         Id: 4,
         Cost: [4]int{0, 1, 2, 0},
-        GetEffects: func (g *Game, p *Player) []Option {
+        GetEffects: func (g *Game, p *Player) []*Delta {
             return g.Research.GetOptions(g, p, 2, true)
         },
         Color: Blue,
@@ -72,8 +72,8 @@ func Age2Building5() Building {
     return Building {
         Id: 5,
         Cost: [4]int{0, 2, 1, 0},
-        GetEffects: func (g *Game, p *Player) []Option {
-            options := make([]Option, 0)
+        GetEffects: func (g *Game, p *Player) []*Delta {
+            options := make([]*Delta, 0)
             for _, o := range g.Research.FreeResearch(g, p, Theology) {
                 options = append(options, Option{
                     Execute: func(g *Game, p *Player) {
@@ -94,8 +94,8 @@ func Age2Building6() Building {
     return Building {
         Id: 6,
         Cost: [4]int{3, 0, 0, 0},
-        GetEffects: func (g *Game, p *Player) []Option {
-            options := make([]Option, 0)
+        GetEffects: func (g *Game, p *Player) []*Delta {
+            options := make([]*Delta, 0)
             for _, o := range g.Research.GetOptions(g, p, 1, true) {
                 options = append(options, Option{
                     Execute: func(g *Game, p *Player) {
@@ -116,8 +116,8 @@ func Age2Building7() Building {
     return Building {
         Id: 7,
         Cost: [4]int{1, 1, 1, 0},
-        GetEffects: func (g *Game, p *Player) []Option {
-            return []Option {Option{
+        GetEffects: func (g *Game, p *Player) []*Delta {
+            return []*Delta {Option{
                 Execute: func(g *Game, p *Player) {
                     g.UnlockWorker(p.Color)
                     p.Points += 6
@@ -134,8 +134,8 @@ func Age2Building8() Building {
     return Building {
         Id: 8,
         Cost: [4]int{0, 0, 3, 0},
-        GetEffects: func (g *Game, p *Player) []Option {
-            options := make([]Option, 0)
+        GetEffects: func (g *Game, p *Player) []*Delta {
+            options := make([]*Delta, 0)
             for _, o := range Uxmal2(g, p) {
                 options = append(options, Option{
                     Execute: func(g *Game, p *Player) {
@@ -163,8 +163,8 @@ func Age2Building9() Building {
     return Building {
         Id: 9,
         Cost: [4]int{1, 0, 2, 0},
-        GetEffects: func (g *Game, p *Player) []Option {
-            return []Option {Option{
+        GetEffects: func (g *Game, p *Player) []*Delta {
+            return []*Delta {Option{
                 Execute: func(g *Game, p *Player) {
                     p.Points += 8
                 },
@@ -179,8 +179,8 @@ func Age2Building10() Building {
     return Building {
         Id: 10,
         Cost: [4]int{2, 0, 0, 0},
-        GetEffects: func (g *Game, p *Player) []Option {
-            return []Option {Option{
+        GetEffects: func (g *Game, p *Player) []*Delta {
+            return []*Delta {Option{
                 Execute: func(g *Game, p *Player) {
                     p.FreeWorkers += 3
                 },
@@ -195,8 +195,8 @@ func Age2Building11() Building {
     return Building {
         Id: 11,
         Cost: [4]int{1, 2, 1, 0},
-        GetEffects: func (g *Game, p *Player) []Option {
-            return []Option {Option{
+        GetEffects: func (g *Game, p *Player) []*Delta {
+            return []*Delta {Option{
                 Execute: func(g *Game, p *Player) {
                     for i := 0; i < 3; i++ {
                         g.Temples.Step(p, i, 1)
@@ -214,8 +214,8 @@ func Age2Building12() Building {
     return Building {
         Id: 12,
         Cost: [4]int{2, 2, 0, 0},
-        GetEffects: func (g *Game, p *Player) []Option {
-            options := make([]Option, 0)
+        GetEffects: func (g *Game, p *Player) []*Delta {
+            options := make([]*Delta, 0)
             for _, o := range g.Research.GetOptions(g, p, 1, true) {
                 options = append(options, Option{
                     Execute: func(g *Game, p *Player) {
@@ -235,8 +235,8 @@ func Age2Building13() Building {
     return Building {
         Id: 13,
         Cost: [4]int{0, 1, 1, 0},
-        GetEffects: func (g *Game, p *Player) []Option {
-            options := make([]Option, 0)
+        GetEffects: func (g *Game, p *Player) []*Delta {
+            options := make([]*Delta, 0)
             for _, o := range g.Research.FreeResearch(g, p, Construction) {
                 options = append(options, Option{
                     Execute: func(g *Game, p *Player) {
@@ -276,8 +276,8 @@ func Age2Building16() Building {
     return Building {
         Id: 16,
         Cost: [4]int{2, 1, 1, 0},
-        GetEffects: func (g *Game, p *Player) []Option {
-            options := make([]Option, 0)
+        GetEffects: func (g *Game, p *Player) []*Delta {
+            options := make([]*Delta, 0)
             // for _, o := range Uxmal5(g, p) {
             //     options = append(options, Option{
             //         Execute: func(g *Game, p *Player) {
@@ -297,8 +297,8 @@ func Age2Building17() Building {
     return Building {
         Id: 17,
         Cost: [4]int{0, 0, 1, 0},
-        GetEffects: func (g *Game, p *Player) []Option {
-            options := make([]Option, 0)
+        GetEffects: func (g *Game, p *Player) []*Delta {
+            options := make([]*Delta, 0)
             for _, o := range g.Research.GetOptions(g, p, 1, true) {
                 options = append(options, Option{
                     Execute: func(g *Game, p *Player) {
@@ -318,8 +318,8 @@ func Age2Building18() Building {
     return Building {
         Id: 18,
         Cost: [4]int{2, 1, 0, 0},
-        GetEffects: func (g *Game, p *Player) []Option {
-            options := make([]Option, 0)
+        GetEffects: func (g *Game, p *Player) []*Delta {
+            options := make([]*Delta, 0)
             for _, o := range g.Research.GetOptions(g, p, 1, true) {
                 options = append(options, Option{
                     Execute: func(g *Game, p *Player) {

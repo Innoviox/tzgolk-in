@@ -6,8 +6,8 @@ import (
 	. "tzgolkin/engine"
 )
 
-func Chichen0(g *Game, p *Player) []Option {
-	return make([]Option, 0)
+func Chichen0(g *Game, p *Player) []*Delta {
+	return make([]*Delta, 0)
 }
 
 type ChichenSpot struct {
@@ -34,43 +34,41 @@ func ChichenSpots() []ChichenSpot {
 
 func ChichenX(n int, canForesight bool) Options {
 	spot := ChichenSpots()[n]
-	return func(g *Game, p *Player) []Option {
-		ChichenHelper := func () []Option {
-			options := make([]Option, 0)
-		
+	return func(g *Game, p *Player) []*Delta {
+		ChichenHelperHelper := func (r int) *Delta {
+			d := g.Temples.Step(p, spot.Temple, 1)
+			pd := PlayerDelta{}
+			pd.Points = spot.Points
+			pd.Resources[Skull] = -1
+			if r != -1 {
+				pd.Resources[r] = 1
+			}
+			f := WheelDelta{PositionDeltas: map[int]PositionDelta{spot.Position: PositionDelta{CData: ChichenDataDelta{
+				Full: 1,
+			}}}}
+			d.PlayerDeltas[p.Color] = pd
+			d.CalendarDelta.WheelDeltas[4] = f
+
+			return d
+		}
+
+		ChichenHelper := func () []*Delta {
+			options := make([]*Delta, 0)
+
 			if spot.Block {
 				// if blocK: generate option for gaining each block
 				for i := 0; i < 3; i++ {
-					options = append(options, Option{
-						Execute: func(g *Game, p *Player) {
-							g.Temples.Step(p, spot.Temple, 1)
-							p.Points += spot.Points
-							p.Resources[i] += 1
-							p.Resources[Skull] -= 1
-			
-							g.Calendar.Wheels[4].Positions[spot.Position].CData.Full = true
-						},
-						Description: fmt.Sprintf("%s temple, %d points, 1 %sT", string(ResourceDebug[i]), spot.Points, string(TempleDebug[spot.Temple])),
-					})
+					options = append(options, ChichenHelperHelper(i))
 				}
 			} else {
 				// just generate option for points
-				options = append(options, Option{
-					Execute: func(g *Game, p *Player) {
-						g.Temples.Step(p, spot.Temple, 1)
-						p.Points += spot.Points
-						p.Resources[Skull] -= 1
-			
-						g.Calendar.Wheels[4].Positions[spot.Position].CData.Full = true
-					},
-					Description: fmt.Sprintf("%s temple, %d points", string(TempleDebug[spot.Temple]), spot.Points),
-				})
+				options = append(options, ChichenHelperHelper(-1))
 			}
 		
 			return options
 		}
 
-		options := make([]Option, 0)
+		options := make([]*Delta, 0)
 
 		if canForesight && g.Research.Foresight(p.Color) {
 			if n < 8 {
@@ -93,13 +91,14 @@ func ChichenX(n int, canForesight bool) Options {
 				if p.Resources[i] > 0 {
 					for _, o := range ChichenHelper() {
 						// add "spend block for temple" to each option
-						options = append(options, g.Temples.GainTempleStep(p, Option {
-							Execute: func(g *Game, p *Player) {
-								p.Resources[i] -= 1
-								o.Execute(g, p)
-							},
-							Description: fmt.Sprintf("%s, [theo] pay 1 %s", o.Description, string(ResourceDebug[i])),
-						}, 1)...)
+						r := [4]int{0, 0, 0, 0}
+						r[i] = -1 
+
+						d := &Delta{PlayerDeltas: map[Color]PlayerDelta{p.Color: PlayerDelta{Resources: r}}}
+						d.Description = fmt.Sprintf("[theo] pay 1 %s", string(ResourceDebug[i]))
+
+						d.Add(o)
+						options = append(options, g.Temples.GainTempleStep(p, d, 1)...)
 					}
 				}
 			}

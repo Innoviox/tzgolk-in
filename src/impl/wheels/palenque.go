@@ -6,12 +6,12 @@ import (
 	. "tzgolkin/engine"
 )
 
-func Palenque0(g *Game, p *Player) []Option {
-	return make([]Option, 0)
+func Palenque0(g *Game, p *Player) []*Delta {
+	return make([]*Delta, 0)
 }
 
-func Palenque1(g *Game, p *Player) []Option {
-	return []Option{Option{
+func Palenque1(g *Game, p *Player) []*Delta {
+	return []*Delta{Option{
 		Execute: func (g *Game, p *Player) {
 			p.Corn += 3 + g.Research.CornBonus(p.Color, Blue)
 		},
@@ -19,8 +19,8 @@ func Palenque1(g *Game, p *Player) []Option {
 	}}
 }
 
-func Palenque2(g *Game, p *Player) []Option {
-	options := make([]Option, 0)
+func Palenque2(g *Game, p *Player) []*Delta {
+	options := make([]*Delta, 0)
 
 	if g.Calendar.Wheels[0].Positions[2].PData.CornTiles > 0 {
 		options = append(options, Option{
@@ -46,8 +46,8 @@ func Palenque2(g *Game, p *Player) []Option {
 }
 
 func Jungle(Corn int, wood int, position int) Options {
-	return func (g *Game, p *Player) []Option {
-		options := make([]Option, 0)
+	return func (g *Game, p *Player) []*Delta {
+		options := make([]*Delta, 0)
 
 		if g.Calendar.Wheels[0].Positions[position].PData.WoodTiles > 0 {
 			options = append(options, Option{
