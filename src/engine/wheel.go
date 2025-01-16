@@ -109,15 +109,18 @@ func (w *Wheel) Copy(other *Wheel) {
 
 func (w *Wheel) Exact(other *Wheel) bool {
 	if w.Id != other.Id || w.Size != other.Size || w.Name != other.Name {
+		fmt.Println("gerijo")
 		return false
 	}
 
 	if !reflect.DeepEqual(w.Occupied, other.Occupied) {
+		fmt.Println("\nocc", w.Occupied, other.Occupied)
 		return false
 	}
 
 	for i, p := range w.Positions {
 		if !p.Exact(other.Positions[i]) {
+			fmt.Println("pos", i)
 			return false
 		}
 	}
@@ -127,10 +130,12 @@ func (w *Wheel) Exact(other *Wheel) bool {
 
 func (w *Wheel) AddDelta(delta WheelDelta, mul int) {
 	// todo how should this work?
-	if mul == 1 {
-		w.Occupied = CopyMap(delta.NewOccupied)
-	} else {
-		w.Occupied = CopyMap(delta.OldOccupied)
+	if delta.Sign != 0 {
+		if mul * delta.Sign == -1 {
+			w.Occupied = CopyMap(delta.OldOccupied)
+		} else {
+			w.Occupied = CopyMap(delta.NewOccupied)
+		}
 	}
 
 	for i, p := range delta.PositionDeltas {
@@ -140,35 +145,30 @@ func (w *Wheel) AddDelta(delta WheelDelta, mul int) {
 
 // -- MARK -- Unique methods
 func (w *Wheel) AddWorker(position int, worker int) *Delta {
-	newOccupied := make(map[int]int)
-	for k, v := range w.Occupied {
-		newOccupied[k] = v
-	}
+	newOccupied := CopyMap(w.Occupied)
 	newOccupied[position] = worker
 
-	return w.MakeDelta(newOccupied)
+	return w.MakeDelta(newOccupied, 1)
 }
 
 func (w *Wheel) RemoveWorker(worker int) *Delta {
-	newOccupied := make(map[int]int)
-	for k, v := range w.Occupied {
-		newOccupied[k] = v
-	}
+	newOccupied := CopyMap(w.Occupied)
 	
 	for k, v := range w.Occupied {
 		if v == worker {
 			delete(newOccupied, k)
-			return w.MakeDelta(newOccupied)
+			return w.MakeDelta(newOccupied, -1)
 		}
 	}
 
-	return w.MakeDelta(newOccupied)
+	return w.MakeDelta(newOccupied, -1)
 }
 
-func (w *Wheel) MakeDelta(Occupied map[int]int) *Delta {
+func (w *Wheel) MakeDelta(Occupied map[int]int, Sign int) *Delta {
 	return &Delta{CalendarDelta: CalendarDelta{WheelDeltas: map[int]WheelDelta{w.Id: WheelDelta{
 		OldOccupied: CopyMap(w.Occupied),
 		NewOccupied: Occupied,
+		Sign: Sign,
 	}}}}
 }
 
@@ -193,7 +193,7 @@ func (w *Wheel) Rotate(g *Game) *Delta {
 		d.Add(g.GetWorker(workerToRemove).ReturnFrom(w))
 	}
 
-	d.Add(w.MakeDelta(new_occupied))
+	d.Add(w.MakeDelta(new_occupied, 1))
 
 	return d
 }

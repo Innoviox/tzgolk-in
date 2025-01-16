@@ -64,6 +64,7 @@ type WheelDelta struct {
     // todo how should this work?
     OldOccupied map[int]int
     NewOccupied map[int]int
+    Sign int
     PositionDeltas map[int]PositionDelta
 }
 

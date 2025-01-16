@@ -153,6 +153,7 @@ func (g *Game) MakeRetrievalMoves(moves []Move, retrieval []int, key int) []Move
 			if !g.Exact(g2) {
 				fmt.Println("PLATO ERROR 0")
 				fmt.Println(d)
+				fmt.Println(d.CalendarDelta)
 				fmt.Println([]int{}[1])
 			}
 		}

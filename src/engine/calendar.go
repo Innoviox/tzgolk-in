@@ -26,6 +26,7 @@ func MakeCalendar(wheels []*Wheel) *Calendar {
 func (c *Calendar) Exact(other *Calendar) bool {
 	for i := 0; i < len(c.Wheels); i++ {
 		if !c.Wheels[i].Exact(other.Wheels[i]) {
+			fmt.Println("wheel", i, "is the problem")
 			return false
 		}
 	}

@@ -29,6 +29,7 @@ func Tikal4(g *Game, p *Player) []*Delta {
 
 		o1 := o.Clone()
 
+		g2 := g.Clone()
 		g.AddDelta(o1, 1)
 
 		for _, o2 := range g.GetBuildingOptions(p, o.BuildingNum, false) {
@@ -38,6 +39,11 @@ func Tikal4(g *Game, p *Player) []*Delta {
 		}
 
 		g.AddDelta(o1, -1)
+		if !g.Exact(g2) {
+			fmt.Println("PLATO ERROR %")
+			fmt.Println(o1)
+			fmt.Println([]int{}[1])
+		}
 	}
 
 	options = append(options, g.GetMonumentOptions(p)...)
