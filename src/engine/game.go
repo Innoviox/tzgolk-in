@@ -49,6 +49,15 @@ type Game struct {
 
 // -- MARK -- Basic methods
 func (g *Game) Init() {
+	g.CurrentBuildings = make(map[int]int)
+	for i := 0; i < len(g.Buildings); i++ {
+		g.CurrentBuildings[i] = 0
+	}
+	g.CurrentMonuments = make(map[int]int)
+	for i := 0; i < len(g.Monuments); i++ {
+		g.CurrentMonuments[i] = 0
+	}
+
 	g.Players = make([]*Player, 4)
 	g.Workers = make([]*Worker, 0)
 	for i, color := range [...]Color{Red, Green, Blue, Yellow} {
@@ -60,6 +69,8 @@ func (g *Game) Init() {
 			FreeWorkers: 0,
 			WorkerDeduction: 0,
 			LightSide: true,
+			Buildings: CopyMap(g.CurrentBuildings),
+			Monuments: CopyMap(g.CurrentMonuments),
 		}
 
 		for j := 0; j < 6; j++ {
@@ -75,9 +86,6 @@ func (g *Game) Init() {
 
 	g.Research = MakeResearch()
 
-	g.CurrentBuildings = make(map[int]int)
-	g.CurrentMonuments = make(map[int]int)
-	
 	g.NBuildings = 6
 	g.AddDelta(g.DealBuildings(), 1)
 
@@ -258,14 +266,13 @@ func (g *Game) FirstPlayerSpace(MarkStep func(string)) *Delta {
 		PlayerDeltas: map[Color]PlayerDelta{player.Color: PlayerDelta{
 			Corn: g.AccumulatedCorn,
 		}},
+		WorkerDeltas: map[int]WorkerDelta{worker.Id: WorkerDelta{
+			Available: 1,
+			Wheel_id: -1 - worker.Wheel_id, 
+			Position: -1 - worker.Position,
+		}},
 		CalendarDelta: CalendarDelta{FirstPlayer: -1 - g.Calendar.FirstPlayer},
 		AccumulatedCorn: -g.AccumulatedCorn,
-	}
-
-	d.WorkerDeltas[worker.Id] = WorkerDelta{
-		Available: 1,
-		Wheel_id: -1 - worker.Wheel_id, 
-		Position: -1 - worker.Position,
 	}
 
 	MarkStep(fmt.Sprintf("FirstPlayer for %s, +%d Corn", player.Color.String(), g.AccumulatedCorn))
@@ -441,15 +448,15 @@ func (g *Game) TakeTurn(MarkStep func(string), random bool) *Delta {
 	}
 	// player.Corn -= move.Corn
 
-	// todo buildings
-	g.DealBuildings()
+	d.Add(g.DealBuildings())
 	return d
 }
 
 func (g *Game) Run(MarkStep func(string), random bool) {
-	for !g.IsOver() && g.Day < 4 {
+	for !g.IsOver() /* && g.Day < 4 */ {
 		for i := 0; i < len(g.Players); i++ {
 			g.AddDelta(g.TakeTurn(MarkStep, random), 1)
+			MarkStep("Test")
 			g.CurrPlayer = (g.CurrPlayer + 1) % len(g.Players)
 		}
 
@@ -511,7 +518,9 @@ func (g *Game) RunStop(MarkStep func(string), stopPlayer *Player) *Delta {
 
 // -- MARK -- Getters
 func (g *Game) DealBuildings() *Delta {
-	d := &Delta{}
+	d := &Delta{
+		Buildings: map[int]int{},
+	}
 	n := 0
 	for _, v := range g.CurrentBuildings {
 		if v == 1 {

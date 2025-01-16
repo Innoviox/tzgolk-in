@@ -40,7 +40,7 @@ func (w *Worker) Copy(other *Worker) {
 }
 
 func (w *Worker) AddDelta(delta WorkerDelta, mul int) {
-	w.Available = Bool(delta.Available, mul)
+	w.Available = Bool(delta.Available, mul, w.Available)
 	w.Wheel_id += delta.Wheel_id * mul
 	w.Position += delta.Position * mul
 }

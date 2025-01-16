@@ -68,7 +68,7 @@ func (p *Player) AddDelta(delta PlayerDelta, mul int) {
 	p.FreeWorkers += delta.FreeWorkers * mul
 	p.WorkerDeduction += delta.WorkerDeduction * mul
 
-	p.LightSide = Bool(delta.LightSide, mul)
+	p.LightSide = Bool(delta.LightSide, mul, p.LightSide)
 	for k, v := range delta.Buildings {
 		p.Buildings[k] += v * mul
 	}
@@ -100,8 +100,8 @@ func (p *Player) String(g *Game) string {
 	fmt.Fprintf(&br, "| Free Workers: %d\n", p.FreeWorkers)
 	fmt.Fprintf(&br, "| Worker Deduction: %d\n", p.WorkerDeduction)
 	fmt.Fprintf(&br, "| Light Side: %t\n", p.LightSide)
-	fmt.Fprintf(&br, "| Buildings: %d\n", len(p.Buildings))
-	fmt.Fprintf(&br, "| Monuments: %d\n", len(p.Monuments))
+	fmt.Fprintf(&br, "| Buildings: %d\n", CountValues(p.Buildings, 1))
+	fmt.Fprintf(&br, "| Monuments: %d\n", CountValues(p.Monuments, 1))
 	fmt.Fprintf(&br, "| Workers: %d\n", nWorkers)
 	fmt.Fprintf(&br, "------------------------\n")
 

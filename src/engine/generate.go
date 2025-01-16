@@ -114,8 +114,6 @@ func (g *Game) MakeRetrievalMoves(moves []Move, retrieval []int, key int) []Move
 
 	out := make([]Move, 0)
 	out = append(out, moves...)
-
-	g.Save(key)
 	
 	for _, w := range retrieval {
 		worker := g.GetWorker(w)
@@ -129,7 +127,8 @@ func (g *Game) MakeRetrievalMoves(moves []Move, retrieval []int, key int) []Move
 		// fmt.Fprintf(os.Stdout, "\t\tRest %v\n", rest)
 
 		for i := 0; i < len(moves); i++ {
-			g.Calendar.Execute(moves[i], g, func(s string){})
+			d := g.Calendar.Execute(moves[i], g, func(s string){})
+			g.AddDelta(d, 1)
 			for _, option := range g.GetOptions(worker) {
 				// if worker.Wheel_id != 4 {
 				// 	for j := 1; j < worker.Position; j++ {
@@ -147,7 +146,7 @@ func (g *Game) MakeRetrievalMoves(moves []Move, retrieval []int, key int) []Move
 					Execute: option,
 				}, 0))
 			}
-			g.Load(key)
+			g.AddDelta(d, -1)
 		}
 
 		out = append(out, g.MakeRetrievalMoves(m, rest, key + 1)...)
@@ -181,16 +180,15 @@ func (g *Game) MakePlacementMoves(moves []Move, placement []int, key int) []Move
 	worker := placement[0]
 	rest := placement[1:]
 
-	g.Save(key)
-
 	l := len(moves)
 	for i := 0; i < l; i++ {
-		g.Calendar.Execute(moves[i], g, func(s string){})
+		d := g.Calendar.Execute(moves[i], g, func(s string){})
+		g.AddDelta(d, 1)
 
 		for _, position := range g.Calendar.LegalPositions() {
 			moves = append(moves, moves[i].Place(worker, position))
 		}
-		g.Load(key)
+		g.AddDelta(d, -1)
 	}
 
 	return g.MakePlacementMoves(moves, rest, key + 1)

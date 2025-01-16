@@ -94,8 +94,13 @@ type ResearchDelta struct {
     Levels map[Color]Levels
 }
 
-func Bool(d int, m int) bool {
-    return d * m > 0
+func Bool(d int, m int, current bool) bool {
+    if d * m > 0 {
+        return true
+    } else if d * m < 0 {
+        return false
+    }
+    return current
 }
 
 // todo MarkDelta function or something
@@ -103,60 +108,93 @@ func (d *Delta) Add(o *Delta) {
     fmt.Printf("%v + %v\n", d, o)
     fmt.Print("a")
     if o.PlayerDeltas != nil {
-        for k, v := range o.PlayerDeltas {
-            p := d.PlayerDeltas[k]
-            p.Resources[0] += v.Resources[0]
-            p.Resources[1] += v.Resources[1]
-            p.Resources[2] += v.Resources[2]
-            p.Resources[3] += v.Resources[3]
-            p.Corn += v.Corn
-            p.Points += v.Points
-            p.CornTiles += v.CornTiles
-            p.WoodTiles += v.WoodTiles
-            p.FreeWorkers += v.FreeWorkers
-            p.WorkerDeduction += v.WorkerDeduction
-            p.LightSide += v.LightSide
+        if d.PlayerDeltas == nil {
+            d.PlayerDeltas = o.PlayerDeltas
+        } else {
+            for k, v := range o.PlayerDeltas {
+                p, ok := d.PlayerDeltas[k]
+                if !ok {
+                    d.PlayerDeltas[k] = v
+                    continue
+                }
+                p.Resources[0] += v.Resources[0]
+                p.Resources[1] += v.Resources[1]
+                p.Resources[2] += v.Resources[2]
+                p.Resources[3] += v.Resources[3]
+                p.Corn += v.Corn
+                p.Points += v.Points
+                p.CornTiles += v.CornTiles
+                p.WoodTiles += v.WoodTiles
+                p.FreeWorkers += v.FreeWorkers
+                p.WorkerDeduction += v.WorkerDeduction
+                p.LightSide += v.LightSide
 
-            for k2, v2 := range v.Buildings {
-                p.Buildings[k2] += v2
-            }
+                if p.Buildings == nil {
+                    p.Buildings = v.Buildings
+                } else {
+                    for k2, v2 := range v.Buildings {
+                        p.Buildings[k2] += v2
+                    }
+                }
 
-            for k2, v2 := range v.Monuments {
-                p.Monuments[k2] += v2
+                if p.Monuments == nil {
+                    p.Monuments = v.Monuments
+                } else {
+                    for k2, v2 := range v.Monuments {
+                        p.Monuments[k2] += v2
+                    }
+                }
             }
         }
     }
     fmt.Print("b")
 
     if o.WorkerDeltas != nil {
-        for k, v := range o.WorkerDeltas {
-            w := d.WorkerDeltas[k]
-            w.Available += v.Available
-            w.Wheel_id += v.Wheel_id
-            w.Position += v.Position
+        if d.WorkerDeltas == nil {
+            d.WorkerDeltas = o.WorkerDeltas
+        } else {
+            for k, v := range o.WorkerDeltas {
+                w, ok := d.WorkerDeltas[k]
+                if !ok {
+                    d.WorkerDeltas[k] = v
+                    continue
+                }
+                w.Available += v.Available
+                w.Wheel_id += v.Wheel_id
+                w.Position += v.Position
+            }
         }
     }
     fmt.Print("c")
 
 
     if o.CalendarDelta.WheelDeltas != nil {
-        for k, v := range o.CalendarDelta.WheelDeltas {
-            w := d.CalendarDelta.WheelDeltas[k]
-            if len(v.OldOccupied) > 0 {
-                w.OldOccupied = v.OldOccupied
-            }
+        if d.CalendarDelta.WheelDeltas == nil {
+            d.CalendarDelta.WheelDeltas = o.CalendarDelta.WheelDeltas
+        } else {
+            for k, v := range o.CalendarDelta.WheelDeltas {
+                w, ok := d.CalendarDelta.WheelDeltas[k]
+                if !ok {
+                    d.CalendarDelta.WheelDeltas[k] = v
+                    continue
+                }
 
-            if len(v.NewOccupied) > 0 {
-                w.NewOccupied = v.NewOccupied
-            }
+                if len(v.OldOccupied) > 0 {
+                    w.OldOccupied = v.OldOccupied
+                }
 
-            if v.PositionDeltas != nil {
-                for k2, v2 := range v.PositionDeltas {
-                    p := w.PositionDeltas[k2]
+                if len(v.NewOccupied) > 0 {
+                    w.NewOccupied = v.NewOccupied
+                }
 
-                    p.PData.CornTiles += v2.PData.CornTiles
-                    p.PData.WoodTiles += v2.PData.WoodTiles
-                    p.CData.Full += v2.CData.Full
+                if v.PositionDeltas != nil {
+                    for k2, v2 := range v.PositionDeltas {
+                        p := w.PositionDeltas[k2]
+
+                        p.PData.CornTiles += v2.PData.CornTiles
+                        p.PData.WoodTiles += v2.PData.WoodTiles
+                        p.CData.Full += v2.CData.Full
+                    }
                 }
             }
         }
@@ -166,18 +204,31 @@ func (d *Delta) Add(o *Delta) {
     d.CalendarDelta.FirstPlayer += o.CalendarDelta.FirstPlayer
 
     if o.TemplesDelta.TempleDeltas != nil {
-        for k, v := range o.TemplesDelta.TempleDeltas {
-            for k2, v2 := range v.PlayerLocations {
-                d.TemplesDelta.TempleDeltas[k].PlayerLocations[k2] += v2
+        if d.TemplesDelta.TempleDeltas == nil {
+            d.TemplesDelta.TempleDeltas = o.TemplesDelta.TempleDeltas
+        } else {
+            for k, v := range o.TemplesDelta.TempleDeltas {
+                pl := d.TemplesDelta.TempleDeltas[k]
+                if pl.PlayerLocations == nil {
+                    pl.PlayerLocations = v.PlayerLocations
+                } else {
+                    for k2, v2 := range v.PlayerLocations {
+                        pl.PlayerLocations[k2] += v2
+                    }
+                }
             }
         }
     }
     fmt.Print("e")
 
     if o.ResearchDelta.Levels != nil {
-        for k, v := range o.ResearchDelta.Levels {
-            for k2, v2 := range v {
-                d.ResearchDelta.Levels[k][k2] += v2
+        if d.ResearchDelta.Levels == nil {
+            d.ResearchDelta.Levels = o.ResearchDelta.Levels
+        } else {
+            for k, v := range o.ResearchDelta.Levels {
+                for k2, v2 := range v {
+                    d.ResearchDelta.Levels[k][k2] += v2
+                }
             }
         }
     }
@@ -218,6 +269,7 @@ func (d *Delta) Add(o *Delta) {
         d.BuildingNum = o.BuildingNum
     }
     fmt.Print("i!\n")
+    fmt.Printf("%v\n", d)
 }
 
 func Combine(d1 *Delta, d2 *Delta) *Delta {

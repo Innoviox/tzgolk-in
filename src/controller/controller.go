@@ -41,6 +41,7 @@ func MakeController(rand *rand.Rand) *Controller {
         Calendar: MakeCalendar(wheels),
         Temples: MakeTemples(temples),
         Buildings: buildings,
+        Age1Cutoff: 15,
         Monuments: monuments,
         Tiles: tiles,
         Rand: rand,

@@ -129,3 +129,13 @@ func RandZeros(m map[int]int, lo int, hi int, n int) []int {
 	})
 	return result[:n]
 }
+
+func CountValues(m map[int]int, v int) int {
+	count := 0
+	for _, val := range m {
+		if val == v {
+			count += 1
+		}
+	}
+	return count
+}

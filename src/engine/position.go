@@ -58,7 +58,7 @@ func (p *Position) AddDelta(delta PositionDelta, mul int) {
 	} 
 
 	if p.CData != nil{
-		p.CData.Full = Bool(delta.CData.Full, mul)
+		p.CData.Full = Bool(delta.CData.Full, mul, p.CData.Full)
 	}
 }
 
