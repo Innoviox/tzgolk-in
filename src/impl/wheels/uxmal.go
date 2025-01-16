@@ -13,12 +13,11 @@ func Uxmal1(g *Game, p *Player) []*Delta {
 	options := make([]*Delta, 0)
 
 	if p.Corn >= 3 {
-		options = append(options, g.Temples.GainTempleStep(p, Option{
-			Execute: func(g *Game, p *Player) {
-				p.Corn -= 3
-			},
-			Description: "pay 3 Corn",
-		}, 1)...,)
+		d := PlayerDeltaWrapper(p.Color, PlayerDelta{
+			Corn: -3,
+		})
+		d.Description = "pay 3 Corn"
+		options = append(options, g.Temples.GainTempleStep(p, d, 1)...)
 	}
 
 	return SkipWrapper(options)
@@ -89,12 +88,7 @@ func GenerateCornExchanges(Corn int, base []CornOption) []CornOption {
 }
 
 func Uxmal3(g *Game, p *Player) []*Delta {
-	return []*Delta{Option{
-		Execute: func(g *Game, p *Player) {
-			g.UnlockWorker(p.Color)
-		},
-		Description: "unlock worker",
-	}}
+	return []*Delta{g.UnlockWorker(p.Color)}
 }
 
 func Uxmal4(g *Game, p *Player) []*Delta {
@@ -143,13 +137,9 @@ func Uxmal5(g *Game, p *Player) []*Delta {
 
 
 	for _, option := range allOptions {
-		options = append(options, Option{
-			Execute: func(g *Game, p *Player) {
-				p.Corn -= 1
-				option.Execute(g, p)
-			},
-			Description: fmt.Sprintf("[mirror] pay 1 Corn, %s", option.Description),
-		})
+		options = append(options, Combine(option, PlayerDeltaWrapper(p.Color, PlayerDelta{
+			Corn: -1,
+		})))
 	}
 
 	return options

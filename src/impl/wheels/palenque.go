@@ -11,12 +11,12 @@ func Palenque0(g *Game, p *Player) []*Delta {
 }
 
 func Palenque1(g *Game, p *Player) []*Delta {
-	return []*Delta{Option{
-		Execute: func (g *Game, p *Player) {
-			p.Corn += 3 + g.Research.CornBonus(p.Color, Blue)
-		},
-		Description: fmt.Sprintf("3 + %d Corn", g.Research.CornBonus(p.Color, Blue)),
-	}}
+	d := PlayerDeltaWrapper(p.Color, PlayerDelta{
+		Corn: 3 + g.Research.CornBonus(p.Color, Blue),
+	})
+	d.Description = fmt.Sprintf("3 + %d Corn", g.Research.CornBonus(p.Color, Blue))
+
+	return []*Delta{d}
 }
 
 func Palenque2(g *Game, p *Player) []*Delta {
@@ -32,12 +32,12 @@ func Palenque2(g *Game, p *Player) []*Delta {
 			Description: fmt.Sprintf("4 + %d Corn", g.Research.CornBonus(p.Color, Green)),
 		})
 	} else if g.Research.Irrigation(p.Color) {
-		options = append(options, Option{
-			Execute: func(g *Game, p *Player) {
-				p.Corn += 4 + g.Research.CornBonus(p.Color, Green)
-			},
-			Description: fmt.Sprintf("4 + %d Corn (irrigation)", g.Research.CornBonus(p.Color, Green)),
+		d := PlayerDeltaWrapper(p.Color, PlayerDelta{
+			Corn: 4 + g.Research.CornBonus(p.Color, Blue),
 		})
+		d.Description = fmt.Sprintf("4 + %d Corn (irrigation)", g.Research.CornBonus(p.Color, Green))
+
+		options = append(options, d)
 	} else {
 		options = Skip()
 	}
@@ -82,12 +82,11 @@ func Jungle(Corn int, wood int, position int) Options {
 		}
 
 		if g.Research.Irrigation(p.Color) {
-			options = append(options, Option{
-				Execute: func(g *Game, p *Player) {
-					p.Corn += Corn + g.Research.CornBonus(p.Color, Green)
-				},
-				Description: fmt.Sprintf("%d + %d Corn (irrigation)", Corn, g.Research.CornBonus(p.Color, Green)),
+			d := PlayerDeltaWrapper(p.Color, PlayerDelta{
+				Corn: Corn + g.Research.CornBonus(p.Color, Green),
 			})
+			d.Description = fmt.Sprintf("%d + %d Corn (irrigation)", Corn, g.Research.CornBonus(p.Color, Green))
+			options = append(options, d)
 		}
 
 		return options

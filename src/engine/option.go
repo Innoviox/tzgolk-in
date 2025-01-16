@@ -68,12 +68,12 @@ func (g *Game) GetBuildingOptions(p *Player, exclude int, useResearch bool) []*D
 	return options
 }
 
-func (g *Game) GetMonumentOptions(p *Player) []Delta {
-	options := make([]Delta, 0)
+func (g *Game) GetMonumentOptions(p *Player) []*Delta {
+	options := make([]*Delta, 0)
 
 	for _, m := range g.CurrentMonuments {
 		if p.CanPay(m.Cost) {
-			options = append(options, Delta{
+			options = append(options, &Delta{
 				PlayerDeltas: map[Color]PlayerDelta{
 					p.Color: PlayerDelta{
 						Resources: InvCost(m.Cost),

@@ -32,13 +32,9 @@ func Tikal4(g *Game, p *Player) []*Delta {
 		o.Execute(new_game, new_player)
 
 		for _, o2 := range new_game.GetBuildingOptions(new_player, o.BuildingNum, false) {
-			options = append(options, Option{
-				Execute: func(g *Game, p *Player) {
-					o.Execute(g, p)
-					o2.Execute(g, p)
-				},
-				Description: fmt.Sprintf("%s, %s [no res]", o.Description, o2.Description),
-			})
+			d := Combine(o, o2)
+			d.Description = fmt.Sprintf("%s, %s [no res]", o.Description, o2.Description)
+			options = append(options, d)
 		}
 	}
 
