@@ -53,14 +53,20 @@ func Tikal5(g *Game, p *Player) []*Delta {
 					if (j == k) {
 						continue
 					}
-					options = append(options, Option{
-						Execute: func(g *Game, p *Player) {
-							p.Resources[i] -= 1
-							g.Temples.Step(p, j, 1)
-							g.Temples.Step(p, k, 1)
-						},
-						Description: fmt.Sprintf("pay 1 %s, 1 %sT, 1 %sT", string(ResourceDebug[i]), string(TempleDebug[j]), string(TempleDebug[k])),
+
+					r := [4]int{}
+					r[i] -= 1
+
+					d := PlayerDeltaWrapper(p.Color, PlayerDelta{
+						Resources: r,
 					})
+
+					d.Add(g.Temples.Step(p, j, 1))
+					d.Add(g.Temples.Step(p, k, 1))
+
+					d.Description = fmt.Sprintf("pay 1 %s, 1 %sT, 1 %sT", string(ResourceDebug[i]), string(TempleDebug[j]), string(TempleDebug[k]))
+
+					options = append(options, d)
 				}
 			}
 		}

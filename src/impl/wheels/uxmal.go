@@ -98,18 +98,16 @@ func Uxmal4(g *Game, p *Player) []*Delta {
 		cost := b.CornCost(g, p) 
 		if p.Corn >= cost {
 			for _, effect := range b.GetEffects(g, p) {
-				options = append(options, Option{
-					Execute: func(g *Game, p *Player) {
-						p.Corn -= cost
-						effect.Execute(g, p)
-
-						g.Research.Built(p)
-						
-						p.Buildings = append(p.Buildings, b)
-						// g.RemoveBuilding(b)
-					},
-					Description: fmt.Sprintf("[build %d] pay %d Corn, %s", b.Id, cost, effect.Description),
+				d := PlayerDeltaWrapper(p.Color, PlayerDelta{
+					Corn: -cost,
 				})
+
+				d.Add(effect)
+				d.Add(g.Research.Built(p))
+				// todo buildings add/remove/etc
+
+				d.Description = fmt.Sprintf("[build %d] pay %d Corn, %s", b.Id, cost, effect.Description)
+				options = append(options, d)
 			}
 		}
 	}
