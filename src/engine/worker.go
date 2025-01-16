@@ -1,5 +1,9 @@
 package engine
 
+// import (
+// 	"fmt"
+// )
+
 type Worker struct {
 	Id int
 
@@ -40,9 +44,19 @@ func (w *Worker) Copy(other *Worker) {
 }
 
 func (w *Worker) AddDelta(delta WorkerDelta, mul int) {
+	// fmt.Println("Worker AddDelta", w, delta, mul)
 	w.Available = Bool(delta.Available, mul, w.Available)
 	w.Wheel_id += delta.Wheel_id * mul
 	w.Position += delta.Position * mul
+	// fmt.Println("Worker Added", w)
+}
+
+func (w *Worker) Exact(other *Worker) bool {
+	return w.Id == other.Id &&
+		w.Color == other.Color &&
+		w.Available == other.Available &&
+		w.Wheel_id == other.Wheel_id &&
+		w.Position == other.Position
 }
 
 // -- MARK -- Unique methods

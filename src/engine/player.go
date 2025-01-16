@@ -3,6 +3,7 @@ package engine
 import (
 	"fmt"
 	"strings"
+	"reflect"
 )
 
 type Player struct {
@@ -76,6 +77,27 @@ func (p *Player) AddDelta(delta PlayerDelta, mul int) {
 		p.Monuments[k] += v * mul
 	}
 	// todo buildings & monuments
+}
+
+func (p *Player) Exact(other *Player) bool {
+	for i := 0; i < 4; i++ {
+		if p.Resources[i] != other.Resources[i] {
+			return false
+		}
+	}
+
+	if !reflect.DeepEqual(p.Buildings, other.Buildings) {
+		return false
+	}
+
+	if !reflect.DeepEqual(p.Monuments, other.Monuments) {
+		return false
+	}
+
+	return p.Corn == other.Corn && p.Color == other.Color &&
+	p.Points == other.Points && p.CornTiles == other.CornTiles &&
+	p.WoodTiles == other.WoodTiles && p.FreeWorkers == other.FreeWorkers && 
+	p.WorkerDeduction == other.WorkerDeduction && p.LightSide == other.LightSide
 }
 
 func (p *Player) String(g *Game) string {

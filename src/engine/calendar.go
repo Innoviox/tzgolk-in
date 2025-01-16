@@ -23,6 +23,17 @@ func MakeCalendar(wheels []*Wheel) *Calendar {
 	}
 }
 
+func (c *Calendar) Exact(other *Calendar) bool {
+	for i := 0; i < len(c.Wheels); i++ {
+		if !c.Wheels[i].Exact(other.Wheels[i]) {
+			return false
+		}
+	}
+
+	return c.Rotation == other.Rotation &&
+		c.FirstPlayer == other.FirstPlayer 
+}
+
 func (c *Calendar) Clone() *Calendar {
 	new_wheels := make([]*Wheel, 0) // todo map method?
 	for _, wheel := range c.Wheels {

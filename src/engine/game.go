@@ -5,6 +5,7 @@ import (
 	"os"
 	"strings"
 	"math/rand"
+	"reflect"
 )
 
 type Game struct {
@@ -111,7 +112,6 @@ func (g *Game) Init() {
 }
 
 func (g *Game) Clone() *Game {
-	fmt.Println("Cloning game!")
 	players := make([]*Player, 0)
 	for _, p := range g.Players {
 		players = append(players, p.Clone())
@@ -183,6 +183,54 @@ func (g *Game) Copy(other *Game) {
 	g.ResDays = other.ResDays
 	g.PointDays = other.PointDays
 	g.Over = other.Over
+}
+
+func (g *Game) Exact(other *Game) bool {
+	for i := 0; i < 4; i++ {
+		if !g.Players[i].Exact(other.Players[i]) {
+			fmt.Println("p", i)
+			return false
+		}
+	}
+
+	for i := 0; i < len(g.Workers); i++ {
+		if !g.Workers[i].Exact(other.Workers[i]) {
+			fmt.Println("w", i)
+			return false
+		}
+	}
+
+	if !g.Calendar.Exact(other.Calendar) {
+		fmt.Println("c")
+		return false
+	}
+
+	if !g.Temples.Exact(other.Temples) {
+		fmt.Println("t")
+		return false
+	}
+
+	if !g.Research.Exact(other.Research) {
+		fmt.Println("r")
+		return false
+	}
+
+	if !reflect.DeepEqual(g.CurrentMonuments, other.CurrentMonuments) {
+		fmt.Println("m")
+		return false
+	}
+
+	if !reflect.DeepEqual(g.CurrentBuildings, other.CurrentBuildings) {
+		fmt.Println("b")
+		return false
+	}
+
+	return g.CurrPlayer == other.CurrPlayer && 
+		g.FirstPlayer == other.FirstPlayer &&
+		g.AccumulatedCorn == other.AccumulatedCorn &&
+		g.Age == other.Age &&
+		g.Day == other.Day &&
+		g.Over == other.Over
 }
 
 func (g *Game) AddDelta(delta *Delta, mul int) {
@@ -488,20 +536,20 @@ func (g *Game) RunStop(MarkStep func(string), stopPlayer *Player) *Delta {
 	}
 
 	if g.Calendar.FirstPlayer != -1 {
-		d1 := g.FirstPlayerSpace(MarkStep)
-		d.Add(d1)
-		g.AddDelta(d1, 1)
+		d2 := g.FirstPlayerSpace(MarkStep)
+		d.Add(d2)
+		g.AddDelta(d2, 1)
 	}
 
-	d1 := g.Rotate(MarkStep)
-	d.Add(d1)
-	g.AddDelta(d1, 1)
+	d3 := g.Rotate(MarkStep)
+	d.Add(d3)
+	g.AddDelta(d3, 1)
 
 	run2 := 3 - run1
 	for i := 0; i < run2; i++ {
-		d2 := g.TakeTurn(MarkStep, true)
-		d.Add(d2)
-		g.AddDelta(d2, 1)
+		d4 := g.TakeTurn(MarkStep, true)
+		d.Add(d4)
+		g.AddDelta(d4, 1)
 
 		g.CurrPlayer = (g.CurrPlayer + 1) % len(g.Players)
 	}

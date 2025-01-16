@@ -33,6 +33,11 @@ func (p *Position) Clone() *Position {
 	}
 }
 
+func (p *Position) Exact(other *Position) bool {
+	return p.Wheel_id == other.Wheel_id &&
+		p.Corn == other.Corn
+}
+
 func (p *Position) Copy(other *Position) {
 	var newPData *PalenqueData
 	if other.PData != nil {

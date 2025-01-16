@@ -3,6 +3,7 @@ package engine
 import (
 	"fmt"
 	"strings"
+	"reflect"
 )
 
 // '⁰'
@@ -106,6 +107,24 @@ func (w *Wheel) Copy(other *Wheel) {
 	}
 }
 
+func (w *Wheel) Exact(other *Wheel) bool {
+	if w.Id != other.Id || w.Size != other.Size || w.Name != other.Name {
+		return false
+	}
+
+	if !reflect.DeepEqual(w.Occupied, other.Occupied) {
+		return false
+	}
+
+	for i, p := range w.Positions {
+		if !p.Exact(other.Positions[i]) {
+			return false
+		}
+	}
+
+	return true
+}
+
 func (w *Wheel) AddDelta(delta WheelDelta, mul int) {
 	// todo how should this work?
 	if mul == 1 {
@@ -164,7 +183,9 @@ func (w *Wheel) Rotate(g *Game) *Delta {
 		} else {
 			new_occupied[k + 1] = v
 			worker := g.GetWorker(v)
-			d.Add(&Delta{WorkerDeltas: map[int]WorkerDelta{worker.Id: WorkerDelta{Position: 1}}})
+			d.Add(&Delta{WorkerDeltas: map[int]WorkerDelta{worker.Id: WorkerDelta{
+				Position: 1,
+			}}})
 		}
 	} 
 

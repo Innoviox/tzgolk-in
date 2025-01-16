@@ -1,5 +1,8 @@
 package engine
 
+import (
+    "fmt"
+)
 /*
 
 
@@ -48,14 +51,30 @@ func ComputeMove(g *Game, p *Player, ply int, rec bool) (*Move, float64) {
         bar = progressbar.Default(int64(len(moves)))
     }
 
-    g.Save(ply)
+    ccp := g.CurrPlayer
+
+    g2 := g.Clone()
 
     best := float64(-100)
     var best_move Move
     for _, m := range moves {
-        g.Calendar.Execute(m, g, func(s string){})
-        g.CurrPlayer = (g.CurrPlayer + 1) % len(g.Players)
-        g.RunStop(func(s string){/*fmt.Println(s)*/}, p)
+        d := &Delta{}
+
+        g.CurrPlayer = ccp
+        if !g.Exact(g2) {
+            fmt.Println("PLATO ERROR 2")
+            fmt.Println([]int{}[1])
+        }
+
+        d1 := g.Calendar.Execute(m, g, func(s string){})
+        g.AddDelta(d1, 1)
+        d.Add(d1)
+
+        g.CurrPlayer = (ccp + 1) % len(g.Players)
+
+        d2 := g.RunStop(func(s string){/*fmt.Println(s)*/}, p)
+        // g.AddDelta(d2, 1)
+        d.Add(d2)
         
         _, score := ComputeMove(g, p, ply - 1, true)
         // if !rec {
@@ -70,8 +89,13 @@ func ComputeMove(g *Game, p *Player, ply int, rec bool) (*Move, float64) {
             bar.Add(1)
         }
         
-        g.Load(ply)
+        // g.Load(ply)
+        g.AddDelta(d2, -1)
+        g.AddDelta(d, -1)
+        // g.AddDelta(d, -1)
     }   
+
+    g.CurrPlayer = ccp
 
     return &best_move, best
 }

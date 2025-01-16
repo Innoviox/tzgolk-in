@@ -1,7 +1,7 @@
 package engine
 
 import (
-    // "fmt"
+    "fmt"
     // "os"
 )
 
@@ -130,6 +130,7 @@ func (g *Game) MakeRetrievalMoves(moves []Move, retrieval []int, key int) []Move
 		for i := 0; i < len(moves); i++ {
 			d := g.Calendar.Execute(moves[i], g, func(s string){})
 			wOrig := worker.Clone()
+			g2 := g.Clone()
 			g.AddDelta(d, 1)
 			for _, option := range g.GetOptions(wOrig) {
 				// if worker.Wheel_id != 4 {
@@ -149,6 +150,11 @@ func (g *Game) MakeRetrievalMoves(moves []Move, retrieval []int, key int) []Move
 				}, 0))
 			}
 			g.AddDelta(d, -1)
+			if !g.Exact(g2) {
+				fmt.Println("PLATO ERROR 0")
+				fmt.Println(d)
+				fmt.Println([]int{}[1])
+			}
 		}
 
 		out = append(out, g.MakeRetrievalMoves(m, rest, key + 1)...)
@@ -185,12 +191,18 @@ func (g *Game) MakePlacementMoves(moves []Move, placement []int, key int) []Move
 	l := len(moves)
 	for i := 0; i < l; i++ {
 		d := g.Calendar.Execute(moves[i], g, func(s string){})
+		g2 := g.Clone()
 		g.AddDelta(d, 1)
 
 		for _, position := range g.Calendar.LegalPositions() {
 			moves = append(moves, moves[i].Place(worker, position))
 		}
 		g.AddDelta(d, -1)
+		if !g.Exact(g2) {
+			fmt.Println("PLATO ERROR 1")
+			fmt.Println(d)
+			fmt.Println([]int{}[1])
+		}
 	}
 
 	return g.MakePlacementMoves(moves, rest, key + 1)

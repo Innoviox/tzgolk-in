@@ -3,6 +3,7 @@ package engine
 import (
 	"fmt"
 	"strings"
+	"reflect"
 )
 
 type Science int
@@ -19,6 +20,10 @@ func MakeLevels() Levels {
 
 type Research struct {
 	Levels map[Color]Levels
+}
+
+func (r *Research) Exact(other *Research) bool {
+	return reflect.DeepEqual(r.Levels, other.Levels)
 }
 
 func MakeResearch() *Research {

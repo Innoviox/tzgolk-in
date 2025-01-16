@@ -4,6 +4,7 @@ import (
 	"fmt"
 	// "os"
 	"strings"
+	"reflect"
 )
 
 type Temple struct {
@@ -29,6 +30,10 @@ func (t *Temple) Clone() *Temple {
 		Points: t.Points,
 		Resources: t.Resources,
 	}
+}
+
+func (t *Temple) Exact(other *Temple) bool {
+	return reflect.DeepEqual(t.PlayerLocations, other.PlayerLocations)
 }
 
 func (t *Temple) Copy(other *Temple) {
@@ -57,6 +62,15 @@ func MakeTemples(temples []*Temple) *Temples {
 	return &Temples{
 		Temples: temples,
 	}
+}
+
+func (t *Temples) Exact(other *Temples) bool {
+	for i := 0; i < 3; i++ {
+		if !t.Temples[i].Exact(other.Temples[i]) {
+			return false
+		}
+	}
+	return true
 }
 
 func (t *Temples) Clone() *Temples {
