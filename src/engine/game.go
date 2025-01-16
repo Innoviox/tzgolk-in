@@ -357,7 +357,7 @@ func (g *Game) CheckDay(MarkStep func(string)) *Delta {
 
 			MarkStep("Gained points")
 
-			d.Add(&Delta{Age: 1})
+			d.Age = 1
 			if g.Age == 1 {
 				// todo buildings
 				d.Buildings = map[int]int{}

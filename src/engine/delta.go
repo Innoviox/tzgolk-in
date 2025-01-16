@@ -267,7 +267,7 @@ func (d *Delta) Add(o *Delta) {
     d.AccumulatedCorn += o.AccumulatedCorn
     d.Age += o.Age
     d.Day += o.Day
-    d.Over += d.Over
+    d.Over += o.Over
 
     d.Description = fmt.Sprintf("%s; %s", d.Description, o.Description)
 
