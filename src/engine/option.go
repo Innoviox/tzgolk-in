@@ -167,17 +167,19 @@ func (r *Research) GetOptionsHelper(g *Game, p *Player, resources [4]int, levels
 					newLevels[k] = v
 				}
 				newLevels[Science(s)] += 1
-
+				fmt.Println("Aaegegaraegraegreagr")
 				d := ResourcesDelta(p.Color, p.Resources, newResources)
+				fmt.Println("joeofibdjcviojvijoxjobicv", d)
 				d.Add(&Delta{ResearchDelta: ResearchDelta{Levels: map[Color]Levels{p.Color: map[Science]int{
 					Science(s): 1,
 				}}}})
+				fmt.Println("cbviojbjovcbvicbvco", d)
 				d.Description = GenerateResearchDescription(resources, newResources, levels, newLevels)
-
 				if n == 1 {
 					options = append(options, d)
 				} else {
 					for _, o := range r.GetOptionsHelper(g, p, newResources, newLevels, n - 1, free) {
+						fmt.Println("fngjfgnuifgnijifgnj", d, o, Combine(d, o))
 						options = append(options, Combine(d, o))
 					}
 				}

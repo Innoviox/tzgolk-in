@@ -113,7 +113,9 @@ func Uxmal4(g *Game, p *Player) []*Delta {
 				d.Add(effect)
 				d.Add(g.Research.Built(p))
 
-				d.Buildings[b.Id] = 1
+				d.Buildings = map[int]int{
+					b.Id: 1,
+				}
 
 				d.Description = fmt.Sprintf("[build %d] pay %d Corn, %s", b.Id, cost, effect.Description)
 				options = append(options, d)

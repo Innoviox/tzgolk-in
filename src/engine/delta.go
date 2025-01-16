@@ -105,8 +105,8 @@ func Bool(d int, m int, current bool) bool {
 
 // todo MarkDelta function or something
 func (d *Delta) Add(o *Delta) {
-    fmt.Printf("%v + %v\n", d, o)
-    fmt.Print("a")
+    // fmt.Printf("%v + %v\n", d, o)
+    // fmt.Print("a")
     if o.PlayerDeltas != nil {
         if d.PlayerDeltas == nil {
             d.PlayerDeltas = o.PlayerDeltas
@@ -147,7 +147,7 @@ func (d *Delta) Add(o *Delta) {
             }
         }
     }
-    fmt.Print("b")
+    // fmt.Print("b")
 
     if o.WorkerDeltas != nil {
         if d.WorkerDeltas == nil {
@@ -165,7 +165,7 @@ func (d *Delta) Add(o *Delta) {
             }
         }
     }
-    fmt.Print("c")
+    // fmt.Print("c")
 
 
     if o.CalendarDelta.WheelDeltas != nil {
@@ -199,7 +199,7 @@ func (d *Delta) Add(o *Delta) {
             }
         }
     }
-    fmt.Print("d")
+    // fmt.Print("d")
     d.CalendarDelta.Rotation += o.CalendarDelta.Rotation
     d.CalendarDelta.FirstPlayer += o.CalendarDelta.FirstPlayer
 
@@ -219,20 +219,21 @@ func (d *Delta) Add(o *Delta) {
             }
         }
     }
-    fmt.Print("e")
+    // fmt.Print("e")
 
-    if o.ResearchDelta.Levels != nil {
-        if d.ResearchDelta.Levels == nil {
-            d.ResearchDelta.Levels = o.ResearchDelta.Levels
-        } else {
-            for k, v := range o.ResearchDelta.Levels {
-                for k2, v2 := range v {
-                    d.ResearchDelta.Levels[k][k2] += v2
-                }
-            }
-        }
-    }
-    fmt.Print("f")
+    // if o.ResearchDelta.Levels != nil {
+    //     if d.ResearchDelta.Levels == nil {
+    //         d.ResearchDelta.Levels = o.ResearchDelta.Levels
+    //     } else {
+    //         for k, v := range o.ResearchDelta.Levels {
+    //             for k2, v2 := range v {
+    //                 d.ResearchDelta.Levels[k][k2] += v2
+    //             }
+    //         }
+    //     }
+    //     // fmt.Printf("%v %v\n", o.ResearchDelta, d.ResearchDelta)
+    // }
+    // fmt.Print("f")
 
     if o.Monuments != nil {
         if d.Monuments == nil {
@@ -243,7 +244,7 @@ func (d *Delta) Add(o *Delta) {
             }
         }
     }
-    fmt.Print("g")
+    // fmt.Print("g")
 
     if o.Buildings != nil {
         if d.Buildings == nil {
@@ -254,7 +255,7 @@ func (d *Delta) Add(o *Delta) {
             }
         }
     }
-    fmt.Print("h")
+    // fmt.Print("h")
 
     d.CurrPlayer += o.CurrPlayer
     d.FirstPlayer += o.FirstPlayer
@@ -268,8 +269,8 @@ func (d *Delta) Add(o *Delta) {
     if o.BuildingNum != 0 {
         d.BuildingNum = o.BuildingNum
     }
-    fmt.Print("i!\n")
-    fmt.Printf("%v\n", d)
+    // fmt.Print("i!\n")
+    // fmt.Printf("%v\n", d)
 }
 
 func Combine(d1 *Delta, d2 *Delta) *Delta {

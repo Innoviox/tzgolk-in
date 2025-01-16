@@ -111,7 +111,7 @@ func CopyMap[K comparable, V any](m map[K]V) map[K]V {
 	return new
 }
 
-func RandZeros(m map[int]int, lo int, hi int, n int) []int {
+func RandZeros(m map[int]int, lo int, hi int, n int, r *rand.Rand) []int {
 	result := make([]int, 0)
 
 	for i := lo; i < hi; i++ {
@@ -124,7 +124,7 @@ func RandZeros(m map[int]int, lo int, hi int, n int) []int {
 		return result
 	}
 
-	rand.Shuffle(len(result), func(i, j int) { 
+	r.Shuffle(len(result), func(i, j int) { 
 		result[i], result[j] = result[j], result[i] 
 	})
 	return result[:n]

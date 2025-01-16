@@ -84,6 +84,7 @@ func (g *Game) AddBegging(move Move, player *Player) []Move {
 }
 
 func (g *Game) GetOptions(worker *Worker) []*Delta {
+	// fmt.Printf("%v\n", worker)
 	wheel := g.Calendar.Wheels[worker.Wheel_id]
 	// fmt.Fprintln(os.Stdout, "\twheel %s worker %v\n", wheel.Name, worker)
 	position := wheel.Positions[worker.Position]
@@ -128,8 +129,9 @@ func (g *Game) MakeRetrievalMoves(moves []Move, retrieval []int, key int) []Move
 
 		for i := 0; i < len(moves); i++ {
 			d := g.Calendar.Execute(moves[i], g, func(s string){})
+			wOrig := worker.Clone()
 			g.AddDelta(d, 1)
-			for _, option := range g.GetOptions(worker) {
+			for _, option := range g.GetOptions(wOrig) {
 				// if worker.Wheel_id != 4 {
 				// 	for j := 1; j < worker.Position; j++ {
 

@@ -50,12 +50,12 @@ type Game struct {
 // -- MARK -- Basic methods
 func (g *Game) Init() {
 	g.CurrentBuildings = make(map[int]int)
-	for i := 0; i < len(g.Buildings); i++ {
-		g.CurrentBuildings[i] = 0
+	for k := range g.Buildings {
+		g.CurrentBuildings[k] = 0
 	}
 	g.CurrentMonuments = make(map[int]int)
-	for i := 0; i < len(g.Monuments); i++ {
-		g.CurrentMonuments[i] = 0
+	for k := range g.Monuments {
+		g.CurrentMonuments[k] = 0
 	}
 
 	g.Players = make([]*Player, 4)
@@ -199,6 +199,7 @@ func (g *Game) AddDelta(delta *Delta, mul int) {
 
 	g.Calendar.AddDelta(delta.CalendarDelta, mul)
 	g.Temples.AddDelta(delta.TemplesDelta, mul)
+	fmt.Println("descr", delta.Description)
 	g.Research.AddDelta(delta.ResearchDelta, mul)
 
 	for k, v := range delta.Buildings {
@@ -214,6 +215,7 @@ func (g *Game) AddDelta(delta *Delta, mul int) {
 	g.AccumulatedCorn += delta.AccumulatedCorn * mul
 	g.Age += delta.Age * mul
 	g.Day += delta.Day * mul
+	g.Over = Bool(delta.Over, mul, g.Over)
 }
 
 func (g *Game) Save(key int) {
@@ -359,12 +361,13 @@ func (g *Game) CheckDay(MarkStep func(string)) *Delta {
 			d.Add(&Delta{Age: 1})
 			if g.Age == 1 {
 				// todo buildings
+				d.Buildings = map[int]int{}
 				for k, v := range g.CurrentBuildings {
 					if v == 1 {
 						d.Buildings[k] = -1
 					}
 				}
-				g.DealBuildings()
+				d.Add(g.DealBuildings())
 				MarkStep("Dealt new buildings")
 			} else {
 				d.Add(g.EndGame(MarkStep))
@@ -404,7 +407,7 @@ func (g *Game) FoodDay(MarkStep func(string)) *Delta {
 		for _, w := range g.Workers {
 			if w.Color == player.Color {
 				if w.Wheel_id != -1 || w.Available {
-					if player.Corn >= 2 - player.WorkerDeduction {
+					if player.Corn + pd.Corn >= 2 - player.WorkerDeduction {
 						pd.Corn -= 2 - player.WorkerDeduction
 						paid += 1
 					} else if unpaid >= player.FreeWorkers {
@@ -527,12 +530,12 @@ func (g *Game) DealBuildings() *Delta {
 			n += 1
 		}
 	}
-	lo, hi := 0, g.Age1Cutoff
+	lo, hi := 1, g.Age1Cutoff
 	if g.Age == 2 {
 		lo, hi = g.Age1Cutoff, len(g.Buildings)
 	}
 
-	r := RandZeros(g.CurrentBuildings, lo, hi, g.NBuildings - n)
+	r := RandZeros(g.CurrentBuildings, lo, hi, g.NBuildings - n, g.Rand)
 	for _, i := range r {
 		d.Buildings[i] = 1
 	}
@@ -544,7 +547,7 @@ func (g *Game) DealMonuments() *Delta {
 	d := &Delta{
 		Monuments: map[int]int{},
 	}
-	r := RandZeros(g.CurrentMonuments, 0, len(g.Monuments), g.NMonuments)
+	r := RandZeros(g.CurrentMonuments, 0, len(g.Monuments), g.NMonuments, g.Rand)
 	for _, n := range r {
 		d.Monuments[n] = 1
 	}
