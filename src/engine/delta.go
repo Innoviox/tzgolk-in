@@ -221,18 +221,18 @@ func (d *Delta) Add(o *Delta) {
     }
     // fmt.Print("e")
 
-    // if o.ResearchDelta.Levels != nil {
-    //     if d.ResearchDelta.Levels == nil {
-    //         d.ResearchDelta.Levels = o.ResearchDelta.Levels
-    //     } else {
-    //         for k, v := range o.ResearchDelta.Levels {
-    //             for k2, v2 := range v {
-    //                 d.ResearchDelta.Levels[k][k2] += v2
-    //             }
-    //         }
-    //     }
-    //     // fmt.Printf("%v %v\n", o.ResearchDelta, d.ResearchDelta)
-    // }
+    if o.ResearchDelta.Levels != nil {
+        if d.ResearchDelta.Levels == nil {
+            d.ResearchDelta.Levels = o.ResearchDelta.Levels
+        } else {
+            for k, v := range o.ResearchDelta.Levels {
+                for k2, v2 := range v {
+                    d.ResearchDelta.Levels[k][k2] += v2
+                }
+            }
+        }
+        // fmt.Printf("%v %v\n", o.ResearchDelta, d.ResearchDelta)
+    }
     // fmt.Print("f")
 
     if o.Monuments != nil {
@@ -289,4 +289,40 @@ func ResourcesDelta(color Color, old [4]int, new [4]int) *Delta {
 
 func PlayerDeltaWrapper(color Color, pd PlayerDelta) *Delta {
     return &Delta{PlayerDeltas: map[Color]PlayerDelta{color: pd}}
+}
+
+func (d *Delta) Clone() *Delta {
+    d2 := &Delta{
+        PlayerDeltas: CopyMap(d.PlayerDeltas),
+        WorkerDeltas: CopyMap(d.WorkerDeltas),
+        CalendarDelta: CalendarDelta {
+            WheelDeltas: CopyMap(d.CalendarDelta.WheelDeltas),
+            Rotation: d.CalendarDelta.Rotation,
+            FirstPlayer: d.CalendarDelta.FirstPlayer,
+        },
+        TemplesDelta: TemplesDelta{
+            TempleDeltas: map[int]TempleDelta{},
+        },
+        ResearchDelta: ResearchDelta {
+            Levels: map[Color]Levels{},
+        },
+        Monuments: CopyMap(d.Monuments),
+        Buildings: CopyMap(d.Buildings),
+        CurrPlayer: d.CurrPlayer,
+        FirstPlayer: d.FirstPlayer,
+        AccumulatedCorn: d.AccumulatedCorn,
+        Age: d.Age,
+        Day: d.Day,
+        Over: d.Over,
+        Description: d.Description,
+        BuildingNum: d.BuildingNum,
+    }
+
+    if d.ResearchDelta.Levels != nil {
+        for k, v := range d.ResearchDelta.Levels {
+            d2.ResearchDelta.Levels[k] = CopyMap(v)
+        }
+    }
+    
+    return d2
 }

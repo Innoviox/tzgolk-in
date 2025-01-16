@@ -27,7 +27,9 @@ func Tikal4(g *Game, p *Player) []*Delta {
 	for _, o := range g.GetBuildingOptions(p, -1, true) {
 		options = append(options, o)
 
-		g.AddDelta(o, 1)
+		o1 := o.Clone()
+
+		g.AddDelta(o1, 1)
 
 		for _, o2 := range g.GetBuildingOptions(p, o.BuildingNum, false) {
 			d := Combine(o, o2)
@@ -35,7 +37,7 @@ func Tikal4(g *Game, p *Player) []*Delta {
 			options = append(options, d)
 		}
 
-		g.AddDelta(o, -1)
+		g.AddDelta(o1, -1)
 	}
 
 	options = append(options, g.GetMonumentOptions(p)...)
