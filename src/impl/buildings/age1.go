@@ -10,15 +10,12 @@ func Building1() Building {
     return Building {
         Id: 1,
         Cost: [4]int{1, 0, 0, 0},
-        GetEffects: func (g *Game, p *Player) []Delta {
-            return []Delta{Delta{
-                PlayerDeltas: map[Color]PlayerDelta{
-                    p.Color: PlayerDelta{
-                        FreeWorkers: 1,
-                    },
-                },
-                Description: "1 free worker",
-            }}
+        GetEffects: func (g *Game, p *Player) []*Delta {
+            d := PlayerDeltaWrapper(p.Color, PlayerDelta{
+                FreeWorkers: 1,
+            })
+            d.Description = "1 free worker"
+            return []*Delta{d}
         },
         Color: Yellow,
     }
@@ -29,13 +26,10 @@ func Building2() Building {
         Id: 2,
         Cost: [4]int{1, 2, 0, 0},
         GetEffects: func (g *Game, p *Player) []*Delta {
-            return []*Delta {Option{
-                Execute: func(g *Game, p *Player) {
-                    g.Temples.Step(p, 0, 1)
-                    g.Temples.Step(p, 2, 1)
-                },
-                Description: "1 BT, 1 GT",
-            }}
+            return []*Delta{Combine(
+                g.Temples.Step(p, 0, 1),
+                g.Temples.Step(p, 2, 1),
+            )}
         },
         Color: Red,
     }
@@ -56,16 +50,7 @@ func Building4() Building {
         Id: 4,
         Cost: [4]int{2, 0, 0, 0},
         GetEffects: func (g *Game, p *Player) []*Delta {
-            options := make([]*Delta, 0)
-            for _, o := range g.Research.FreeResearch(g, p, Agriculture) {
-                options = append(options, Option{
-                    Execute: func(g *Game, p *Player) {
-                        o.Execute(g, p)
-                    },
-                    Description: fmt.Sprintf("free agr [%s]", o.Description),
-                })
-            }
-            return options
+            return g.Research.FreeResearch(g, p, Agriculture)
         },
         Color: Green,
     }
@@ -76,12 +61,11 @@ func Building5() Building {
         Id: 5,
         Cost: [4]int{4, 0, 0, 0},
         GetEffects: func (g *Game, p *Player) []*Delta {
-            return []*Delta {Option{
-                Execute: func(g *Game, p *Player) {
-                    p.WorkerDeduction += 1
-                }, 
-                Description: "1 worker deduction",
-            }}
+            d := PlayerDeltaWrapper(p.Color, PlayerDelta{
+                WorkerDeduction: 1,
+            })
+            d.Description = "1 worker deduction"
+            return []*Delta{d}
         },
         Color: Yellow,
     }
@@ -92,16 +76,7 @@ func Building6() Building {
         Id: 6,
         Cost: [4]int{0, 0, 1, 0},
         GetEffects: func (g *Game, p *Player) []*Delta {
-            options := make([]*Delta, 0)
-            for _, o := range g.Research.FreeResearch(g, p, Construction) {
-                options = append(options, Option{
-                    Execute: func(g *Game, p *Player) {
-                        o.Execute(g, p)
-                    },
-                    Description: fmt.Sprintf("free const %s", o.Description),
-                })
-            }
-            return options
+            return g.Research.FreeResearch(g, p, Construction)
         },
         Color: Blue,
     }
@@ -133,13 +108,10 @@ func Building8() Building {
         Id: 8,
         Cost: [4]int{2, 1, 0, 0},
         GetEffects: func (g *Game, p *Player) []*Delta {
-            return []*Delta {Option{
-                Execute: func(g *Game, p *Player) {
-                    g.Temples.Step(p, 0, 1)
-                    g.Temples.Step(p, 1, 1)
-                },
-                Description: "1 BT 1 YT",
-            }}
+            return []*Delta{Combine(
+                g.Temples.Step(p, 0, 1),
+                g.Temples.Step(p, 1, 1),
+            )}
         },
         Color: Red,
     }
@@ -148,17 +120,13 @@ func Building8() Building {
 func Building9() Building {
     return Building {
         Id: 9,
-        Cost: [4]int{1, 1, 0, 0},
+        Cost: [4]int{1, 1, 0, 0},   
         GetEffects: func (g *Game, p *Player) []*Delta {
             options := make([]*Delta, 0)
             for _, o := range g.Research.FreeResearch(g, p, Resources) {
-                options = append(options, Option{
-                    Execute: func(g *Game, p *Player) {
-                        o.Execute(g, p)
-                        p.Corn += 1
-                    },
-                    Description: fmt.Sprintf("free res [%s], 1 G", o.Description),
-                })
+                options = append(options, Combine(o, PlayerDeltaWrapper(p.Color, PlayerDelta{
+                    Corn: 1,
+                })))
             }
             return options
         },
@@ -173,13 +141,7 @@ func Building10() Building {
         GetEffects: func (g *Game, p *Player) []*Delta {
             options := make([]*Delta, 0)
             for _, o := range g.Research.FreeResearch(g, p, Theology) {
-                options = append(options, Option{
-                    Execute: func(g *Game, p *Player) {
-                        o.Execute(g, p)
-                        g.Temples.Step(p, 2, 1)
-                    },
-                    Description: fmt.Sprintf("free theo %s, 1 GT", o.Description),
-                })
+                options = append(options, Combine(o, g.Temples.Step(p, 2, 1)))
             }
             return options
         },
@@ -204,13 +166,9 @@ func Building12() Building {
         GetEffects: func (g *Game, p *Player) []*Delta {
             options := make([]*Delta, 0)
             for _, o := range g.Research.FreeResearch(g, p, Resources) {
-                options = append(options, Option{
-                    Execute: func(g *Game, p *Player) {
-                        o.Execute(g, p)
-                        p.Resources[Gold] += 1
-                    },
-                    Description: fmt.Sprintf("free res [%s], 1 G", o.Description),
-                })
+                options = append(options, Combine(o, PlayerDeltaWrapper(p.Color, PlayerDelta{
+                    Resources: [4]int{0, 0, 1, 0},
+                })))
             }
             return options
         },
@@ -225,13 +183,9 @@ func Building13() Building {
         GetEffects: func (g *Game, p *Player) []*Delta {
             options := make([]*Delta, 0)
             for _, o := range g.Research.FreeResearch(g, p, Agriculture) {
-                options = append(options, Option{
-                    Execute: func(g *Game, p *Player) {
-                        o.Execute(g, p)
-                        p.Resources[Stone] += 1
-                    },
-                    Description: fmt.Sprintf("free agr [%s], 1 S", o.Description),
-                })
+                options = append(options, Combine(o, PlayerDeltaWrapper(p.Color, PlayerDelta{
+                    Resources: [4]int{0, 1, 0, 0},
+                })))
             }
             return options
         },
