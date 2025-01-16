@@ -100,76 +100,110 @@ func Bool(d int, m int) bool {
 
 // todo MarkDelta function or something
 func (d *Delta) Add(o *Delta) {
-    for k, v := range o.PlayerDeltas {
-        p := d.PlayerDeltas[k]
-        p.Resources[0] += v.Resources[0]
-        p.Resources[1] += v.Resources[1]
-        p.Resources[2] += v.Resources[2]
-        p.Resources[3] += v.Resources[3]
-        p.Corn += v.Corn
-        p.Points += v.Points
-        p.CornTiles += v.CornTiles
-        p.WoodTiles += v.WoodTiles
-        p.FreeWorkers += v.FreeWorkers
-        p.WorkerDeduction += v.WorkerDeduction
-        p.LightSide += v.LightSide
+    fmt.Printf("%v + %v\n", d, o)
+    fmt.Print("a")
+    if o.PlayerDeltas != nil {
+        for k, v := range o.PlayerDeltas {
+            p := d.PlayerDeltas[k]
+            p.Resources[0] += v.Resources[0]
+            p.Resources[1] += v.Resources[1]
+            p.Resources[2] += v.Resources[2]
+            p.Resources[3] += v.Resources[3]
+            p.Corn += v.Corn
+            p.Points += v.Points
+            p.CornTiles += v.CornTiles
+            p.WoodTiles += v.WoodTiles
+            p.FreeWorkers += v.FreeWorkers
+            p.WorkerDeduction += v.WorkerDeduction
+            p.LightSide += v.LightSide
 
-        for k2, v2 := range v.Buildings {
-            p.Buildings[k2] += v2
-        }
+            for k2, v2 := range v.Buildings {
+                p.Buildings[k2] += v2
+            }
 
-        for k2, v2 := range v.Monuments {
-            p.Monuments[k2] += v2
-        }
-    }
-
-    for k, v := range o.WorkerDeltas {
-        w := d.WorkerDeltas[k]
-        w.Available += v.Available
-        w.Wheel_id += v.Wheel_id
-        w.Position += v.Position
-    }
-
-    for k, v := range o.CalendarDelta.WheelDeltas {
-        w := d.CalendarDelta.WheelDeltas[k]
-        if len(v.OldOccupied) > 0 {
-            w.OldOccupied = v.OldOccupied
-        }
-
-        if len(v.NewOccupied) > 0 {
-            w.NewOccupied = v.NewOccupied
-        }
-
-        for k2, v2 := range v.PositionDeltas {
-            p := w.PositionDeltas[k2]
-
-            p.PData.CornTiles += v2.PData.CornTiles
-            p.PData.WoodTiles += v2.PData.WoodTiles
-            p.CData.Full += v2.CData.Full
+            for k2, v2 := range v.Monuments {
+                p.Monuments[k2] += v2
+            }
         }
     }
+    fmt.Print("b")
+
+    if o.WorkerDeltas != nil {
+        for k, v := range o.WorkerDeltas {
+            w := d.WorkerDeltas[k]
+            w.Available += v.Available
+            w.Wheel_id += v.Wheel_id
+            w.Position += v.Position
+        }
+    }
+    fmt.Print("c")
+
+
+    if o.CalendarDelta.WheelDeltas != nil {
+        for k, v := range o.CalendarDelta.WheelDeltas {
+            w := d.CalendarDelta.WheelDeltas[k]
+            if len(v.OldOccupied) > 0 {
+                w.OldOccupied = v.OldOccupied
+            }
+
+            if len(v.NewOccupied) > 0 {
+                w.NewOccupied = v.NewOccupied
+            }
+
+            if v.PositionDeltas != nil {
+                for k2, v2 := range v.PositionDeltas {
+                    p := w.PositionDeltas[k2]
+
+                    p.PData.CornTiles += v2.PData.CornTiles
+                    p.PData.WoodTiles += v2.PData.WoodTiles
+                    p.CData.Full += v2.CData.Full
+                }
+            }
+        }
+    }
+    fmt.Print("d")
     d.CalendarDelta.Rotation += o.CalendarDelta.Rotation
     d.CalendarDelta.FirstPlayer += o.CalendarDelta.FirstPlayer
 
-    for k, v := range o.TemplesDelta.TempleDeltas {
-        for k2, v2 := range v.PlayerLocations {
-            d.TemplesDelta.TempleDeltas[k].PlayerLocations[k2] += v2
+    if o.TemplesDelta.TempleDeltas != nil {
+        for k, v := range o.TemplesDelta.TempleDeltas {
+            for k2, v2 := range v.PlayerLocations {
+                d.TemplesDelta.TempleDeltas[k].PlayerLocations[k2] += v2
+            }
         }
     }
+    fmt.Print("e")
 
-    for k, v := range o.ResearchDelta.Levels {
-        for k2, v2 := range v {
-            d.ResearchDelta.Levels[k][k2] += v2
+    if o.ResearchDelta.Levels != nil {
+        for k, v := range o.ResearchDelta.Levels {
+            for k2, v2 := range v {
+                d.ResearchDelta.Levels[k][k2] += v2
+            }
         }
     }
+    fmt.Print("f")
 
-    for k, v := range o.Monuments {
-        d.Monuments[k] += v
+    if o.Monuments != nil {
+        if d.Monuments == nil {
+            d.Monuments = o.Monuments
+        } else {
+            for k, v := range o.Monuments {
+                d.Monuments[k] += v
+            }
+        }
     }
+    fmt.Print("g")
 
-    for k, v := range o.Buildings {
-        d.Buildings[k] += v
+    if o.Buildings != nil {
+        if d.Buildings == nil {
+            d.Buildings = o.Buildings
+        } else {
+            for k, v := range o.Buildings {
+                d.Buildings[k] += v
+            }
+        }
     }
+    fmt.Print("h")
 
     d.CurrPlayer += o.CurrPlayer
     d.FirstPlayer += o.FirstPlayer
@@ -183,6 +217,7 @@ func (d *Delta) Add(o *Delta) {
     if o.BuildingNum != 0 {
         d.BuildingNum = o.BuildingNum
     }
+    fmt.Print("i!\n")
 }
 
 func Combine(d1 *Delta, d2 *Delta) *Delta {

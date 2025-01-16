@@ -75,6 +75,9 @@ func (g *Game) Init() {
 
 	g.Research = MakeResearch()
 
+	g.CurrentBuildings = make(map[int]int)
+	g.CurrentMonuments = make(map[int]int)
+	
 	g.NBuildings = 6
 	g.AddDelta(g.DealBuildings(), 1)
 
@@ -529,7 +532,9 @@ func (g *Game) DealBuildings() *Delta {
 }
 
 func (g *Game) DealMonuments() *Delta {
-	d := &Delta{}
+	d := &Delta{
+		Monuments: map[int]int{},
+	}
 	r := RandZeros(g.CurrentMonuments, 0, len(g.Monuments), g.NMonuments)
 	for _, n := range r {
 		d.Monuments[n] = 1
