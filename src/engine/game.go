@@ -504,6 +504,7 @@ func (g *Game) TakeTurn(MarkStep func(string), random bool) *Delta {
 
 func (g *Game) Run(MarkStep func(string), random bool) {
 	for !g.IsOver() /* && g.Day < 4 */ {
+		g.CurrPlayer = g.FirstPlayer
 		for i := 0; i < len(g.Players); i++ {
 			g.AddDelta(g.TakeTurn(MarkStep, random), 1)
 			MarkStep("Test")
@@ -524,36 +525,39 @@ func mod(a, b int) int {
 
 func (g *Game) RunStop(MarkStep func(string), stopPlayer *Player) *Delta {
 	d := &Delta{}
-	// current player is set to stopPlayer + 1
 	run1 := mod(g.FirstPlayer - int(stopPlayer.Color) + 3, 4)
-	MarkStep(fmt.Sprintf("Running for %d players (%d %d)", run1, g.FirstPlayer, int(stopPlayer.Color)))
-	for i := 0; i < run1; i++ {
-		d1 := g.TakeTurn(MarkStep, true)
-		d.Add(d1)
-		g.AddDelta(d1, 1)
+	ran := false
+	for !g.IsOver() /* && g.Day < 4 */ {
+		k := run1
+		if ran {
+			k = 4
+			g.CurrPlayer = g.FirstPlayer
+		} else {
+			ran = true
+		}
+		for i := 0; i < k; i++ {
+			if g.Players[g.CurrPlayer].Color == stopPlayer.Color {
+				MarkStep(fmt.Sprintf("Stopped by color %s", stopPlayer.Color.String()))
+				return d
+			}
 
-		g.CurrPlayer = (g.CurrPlayer + 1) % len(g.Players)
+			d1 := g.TakeTurn(MarkStep, true)
+			g.AddDelta(d1, 1)
+			d.Add(d1)
+			MarkStep("Test")
+			g.CurrPlayer = (g.CurrPlayer + 1) % len(g.Players)
+		}
+
+		if g.Calendar.FirstPlayer != -1 {
+			d2 := g.FirstPlayerSpace(MarkStep)
+			g.AddDelta(d2, 1)
+			d.Add(d2)
+		}
+
+		d3 := g.Rotate(MarkStep)
+		g.AddDelta(d3, 1)
+		d.Add(d3)
 	}
-
-	if g.Calendar.FirstPlayer != -1 {
-		d2 := g.FirstPlayerSpace(MarkStep)
-		d.Add(d2)
-		g.AddDelta(d2, 1)
-	}
-
-	d3 := g.Rotate(MarkStep)
-	d.Add(d3)
-	g.AddDelta(d3, 1)
-
-	run2 := 3 - run1
-	for i := 0; i < run2; i++ {
-		d4 := g.TakeTurn(MarkStep, true)
-		d.Add(d4)
-		g.AddDelta(d4, 1)
-
-		g.CurrPlayer = (g.CurrPlayer + 1) % len(g.Players)
-	}
-	MarkStep(fmt.Sprintf("Stopped by color %s", stopPlayer.Color.String()))
 	return d
 
 	/*

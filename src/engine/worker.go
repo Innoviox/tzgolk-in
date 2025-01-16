@@ -1,8 +1,8 @@
 package engine
 
-// import (
-// 	"fmt"
-// )
+import (
+	"fmt"
+)
 
 type Worker struct {
 	Id int
@@ -52,11 +52,17 @@ func (w *Worker) AddDelta(delta WorkerDelta, mul int) {
 }
 
 func (w *Worker) Exact(other *Worker) bool {
-	return w.Id == other.Id &&
+	b := w.Id == other.Id &&
 		w.Color == other.Color &&
 		w.Available == other.Available &&
 		w.Wheel_id == other.Wheel_id &&
 		w.Position == other.Position
+
+	if !b {
+		fmt.Println("Worker", w, other)
+	}
+
+	return b
 }
 
 // -- MARK -- Unique methods

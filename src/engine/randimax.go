@@ -58,23 +58,23 @@ func ComputeMove(g *Game, p *Player, ply int, rec bool) (*Move, float64) {
     best := float64(-100)
     var best_move Move
     for _, m := range moves {
-        d := &Delta{}
-
+        // d := &Delta{}
+        
         g.CurrPlayer = ccp
-        if !g.Exact(g2) {
-            fmt.Println("PLATO ERROR 2")
-            fmt.Println([]int{}[1])
-        }
-
-        d1 := g.Calendar.Execute(m, g, func(s string){})
+        fmt.Println("TESTING MOVE", m, g.CurrPlayer, g.FirstPlayer)
+        fmt.Println("a", g.CurrPlayer, ccp)
+        
+        fmt.Println("EXECUTING", m)
+        d1 := g.Calendar.Execute(m, g, func(s string){fmt.Println(s)})
         g.AddDelta(d1, 1)
-        d.Add(d1)
+        // d.Add(d1)
 
         g.CurrPlayer = (ccp + 1) % len(g.Players)
+        fmt.Println("b", g.CurrPlayer, ccp)
 
-        d2 := g.RunStop(func(s string){/*fmt.Println(s)*/}, p)
+        d2 := g.RunStop(func(s string){fmt.Println(s)}, p)
         // g.AddDelta(d2, 1)
-        d.Add(d2)
+        // d.Add(d2)
         
         _, score := ComputeMove(g, p, ply - 1, true)
         // if !rec {
@@ -90,8 +90,19 @@ func ComputeMove(g *Game, p *Player, ply int, rec bool) (*Move, float64) {
         }
         
         // g.Load(ply)
-        g.AddDelta(d2, -1)
-        g.AddDelta(d, -1)
+        d3 := Combine(d1, d2)
+        g.AddDelta(d3, -1)
+        // g.AddDelta(d2, -1)
+        // g.AddDelta(d, -1)
+        g.CurrPlayer = ccp
+        fmt.Println(d3, d3.FirstPlayer)
+        if !g.Exact(g2) {
+            fmt.Println("PLATO ERROR 2")
+            fmt.Println(d1.WorkerDeltas)
+            fmt.Println(d2.WorkerDeltas)
+            fmt.Println(d3.WorkerDeltas)
+            fmt.Println([]int{}[1])
+        }
         // g.AddDelta(d, -1)
     }   
 

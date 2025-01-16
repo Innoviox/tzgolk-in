@@ -128,9 +128,10 @@ func (g *Game) MakeRetrievalMoves(moves []Move, retrieval []int, key int) []Move
 		// fmt.Fprintf(os.Stdout, "\t\tRest %v\n", rest)
 
 		for i := 0; i < len(moves); i++ {
+			g2 := g.Clone()
 			d := g.Calendar.Execute(moves[i], g, func(s string){})
 			wOrig := worker.Clone()
-			g2 := g.Clone()
+			
 			g.AddDelta(d, 1)
 			for _, option := range g.GetOptions(wOrig) {
 				// if worker.Wheel_id != 4 {

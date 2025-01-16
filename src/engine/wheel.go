@@ -131,7 +131,7 @@ func (w *Wheel) Exact(other *Wheel) bool {
 func (w *Wheel) AddDelta(delta WheelDelta, mul int) {
 	// todo how should this work?
 	if delta.Sign != 0 {
-		if mul * delta.Sign == -1 {
+		if mul * delta.Sign < 0 {
 			w.Occupied = CopyMap(delta.OldOccupied)
 		} else {
 			w.Occupied = CopyMap(delta.NewOccupied)
@@ -157,11 +157,11 @@ func (w *Wheel) RemoveWorker(worker int) *Delta {
 	for k, v := range w.Occupied {
 		if v == worker {
 			delete(newOccupied, k)
-			return w.MakeDelta(newOccupied, -1)
+			return w.MakeDelta(newOccupied, 1)
 		}
 	}
 
-	return w.MakeDelta(newOccupied, -1)
+	return w.MakeDelta(newOccupied, 1)
 }
 
 func (w *Wheel) MakeDelta(Occupied map[int]int, Sign int) *Delta {
