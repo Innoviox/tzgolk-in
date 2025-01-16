@@ -17,8 +17,13 @@ func (d *Display) Render(step string) {
     d.screen.Put(40, 13, d.RenderCalendar(g.Calendar))
     d.screen.Put(d.screen.width - 40, 0, d.RenderTemples(g.Temples))
     d.screen.Put(d.screen.width - 40, 15, d.RenderResearch(g.Research))
-    for i, b := range g.CurrentBuildings {
-        d.screen.Put(d.screen.width - 8 - 6 * i, 25, d.RenderBuilding(b))
+    i := 0
+    for k, v := range g.CurrentBuildings {
+        if v == 1 {
+            d.screen.Put(d.screen.width - 8 - 6 * i, 25, 
+                d.RenderBuilding(g.Buildings[k]))
+            i += 1
+        }
     }
 
     // wrap step to 90 characters

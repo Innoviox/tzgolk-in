@@ -26,17 +26,22 @@ func MakeController(rand *rand.Rand) *Controller {
         Brown(), YellowT(), GreenT(),
     }
 
-    age1Buildings := MakeAge1Buildings(rand)
-    age2Buildings := MakeAge2Buildings(rand)
-    monuments := MakeMonuments(rand)
+    buildings := map[int]Building{}
+    for k, v := range MakeAge1Buildings() {
+        buildings[k] = v
+    }
+    for k, v := range MakeAge2Buildings() {
+        buildings[k] = v
+    }
+
+    monuments := MakeMonuments()
     tiles := MakeWealthTiles(rand)
 
     game := &Game {
         Calendar: MakeCalendar(wheels),
         Temples: MakeTemples(temples),
-        Age1Buildings: age1Buildings,
-        Age2Buildings: age2Buildings,
-        AllMonuments: monuments,
+        Buildings: buildings,
+        Monuments: monuments,
         Tiles: tiles,
         Rand: rand,
     }
@@ -50,7 +55,7 @@ func MakeController(rand *rand.Rand) *Controller {
 }
 
 func (c *Controller) Run(MarkStep func(string)) {
-    c.game.Run(MarkStep, true, nil)
+    c.game.Run(MarkStep, true)
 }
 
 func (c *Controller) IsOver() bool {
