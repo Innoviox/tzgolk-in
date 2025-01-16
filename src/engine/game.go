@@ -460,7 +460,7 @@ func mod(a, b int) int {
     return (a % b + b) % b
 }
 
-func (g *Game) RunStop(MarkStep func(string), stopPlayer *Player) {
+func (g *Game) RunStop(MarkStep func(string), stopPlayer *Player) *Delta {
 	// current player is set to stopPlayer + 1
 	run1 := mod(g.FirstPlayer - int(stopPlayer.Color) + 3, 4)
 	MarkStep(fmt.Sprintf("Running for %d players (%d %d)", run1, g.FirstPlayer, int(stopPlayer.Color)))
