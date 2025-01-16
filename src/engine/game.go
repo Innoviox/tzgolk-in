@@ -199,7 +199,6 @@ func (g *Game) AddDelta(delta *Delta, mul int) {
 
 	g.Calendar.AddDelta(delta.CalendarDelta, mul)
 	g.Temples.AddDelta(delta.TemplesDelta, mul)
-	fmt.Println("descr", delta.Description)
 	g.Research.AddDelta(delta.ResearchDelta, mul)
 
 	for k, v := range delta.Buildings {

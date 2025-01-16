@@ -226,8 +226,13 @@ func (d *Delta) Add(o *Delta) {
             d.ResearchDelta.Levels = o.ResearchDelta.Levels
         } else {
             for k, v := range o.ResearchDelta.Levels {
-                for k2, v2 := range v {
-                    d.ResearchDelta.Levels[k][k2] += v2
+                pl := d.ResearchDelta.Levels[k]
+                if pl == nil {
+                    d.ResearchDelta.Levels[k] = v
+                } else {
+                    for k2, v2 := range v {
+                        d.ResearchDelta.Levels[k][k2] += v2
+                    }
                 }
             }
         }
