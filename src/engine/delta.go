@@ -96,13 +96,14 @@ func Bool(d int, m int) bool {
 
 // todo MarkDelta function or something
 func (d *Delta) Add(o *Delta) *Delta {
-    // todo
-    return d
+    for k, v := range o.PlayerDeltas {}
 }
 
 func Combine(d1 *Delta, d2 *Delta) *Delta {
-    // todo
-    return d1
+    d := &Delta{}
+    d.Add(d1)
+    d.Add(d2)
+    return d
 }
 
 
