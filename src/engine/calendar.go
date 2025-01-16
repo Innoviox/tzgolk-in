@@ -76,6 +76,7 @@ func (c *Calendar) String(workers []*Worker) string {
 
 
 // -- MARK -- Unique methods
+/* 
 func (c *Calendar) Execute(move Move, game *Game, MarkStep func(string)) {
 	player := game.GetPlayerByColor(move.Player)
 
@@ -128,6 +129,47 @@ func (c *Calendar) Execute(move Move, game *Game, MarkStep func(string)) {
 		}
 	}
 }
+*/
+
+func (c *Calendar) Execute(move Move, game *Game, MarkStep func(string)) *Delta {
+	player := game.GetPlayerByColor(move.Player)
+
+	d := &Delta{}
+
+	pd := PlayerDelta{}
+	if move.Begged != -1 {
+		pd.Corn = 3 - player.Corn
+		// todo use actual Step for lightsiding
+		d.Add(game.Temples.Step(player, move.Begged, -1))
+	}
+	pd.Corn -= move.Corn
+	d.Add(&Delta{PlayerDeltas: map[Color]PlayerDelta{move.Player: pd}})
+
+	for i := 0; i < len(move.Workers); i++ {
+		p := move.Positions[i]
+		w := game.GetWorker(move.Workers[i])
+		if (move.Placing) {
+			if p.FirstPlayer {
+				d.Add(&Delta{
+					WorkerDeltas: map[int]WorkerDelta{move.Workers[i]: WorkerDelta{
+						Available: -1,
+					}},
+					CalendarDelta: CalendarDelta{
+						FirstPlayer: move.Workers[i] - c.FirstPlayer,
+					},
+				})
+			} else {
+				d.Add(c.Wheels[p.Wheel_id].AddWorker(p.Corn, move.Workers[i]))
+				d.Add(w.PlaceOn(p.Wheel_id, p.Corn))
+			}
+		} else {
+			d.Add(p.Execute)
+			d.Add(w.ReturnFrom(c.Wheels[p.Wheel_id]))
+		}
+	}
+	
+	return d
+}
 
 func (c *Calendar) LegalPositions() []*SpecificPosition {
 	positions := make([]*SpecificPosition, 0)
@@ -152,10 +194,10 @@ func (c *Calendar) LegalPositions() []*SpecificPosition {
 	return positions
 }
 
-func (c *Calendar) Rotate(g *Game) Delta {
-	d := Delta{}
+func (c *Calendar) Rotate(g *Game) *Delta {
+	d := &Delta{}
 	for i := 0; i < len(c.Wheels); i++ {
-		d = AddDelta(d, c.Wheels[i].Rotate(g))
+		d.Add(c.Wheels[i].Rotate(g))
 	}
 	return d
 }

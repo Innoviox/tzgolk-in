@@ -119,11 +119,11 @@ func (w *Wheel) AddDelta(delta WheelDelta, mul int) {
 }
 
 // -- MARK -- Unique methods
-func (w *Wheel) AddWorker(position int, worker int) {
+func (w *Wheel) AddWorker(position int, worker int) *Delta {
 	w.Occupied[position] = worker
 }
 
-func (w *Wheel) RemoveWorker(worker int) {
+func (w *Wheel) RemoveWorker(worker int) *Delta {
 	for k, v := range w.Occupied {
 		if v == worker {
 			delete(w.Occupied, k)
@@ -132,8 +132,8 @@ func (w *Wheel) RemoveWorker(worker int) {
 	}
 }
 
-func (w *Wheel) Rotate(g *Game) Delta {
-	d := Delta{}
+func (w *Wheel) Rotate(g *Game) *Delta {
+	d := &Delta{}
 
 	workerToRemove := -1 // only one worker per wheel can fall off
 	new_occupied := make(map[int]int)
@@ -143,15 +143,15 @@ func (w *Wheel) Rotate(g *Game) Delta {
 		} else {
 			new_occupied[k + 1] = v
 			worker := g.GetWorker(v)
-			d = AddDelta(d, Delta{WorkerDeltas: map[int]WorkerDelta{worker.Id: WorkerDelta{Position: 1}}})
+			d.Add(&Delta{WorkerDeltas: map[int]WorkerDelta{worker.Id: WorkerDelta{Position: 1}}})
 		}
 	} 
 
 	if workerToRemove != -1 {
-		d = AddDelta(d, g.GetWorker(workerToRemove).ReturnFrom(w))
+		d.Add(g.GetWorker(workerToRemove).ReturnFrom(w))
 	}
 
-	d = AddDelta(d, Delta{CalendarDelta: CalendarDelta{WheelDeltas: map[int]WheelDelta{w.Id: WheelDelta{
+	d.Add(&Delta{CalendarDelta: CalendarDelta{WheelDeltas: map[int]WheelDelta{w.Id: WheelDelta{
 		Occupied: new_occupied,
 	}}}})
 

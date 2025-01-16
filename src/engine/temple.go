@@ -139,7 +139,7 @@ func (t *Temples) String() string {
 	return br.String()
 }
 
-func (t *Temples) Step(p *Player, temple int, dir int) {
+func (t *Temples) Step(p *Player, temple int, dir int) *Delta {
 	t.Temples[temple].PlayerLocations[p.Color] += dir
 	if t.Temples[temple].PlayerLocations[p.Color] < 0 {
 		t.Temples[temple].PlayerLocations[p.Color] = 0
@@ -159,7 +159,7 @@ func (t *Temples) CanStep(p *Player, temple int, dir int) bool {
 	}
 }
 
-func (t *Temples) GainResources(p *Player) {
+func (t *Temples) GainResources(p *Player) *Delta {
 	for i := 0; i < 3; i++ {
 		step := t.Temples[i].PlayerLocations[p.Color]
 		for k, v := range t.Temples[i].Resources {
@@ -171,7 +171,7 @@ func (t *Temples) GainResources(p *Player) {
 	}
 }
 
-func (t *Temples) GainPoints(p *Player, age int) {
+func (t *Temples) GainPoints(p *Player, age int) *Delta {
 	for i := 0; i < 3; i++ {
 		j := 0
 		j += t.Temples[i].Points[t.Temples[i].PlayerLocations[p.Color]]

@@ -10,12 +10,12 @@ import (
 // 	BuildingNum int
 // }
 
-type Options func(*Game, *Player) []Delta
+type Options func(*Game, *Player) []*Delta
 
 func Flatten(options []Options) Options {
 	// todo add "mirror" to Description?
-	return func (g *Game, p *Player) []Delta {
-		result := make([]Delta, 0)
+	return func (g *Game, p *Player) []*Delta {
+		result := make([]*Delta, 0)
 		for _, o := range options {
 			result = append(result, o(g, p)...)
 		}
@@ -23,11 +23,11 @@ func Flatten(options []Options) Options {
 	}
 }
 
-func Skip() []Delta {
-	return []Delta{Delta{Description: "skip"}}
+func Skip() []*Delta {
+	return []*Delta{&Delta{Description: "skip"}}
 }
 
-func SkipWrapper(o []Delta) []Delta {
+func SkipWrapper(o []*Delta) []*Delta {
 	if len(o) == 0 {
 		return Skip()
 	} else {
@@ -35,8 +35,8 @@ func SkipWrapper(o []Delta) []Delta {
 	}
 }
 
-func (g *Game) GetBuildingOptions(p *Player, exclude int, useResearch bool) []Delta {
-	options := make([]Delta, 0)
+func (g *Game) GetBuildingOptions(p *Player, exclude int, useResearch bool) []*Delta {
+	options := make([]*Delta, 0)
 
 	for _, b := range g.CurrentBuildings {
 		if b.Id == exclude {
@@ -46,7 +46,7 @@ func (g *Game) GetBuildingOptions(p *Player, exclude int, useResearch bool) []De
 		costs := b.GetCosts(g, p)
 		for _, cost := range costs {
 			for _, effect := range b.GetEffects(g, p) {
-				d := Delta{
+				d := &Delta{
 					PlayerDeltas: map[Color]PlayerDelta{
 						p.Color: PlayerDelta{
 							Resources: InvCost(b.Cost),
@@ -56,9 +56,9 @@ func (g *Game) GetBuildingOptions(p *Player, exclude int, useResearch bool) []De
 					Description: fmt.Sprintf("[build %d] pay %s ", b.Id, CostString(cost)),
 					BuildingNum: b.Id,
 				}
-				d = AddDelta(d, effect) // effect.Descriptio
+				d.Add(effect) // effect.Descriptio
 				if useResearch {
-					d = AddDelta(d, g.Research.Built(p)) // g.Research.BuiltString(p)
+					d.Add(g.Research.Built(p)) // g.Research.BuiltString(p)
 				}
 				options = append(options, d)
 			}
@@ -88,31 +88,21 @@ func (g *Game) GetMonumentOptions(p *Player) []Delta {
 	return options
 }
 
-func (t *Temples) GainTempleStep(p *Player, o Delta, dir int) []Delta {
-	options := make([]Delta, 0)
+func (t *Temples) GainTempleStep(p *Player, o *Delta, dir int) []*Delta {
+	options := make([]*Delta, 0)
 
 	for i := 0; i < 3; i++ {
 		if t.CanStep(p, i, dir) {
-			d := Delta {
-				TemplesDelta: TemplesDelta{
-					TempleDeltas: map[int]TempleDelta{
-						i: TempleDelta{
-							PlayerLocations: map[Color]int{
-								p.Color: dir,
-							},
-						},
-					},
-				},
-				Description: fmt.Sprintf(" %s temple %d", p.Color.String(), dir),
-			}
-			options = append(options, AddDelta(o, d))
+			d := t.Step(p, i, dir)
+			d.Add(o)
+			options = append(options, d)
 		}
 	}
 
 	return options
 }
 
-func (r *Research) GetOptions(g *Game, p *Player, n int, free bool) []Delta{ 
+func (r *Research) GetOptions(g *Game, p *Player, n int, free bool) []*Delta{ 
 	resources := [4]int{}
 	for i := 0; i < 4; i++ {
 		resources[i] = p.Resources[i]
@@ -145,8 +135,8 @@ func GenerateLevelsDescription(l Levels, nl Levels) string {
 	return fmt.Sprintf("%v", Descriptions)
 }
 
-func (r *Research) GetOptionsHelper(g *Game, p *Player, resources [4]int, levels Levels, n int, free bool) []Delta {
-	options := make([]Delta, 0)
+func (r *Research) GetOptionsHelper(g *Game, p *Player, resources [4]int, levels Levels, n int, free bool) []*Delta {
+	options := make([]*Delta, 0)
 	for s := 0; s < 4; s++ {
 		level := levels[Science(s)]
 		possResources := [][4]int{resources} // the resources you end up with after paying
@@ -163,7 +153,7 @@ func (r *Research) GetOptionsHelper(g *Game, p *Player, resources [4]int, levels
 				newLevels[Science(s)] += 1
 
 				d := ResourcesDelta(p.Color, p.Resources, newResources)
-				d = AddDelta(d, Delta{ResearchDelta: ResearchDelta{Levels: map[Color]Levels{p.Color: map[Science]int{
+				d.Add(&Delta{ResearchDelta: ResearchDelta{Levels: map[Color]Levels{p.Color: map[Science]int{
 					Science(s): 1,
 				}}}})
 				d.Description = GenerateResearchDescription(resources, newResources, levels, newLevels)
@@ -172,7 +162,7 @@ func (r *Research) GetOptionsHelper(g *Game, p *Player, resources [4]int, levels
 					options = append(options, d)
 				} else {
 					for _, o := range r.GetOptionsHelper(g, p, newResources, newLevels, n - 1, free) {
-						options = append(options, AddDelta(d, o))
+						options = append(options, Combine(d, o))
 					}
 				}
 			}
@@ -184,7 +174,7 @@ func (r *Research) GetOptionsHelper(g *Game, p *Player, resources [4]int, levels
 			} else {
 				for _, o1 := range advancedOptions {
 					for _, o2 := range r.GetOptionsHelper(g, p, resources, levels, n - 1, free) {
-						options = append(options, AddDelta(o1, o2))
+						options = append(options, Combine(o1, o2))
 					}
 				}
 			}
@@ -194,8 +184,8 @@ func (r *Research) GetOptionsHelper(g *Game, p *Player, resources [4]int, levels
 	return options
 }
 
-func (r *Research) GetAdvancedOptions(g *Game, p *Player, resources [4]int, free bool, s Science) []Delta {
-	advancedOptions := make([]Delta, 0)
+func (r *Research) GetAdvancedOptions(g *Game, p *Player, resources [4]int, free bool, s Science) []*Delta {
+	advancedOptions := make([]*Delta, 0)
 	possResources := [][4]int{resources}
 	if !free {
 		possResources = PayBlocks(resources, 1)
@@ -241,11 +231,11 @@ func (r *Research) GetAdvancedOptions(g *Game, p *Player, resources [4]int, free
 }
 
 
-func (r *Research) FreeResearch(g *Game, p *Player, s Science) []Delta {
+func (r *Research) FreeResearch(g *Game, p *Player, s Science) []*Delta {
 	if g.Research.HasLevel(p.Color, s, 3) {
 		return r.GetAdvancedOptions(g, p, p.Resources, true, s)
 	} else {
-		return []Delta{Delta{
+		return []*Delta{&Delta{
 			ResearchDelta: ResearchDelta{
 				Levels: map[Color]Levels{
 					p.Color: Levels{

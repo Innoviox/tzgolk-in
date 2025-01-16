@@ -74,6 +74,7 @@ type ChichenDataDelta struct {
     Full int
 }
 
+// DO NOT INSTANTIATE TEMPLESDELTA, USE TEMPLES.STEP INSTEAD
 type TemplesDelta struct {
     TempleDeltas map[int]TempleDelta
 }
@@ -95,8 +96,14 @@ func (d *Delta) Add(o *Delta) *Delta {
     return d
 }
 
-func ResourcesDelta(color Color, old [4]int, new [4]int) Delta {
-    return Delta{PlayerDeltas: map[Color]PlayerDelta{color: PlayerDelta{Resources: 
+func Combine(d1 *Delta, d2 *Delta) *Delta {
+    // todo
+    return d1
+}
+
+
+func ResourcesDelta(color Color, old [4]int, new [4]int) *Delta {
+    return &Delta{PlayerDeltas: map[Color]PlayerDelta{color: PlayerDelta{Resources: 
         [4]int{new[0] - old[0], new[1] - old[1], new[2] - old[2], new[3] - old[3]},
     }}}
 }

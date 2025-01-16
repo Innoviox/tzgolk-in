@@ -83,7 +83,7 @@ func (g *Game) AddBegging(move Move, player *Player) []Move {
 	return moves
 }
 
-func (g *Game) GetOptions(worker *Worker) []Option {
+func (g *Game) GetOptions(worker *Worker) []*Delta {
 	wheel := g.Calendar.Wheels[worker.Wheel_id]
 	// fmt.Fprintln(os.Stdout, "\twheel %s worker %v\n", wheel.Name, worker)
 	position := wheel.Positions[worker.Position]

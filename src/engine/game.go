@@ -313,12 +313,12 @@ func (g *Game) FirstPlayerSpace(MarkStep func(string)) {
 	}
 }
 
-func (g *Game) Rotate(MarkStep func(string)) Delta {
+func (g *Game) Rotate(MarkStep func(string)) *Delta {
 	MarkStep("Rotating Calendar")
 	delta := g.Calendar.Rotate(g)
 	delta.AccumulatedCorn = 1
 	MarkStep("Rotated Calendar")
-	delta = AddDelta(d, g.CheckDay(MarkStep))
+	delta.Add(g.CheckDay(MarkStep))
 	delta.Day = 1
 
 	return delta
@@ -494,6 +494,7 @@ func (g *Game) RunStop(MarkStep func(string), stopPlayer *Player) {
 }
 
 // -- MARK -- Getters
+// todo buildings
 func (g *Game) DealBuildings() {
 	for len(g.CurrentBuildings) < g.NBuildings && g.CanDealBuilding() {
 		g.CurrentBuildings = append(g.CurrentBuildings, g.DealBuilding())
@@ -556,15 +557,18 @@ func (g *Game) GetWorker(num int) *Worker {
 	return g.Workers[num]
 }
 
-func (g *Game) UnlockWorker(color Color) {
+func (g *Game) UnlockWorker(color Color) *Delta {
+	d := &Delta{WorkerDeltas: map[int]WorkerDelta{}}
 	for _, w := range g.Workers {
 		if w.Color == color {
 			if !w.Available && w.Wheel_id == -1 {
-				w.Available = true
+				d.WorkerDeltas[w.Id] = WorkerDelta{Available: 1}
+				// w.Available = true
 				break
 			}
 		}
 	}
+	return d
 }
 
 func (g *Game) RemoveBuilding(b Building) {

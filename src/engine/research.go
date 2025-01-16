@@ -146,7 +146,7 @@ func (r *Research) ResourceBonus(c Color, res Resource) int {
 	}
 }
 
-func (r *Research) Built(p *Player) {
+func (r *Research) Built(p *Player) *Delta {
 	if r.HasLevel(p.Color, Construction, 1) {
 		p.Corn += 1
 	}

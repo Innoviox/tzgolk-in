@@ -46,10 +46,22 @@ func (w *Worker) AddDelta(delta WorkerDelta, mul int) {
 }
 
 // -- MARK -- Unique methods
-func (w *Worker) ReturnFrom(wheel *Wheel) {
-	w.Available = true
-	w.Wheel_id = -1
-	w.Position = -1
+func (w *Worker) PlaceOn(wheel_id int, corn int) *Delta {
+	return &Delta{WorkerDeltas: map[int]WorkerDelta{w.Id: WorkerDelta{
+		Available: -1,
+		Wheel_id: wheel_id - w.Wheel_id,
+		Position: corn - w.Position,
+	}}}
+}
 
-	wheel.RemoveWorker(w.Id)
+func (w *Worker) ReturnFrom(wheel *Wheel) *Delta {
+	d := &Delta{WorkerDeltas: map[int]WorkerDelta{w.Id: WorkerDelta{
+		Available: 1,
+		Wheel_id: -1 - w.Wheel_id,
+		Position: -1 - w.Position,
+	}}}
+
+	d.Add(wheel.RemoveWorker(w.Id))
+
+	return d
 }
