@@ -23,14 +23,19 @@ func Palenque2(g *Game, p *Player) []*Delta {
 	options := make([]*Delta, 0)
 
 	if g.Calendar.Wheels[0].Positions[2].PData.CornTiles > 0 {
-		options = append(options, Option{
-			Execute: func(g *Game, p *Player) {
-				p.Corn += 4 + g.Research.CornBonus(p.Color, Green)
-				p.CornTiles += 1
-				g.Calendar.Wheels[0].Positions[2].PData.CornTiles -= 1
-			},
-			Description: fmt.Sprintf("4 + %d Corn", g.Research.CornBonus(p.Color, Green)),
+		d := PlayerDeltaWrapper(p.Color, PlayerDelta{
+			Corn: 4 + g.Research.CornBonus(p.Color, Blue),
+			CornTiles: 1,
 		})
+
+		d.Add(&Delta{CalendarDelta: CalendarDelta{WheelDeltas: map[int]WheelDelta{0: WheelDelta{
+			PositionDeltas: map[int]PositionDelta{2: PositionDelta{PData: PalenqueDataDelta{
+				CornTiles: -1,
+			}}},
+		}}}})
+
+		d.Description = fmt.Sprintf("4 + %d Corn", g.Research.CornBonus(p.Color, Blue))
+		options = append(options, d)
 	} else if g.Research.Irrigation(p.Color) {
 		d := PlayerDeltaWrapper(p.Color, PlayerDelta{
 			Corn: 4 + g.Research.CornBonus(p.Color, Blue),
@@ -50,35 +55,50 @@ func Jungle(Corn int, wood int, position int) Options {
 		options := make([]*Delta, 0)
 
 		if g.Calendar.Wheels[0].Positions[position].PData.WoodTiles > 0 {
-			options = append(options, Option{
-				Execute: func (g *Game, p *Player) {
-					p.Resources[Wood] += wood + g.Research.ResourceBonus(p.Color, Wood)
-					p.WoodTiles += 1
-					g.Calendar.Wheels[0].Positions[position].PData.WoodTiles -= 1
-				},
-				Description: fmt.Sprintf("%d + %d wood", wood, g.Research.ResourceBonus(p.Color, Wood)),
+			d := PlayerDeltaWrapper(p.Color, PlayerDelta{
+				Resources: [4]int{wood + g.Research.ResourceBonus(p.Color, Wood), 0, 0, 0},
+				WoodTiles: 1,
 			})
-	
-			options = append(options, g.Temples.GainTempleStep(p, Option{
-				Execute: func (g *Game, p *Player) {
-					p.Corn += Corn + g.Research.CornBonus(p.Color, Green)
-					p.CornTiles += 1
-					g.Calendar.Wheels[0].Positions[position].PData.WoodTiles -= 1
-					g.Calendar.Wheels[0].Positions[position].PData.CornTiles -= 1
-				},
-				Description: fmt.Sprintf("%d + %d Corn, anger", Corn, g.Research.CornBonus(p.Color, Green)),
-			}, -1)...)
+
+			d.Add(&Delta{CalendarDelta: CalendarDelta{WheelDeltas: map[int]WheelDelta{0: WheelDelta{
+				PositionDeltas: map[int]PositionDelta{position: PositionDelta{PData: PalenqueDataDelta{
+					WoodTiles: -1,
+				}}},
+			}}}})
+
+			d.Description = fmt.Sprintf("%d + %d wood", wood, g.Research.ResourceBonus(p.Color, Wood))
+			options = append(options, d)
+
+			d2 := PlayerDeltaWrapper(p.Color, PlayerDelta{
+				Corn: Corn + g.Research.CornBonus(p.Color, Green),
+				CornTiles: 1,
+			})
+
+			d2.Add(&Delta{CalendarDelta: CalendarDelta{WheelDeltas: map[int]WheelDelta{0: WheelDelta{
+				PositionDeltas: map[int]PositionDelta{position: PositionDelta{PData: PalenqueDataDelta{
+					WoodTiles: -1,
+					CornTiles: -1,
+				}}},
+			}}}})
+
+			d2.Description = fmt.Sprintf("%d + %d Corn", Corn, g.Research.CornBonus(p.Color, Green))
+			options = append(options, g.Temples.GainTempleStep(p, d2, -1)...)
 		} 
 		
 		if g.Calendar.Wheels[0].Positions[position].PData.HasCornShowing() {
-			options = append(options, Option{
-				Execute: func (g *Game, p *Player) {
-					p.Corn += Corn + g.Research.CornBonus(p.Color, Green)
-					p.CornTiles += 1
-					g.Calendar.Wheels[0].Positions[position].PData.CornTiles -= 1
-				},
-				Description: fmt.Sprintf("%d + %d Corn", Corn, g.Research.CornBonus(p.Color, Green)),
+			d := PlayerDeltaWrapper(p.Color, PlayerDelta{
+				Corn: Corn + g.Research.CornBonus(p.Color, Green),
+				CornTiles: 1,
 			})
+
+			d.Add(&Delta{CalendarDelta: CalendarDelta{WheelDeltas: map[int]WheelDelta{0: WheelDelta{
+				PositionDeltas: map[int]PositionDelta{position: PositionDelta{PData: PalenqueDataDelta{
+					CornTiles: -1,
+				}}},
+			}}}})
+
+			d.Description = fmt.Sprintf("%d + %d Corn", Corn, g.Research.CornBonus(p.Color, Green))
+			options = append(options, d)
 		}
 
 		if g.Research.Irrigation(p.Color) {

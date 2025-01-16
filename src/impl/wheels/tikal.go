@@ -27,15 +27,15 @@ func Tikal4(g *Game, p *Player) []*Delta {
 	for _, o := range g.GetBuildingOptions(p, -1, true) {
 		options = append(options, o)
 
-		new_game := g.Clone()
-		new_player := new_game.Players[p.Color]
-		o.Execute(new_game, new_player)
+		g.AddDelta(o, 1)
 
-		for _, o2 := range new_game.GetBuildingOptions(new_player, o.BuildingNum, false) {
+		for _, o2 := range g.GetBuildingOptions(p, o.BuildingNum, false) {
 			d := Combine(o, o2)
 			d.Description = fmt.Sprintf("%s, %s [no res]", o.Description, o2.Description)
 			options = append(options, d)
 		}
+
+		g.AddDelta(o, -1)
 	}
 
 	options = append(options, g.GetMonumentOptions(p)...)

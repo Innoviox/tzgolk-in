@@ -186,7 +186,7 @@ func (g *Game) Copy(other *Game) {
 	g.Over = other.Over
 }
 
-func (g *Game) AddDelta(delta Delta, mul int) {
+func (g *Game) AddDelta(delta *Delta, mul int) {
 	for _, p := range g.Players {
 		res, ok := delta.PlayerDeltas[p.Color]
 		if ok {

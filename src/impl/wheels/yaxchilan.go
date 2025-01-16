@@ -10,52 +10,53 @@ func Yaxchilan0(g *Game, p *Player) []*Delta {
 }
 
 func Yaxchilan1(g *Game, p *Player) []*Delta {
-	return []*Delta {Option{
-		Execute: func(g *Game, p *Player) {
-			p.Resources[Wood] += 1 + g.Research.ResourceBonus(p.Color, Wood)
-		},
-		Description: fmt.Sprintf("1 + %d wood", g.Research.ResourceBonus(p.Color, Wood)),
-	}}
+	d := PlayerDeltaWrapper(p.Color, PlayerDelta{
+		Resources: [4]int{1 + g.Research.ResourceBonus(p.Color, Wood), 0, 0, 0},
+	})
+
+	d.Description = fmt.Sprintf("1 + %d wood", g.Research.ResourceBonus(p.Color, Wood))
+	return []*Delta{d}
 }
 
 func Yaxchilan2(g *Game, p *Player) []*Delta {
-	return []*Delta {Option{
-		Execute: func (g *Game, p *Player) {
-			p.Resources[Stone] += 1 + g.Research.ResourceBonus(p.Color, Stone)
-			p.Corn += 1
-		},
-		Description: fmt.Sprintf("1 + %d stone, 1 Corn", g.Research.ResourceBonus(p.Color, Stone)),
-	}}
+	d := PlayerDeltaWrapper(p.Color, PlayerDelta{
+		Resources: [4]int{0, 1 + g.Research.ResourceBonus(p.Color, Stone), 0, 0},
+		Corn: 1,
+	})
+
+	d.Description = fmt.Sprintf("1 + %d stone, 1 Corn", g.Research.ResourceBonus(p.Color, Stone))
+	return []*Delta{d}
 }
 
 func Yaxchilan3(g *Game, p *Player) []*Delta {
-	return []*Delta {Option{
-		Execute: func (g *Game, p *Player) {
-			p.Resources[Gold] += 1 + g.Research.ResourceBonus(p.Color, Gold)
-			p.Corn += 1
-		},
-		Description: fmt.Sprintf("1 + %d gold, 1 Corn", g.Research.ResourceBonus(p.Color, Gold)),
-	}}
+	d := PlayerDeltaWrapper(p.Color, PlayerDelta{
+		Resources: [4]int{0, 0, 1 + g.Research.ResourceBonus(p.Color, Gold), 0},
+		Corn: 1,
+	})
+
+	d.Description = fmt.Sprintf("1 + %d gold, 1 Corn", g.Research.ResourceBonus(p.Color, Gold))
+	return []*Delta{d}
 }
 
 func Yaxchilan4(g *Game, p *Player) []*Delta {
-	return []*Delta {Option{
-		Execute: func (g *Game, p *Player) {
-			p.Resources[Skull] += 1 + g.Research.ResourceBonus(p.Color, Skull)
-		},
-		Description: fmt.Sprintf("1 + %d skull", g.Research.ResourceBonus(p.Color, Skull)),
-	}}
+	d := PlayerDeltaWrapper(p.Color, PlayerDelta{
+		Resources: [4]int{0, 0, 0, 1 + g.Research.ResourceBonus(p.Color, Skull)},
+		Corn: 1,
+	})
+
+	d.Description = fmt.Sprintf("1 + %d skull", g.Research.ResourceBonus(p.Color, Skull))
+	return []*Delta{d}
 }
 
 func Yaxchilan5(g *Game, p *Player) []*Delta {
-	return []*Delta {Option{
-		Execute: func (g *Game, p *Player) {
-			p.Resources[Gold] += 1 + g.Research.ResourceBonus(p.Color, Gold)
-			p.Resources[Stone] += 1 + g.Research.ResourceBonus(p.Color, Stone)
-			p.Corn += 2
-		},
-		Description: fmt.Sprintf("1 + %d gold, 1 + %d stone, 2 Corn", g.Research.ResourceBonus(p.Color, Gold), g.Research.ResourceBonus(p.Color, Stone)),
-	}}
+	d := PlayerDeltaWrapper(p.Color, PlayerDelta{
+		Resources: [4]int{0, 1 + g.Research.ResourceBonus(p.Color, Stone), 
+						  1 + g.Research.ResourceBonus(p.Color, Gold), 0},
+		Corn: 2,
+	})
+
+	d.Description = fmt.Sprintf("1 + %d gold, 1 + %d stone, 2 Corn", g.Research.ResourceBonus(p.Color, Gold), g.Research.ResourceBonus(p.Color, Stone))
+	return []*Delta{d}
 }
 
 func Yaxchilan() []Options {
