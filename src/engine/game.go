@@ -247,21 +247,25 @@ func (g *Game) TileSetup() {
 }
 
 // -- MARK -- Flow methods
-func (g *Game) FirstPlayerSpace(MarkStep func(string)) {
-	// fmt.Fprintf(os.Stdout, "Firstplayering");
+func (g *Game) FirstPlayerSpace(MarkStep func(string)) *Delta {
 	worker := g.GetWorker(g.Calendar.FirstPlayer)
-	// fmt.Fprintf(os.Stdout, "Firstplayering %s\n", worker.Color)
-	worker.Available = true
-	worker.Wheel_id = -1
-	worker.Position = -1
-	g.Calendar.FirstPlayer = -1
 	player := g.GetPlayerByColor(worker.Color)
-	// fmt.Fprintf(os.Stdout, "giving player %d Corn", player.Corn)
-	player.Corn += g.AccumulatedCorn
+
+	d := &Delta{
+		PlayerDeltas: map[Color]PlayerDelta{player.Color: PlayerDelta{
+			Corn: g.AccumulatedCorn,
+		}},
+		CalendarDelta: CalendarDelta{FirstPlayer: -1 - g.Calendar.FirstPlayer},
+		AccumulatedCorn: -g.AccumulatedCorn,
+	}
+
+	d.WorkerDeltas[worker.Id] = WorkerDelta{
+		Available: 1,
+		Wheel_id: -1 - worker.Wheel_id, 
+		Position: -1 - worker.Position,
+	}
+
 	MarkStep(fmt.Sprintf("FirstPlayer for %s, +%d Corn", player.Color.String(), g.AccumulatedCorn))
-
-	g.AccumulatedCorn = 0
-
 	
 	playerIdx := 0
 	for i := 0; i < len(g.Players); i++ {
@@ -271,11 +275,12 @@ func (g *Game) FirstPlayerSpace(MarkStep func(string)) {
 		}
 	}
 
+	newFirstPlayer := playerIdx
 	if g.FirstPlayer == playerIdx {
-		g.FirstPlayer = (g.FirstPlayer + 1) % len(g.Players)
-	} else {
-		g.FirstPlayer = playerIdx
+		newFirstPlayer = (g.FirstPlayer + 1) % len(g.Players)
 	}
+
+	d.FirstPlayer = newFirstPlayer - g.FirstPlayer
 
 	nextDayIsFoodDay := false
 	for _, day := range g.ResDays {
@@ -293,11 +298,15 @@ func (g *Game) FirstPlayerSpace(MarkStep func(string)) {
 
 	if !nextDayIsFoodDay && player.LightSide && g.Rand.Intn(2) == 0 {
 		// todo actually decide
-		player.LightSide = false
+		d.Add(PlayerDeltaWrapper(player.Color, PlayerDelta{
+			LightSide: -1,
+		}))
 		// fmt.Fprintf(os.Stdout, "Player %s has gone dark\n", player.Color)
 		MarkStep(fmt.Sprintf("Player %s has gone dark", player.Color.String()))
-		g.Rotate(MarkStep)
+		d.Add(g.Rotate(MarkStep))
 	}
+
+	return d
 }
 
 func (g *Game) Rotate(MarkStep func(string)) *Delta {
@@ -437,15 +446,15 @@ func (g *Game) TakeTurn(MarkStep func(string), random bool) *Delta {
 func (g *Game) Run(MarkStep func(string), random bool) {
 	for !g.IsOver() && g.Day < 4 {
 		for i := 0; i < len(g.Players); i++ {
-			g.TakeTurn(MarkStep, random)
+			g.AddDelta(g.TakeTurn(MarkStep, random), 1)
 			g.CurrPlayer = (g.CurrPlayer + 1) % len(g.Players)
 		}
 
 		if g.Calendar.FirstPlayer != -1 {
-			g.FirstPlayerSpace(MarkStep)
+			g.AddDelta(g.FirstPlayerSpace(MarkStep), 1)
 		}
 
-		g.Rotate(MarkStep)
+		g.AddDelta(g.Rotate(MarkStep), 1)
 	}
 }
 
@@ -453,27 +462,40 @@ func mod(a, b int) int {
     return (a % b + b) % b
 }
 
-func (g *Game) RunStop(MarkStep func(string), stopPlayer *Player) /**Delta*/ {
+func (g *Game) RunStop(MarkStep func(string), stopPlayer *Player) *Delta {
+	d := &Delta{}
 	// current player is set to stopPlayer + 1
 	run1 := mod(g.FirstPlayer - int(stopPlayer.Color) + 3, 4)
 	MarkStep(fmt.Sprintf("Running for %d players (%d %d)", run1, g.FirstPlayer, int(stopPlayer.Color)))
 	for i := 0; i < run1; i++ {
-		g.TakeTurn(MarkStep, true)
+		d1 := g.TakeTurn(MarkStep, true)
+		d.Add(d1)
+		g.AddDelta(d1, 1)
+
 		g.CurrPlayer = (g.CurrPlayer + 1) % len(g.Players)
 	}
 
 	if g.Calendar.FirstPlayer != -1 {
-		g.FirstPlayerSpace(MarkStep)
+		d1 := g.FirstPlayerSpace(MarkStep)
+		d.Add(d1)
+		g.AddDelta(d1, 1)
 	}
 
-	g.Rotate(MarkStep)
+	d1 := g.Rotate(MarkStep)
+	d.Add(d1)
+	g.AddDelta(d1, 1)
 
 	run2 := 3 - run1
 	for i := 0; i < run2; i++ {
-		g.TakeTurn(MarkStep, true)
+		d2 := g.TakeTurn(MarkStep, true)
+		d.Add(d2)
+		g.AddDelta(d2, 1)
+
 		g.CurrPlayer = (g.CurrPlayer + 1) % len(g.Players)
 	}
 	MarkStep(fmt.Sprintf("Stopped by color %s", stopPlayer.Color.String()))
+	return d
+
 	/*
 	fp sp 0 1 2 3
 	0     3 2 1 0
@@ -482,8 +504,6 @@ func (g *Game) RunStop(MarkStep func(string), stopPlayer *Player) /**Delta*/ {
 	3     2 1 0 3
 	*/
 	// run for the next n players, n = mod(4 - fp - sp - 1, 4)
-
-	
 }
 
 // -- MARK -- Getters

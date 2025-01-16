@@ -94,6 +94,7 @@ func Bool(d int, m int) bool {
     return d * m > 0
 }
 
+// todo MarkDelta function or something
 func (d *Delta) Add(o *Delta) *Delta {
     // todo
     return d
