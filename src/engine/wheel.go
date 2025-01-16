@@ -120,16 +120,35 @@ func (w *Wheel) AddDelta(delta WheelDelta, mul int) {
 
 // -- MARK -- Unique methods
 func (w *Wheel) AddWorker(position int, worker int) *Delta {
-	w.Occupied[position] = worker
+	newOccupied := make(map[int]int)
+	for k, v := range w.Occupied {
+		newOccupied[k] = v
+	}
+	newOccupied[position] = worker
+
+	return w.MakeDelta(newOccupied)
 }
 
 func (w *Wheel) RemoveWorker(worker int) *Delta {
+	newOccupied := make(map[int]int)
+	for k, v := range w.Occupied {
+		newOccupied[k] = v
+	}
+	
 	for k, v := range w.Occupied {
 		if v == worker {
-			delete(w.Occupied, k)
-			return
+			delete(newOccupied, k)
+			return w.MakeDelta(newOccupied)
 		}
 	}
+
+	return w.MakeDelta(newOccupied)
+}
+
+func (w *Wheel) MakeDelta(Occupied map[int]int) *Delta {
+	return &Delta{CalendarDelta: CalendarDelta{WheelDeltas: map[int]WheelDelta{w.Id: WheelDelta{
+		Occupied: Occupied,
+	}}}}
 }
 
 func (w *Wheel) Rotate(g *Game) *Delta {

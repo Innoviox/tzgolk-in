@@ -147,13 +147,16 @@ func (r *Research) ResourceBonus(c Color, res Resource) int {
 }
 
 func (r *Research) Built(p *Player) *Delta {
+	pd := PlayerDelta{}
 	if r.HasLevel(p.Color, Construction, 1) {
-		p.Corn += 1
+		pd.Corn = 1
 	}
 
 	if r.HasLevel(p.Color, Construction, 2) {
-		p.Points += 2
+		pd.Points = 2
 	}
+
+	return PlayerDeltaWrapper(p.Color, pd)
 }
 
 func (r *Research) BuiltString(p *Player) string {

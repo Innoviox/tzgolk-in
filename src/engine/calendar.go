@@ -143,7 +143,7 @@ func (c *Calendar) Execute(move Move, game *Game, MarkStep func(string)) *Delta 
 		d.Add(game.Temples.Step(player, move.Begged, -1))
 	}
 	pd.Corn -= move.Corn
-	d.Add(&Delta{PlayerDeltas: map[Color]PlayerDelta{move.Player: pd}})
+	d.Add(PlayerDeltaWrapper(move.Player, pd))
 
 	for i := 0; i < len(move.Workers); i++ {
 		p := move.Positions[i]

@@ -199,32 +199,29 @@ func (r *Research) GetAdvancedOptions(g *Game, p *Player, resources [4]int, free
 		case Resources:
 			for i := 0; i < 3; i++ {
 				for j := 0; j < 3; j++ {
-					advancedOptions = append(advancedOptions, Option{
-						Execute: func(g *Game, p *Player) {
-							p.Resources = newResources
-							p.Resources[i] += 1
-							p.Resources[j] += 1
-						},
-						Description: fmt.Sprintf("[res tier 4] pay %s, 1 %s, 1 %s", GeneratePaymentDescription(resources, newResources), string(ResourceDebug[i]), string(ResourceDebug[j])),
-					})
+					d := ResourcesDelta(p.Color, p.Resources, newResources)
+					playerDelta := d.PlayerDeltas[p.Color]
+					playerDelta.Resources[i] += 1
+					playerDelta.Resources[j] += 1
+					d.PlayerDeltas[p.Color] = playerDelta
+					d.Description = fmt.Sprintf("[res tier 4] pay %s, 1 %s, 1 %s", GeneratePaymentDescription(resources, newResources), string(ResourceDebug[i]), string(ResourceDebug[j]))
+					advancedOptions = append(advancedOptions, d)
 				}
 			}
 		case Construction:
-			advancedOptions = append(advancedOptions, Option{
-				Execute: func(g *Game, p *Player) {
-					p.Resources = newResources
-					p.Points += 3
-				},
-				Description: fmt.Sprintf("[cons tier 4] pay %s, 3 points", GeneratePaymentDescription(resources, newResources)),
-			})
+			d := ResourcesDelta(p.Color, p.Resources, newResources)
+			playerDelta := d.PlayerDeltas[p.Color]
+			playerDelta.Points = 3
+			d.PlayerDeltas[p.Color] = playerDelta // todo do I need this assignment
+			d.Description = fmt.Sprintf("[cons tier 4] pay %s, 3 points", GeneratePaymentDescription(resources, newResources))
+			advancedOptions = append(advancedOptions, d)
 		case Theology:
-			advancedOptions = append(advancedOptions, Option{
-				Execute: func(g *Game, p *Player) {
-					p.Resources = newResources
-					p.Resources[Skull] += 1
-				},
-				Description: fmt.Sprintf("[theo tier 4] pay %s, 1 skull", GeneratePaymentDescription(resources, newResources)),
-			})
+			d := ResourcesDelta(p.Color, p.Resources, newResources)
+			playerDelta := d.PlayerDeltas[p.Color]
+			playerDelta.Resources[Skull] += 1
+			d.PlayerDeltas[p.Color] = playerDelta
+			d.Description = fmt.Sprintf("[theo tier 4] pay %s", GeneratePaymentDescription(resources, newResources))
+			advancedOptions = append(advancedOptions, d)
 		}
 	}
 	return advancedOptions

@@ -108,6 +108,6 @@ func ResourcesDelta(color Color, old [4]int, new [4]int) *Delta {
     }}}
 }
 
-// func ResearchDelta(color Color, old Levels, new Levels) Delta {
-
-// }
+func PlayerDeltaWrapper(color Color, pd PlayerDelta) *Delta {
+    return &Delta{PlayerDeltas: map[Color]PlayerDelta{color: pd}}
+}

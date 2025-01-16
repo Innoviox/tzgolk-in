@@ -140,13 +140,19 @@ func (t *Temples) String() string {
 }
 
 func (t *Temples) Step(p *Player, temple int, dir int) *Delta {
-	t.Temples[temple].PlayerLocations[p.Color] += dir
-	if t.Temples[temple].PlayerLocations[p.Color] < 0 {
-		t.Temples[temple].PlayerLocations[p.Color] = 0
-	} else if t.Temples[temple].PlayerLocations[p.Color] >= t.Temples[temple].Steps {
-		t.Temples[temple].PlayerLocations[p.Color] = t.Temples[temple].Steps - 1
-		p.LightSide = true
+	
+	d :=&Delta{TemplesDelta: TemplesDelta{TempleDeltas: map[int]TempleDelta{temple: TempleDelta{PlayerLocations: map[Color]int{
+		p.Color: dir,
+	}}}}}
+
+	if t.Temples[temple].PlayerLocations[p.Color] == t.Temples[temple].Steps - 1 {
+		pd := PlayerDelta{
+			LightSide: 1,
+		}
+		d.Add(PlayerDeltaWrapper(p.Color, pd))
 	}
+	
+	return d
 }
 
 func (t *Temples) CanStep(p *Player, temple int, dir int) bool {
@@ -160,18 +166,21 @@ func (t *Temples) CanStep(p *Player, temple int, dir int) bool {
 }
 
 func (t *Temples) GainResources(p *Player) *Delta {
+	pd := PlayerDelta{}
 	for i := 0; i < 3; i++ {
 		step := t.Temples[i].PlayerLocations[p.Color]
 		for k, v := range t.Temples[i].Resources {
 			if step >= k {
-				p.Resources[v] += 1
-				// fmt.Fprintf(os.Stdout, "giving %s to %s from temple %d\n", string(ResourceDebug[v]), p.Color.String(), i)
+				pd.Resources[v] += 1
 			}
 		}
 	}
+
+	return PlayerDeltaWrapper(p.Color, pd)
 }
 
 func (t *Temples) GainPoints(p *Player, age int) *Delta {
+	pd := PlayerDelta{}
 	for i := 0; i < 3; i++ {
 		j := 0
 		j += t.Temples[i].Points[t.Temples[i].PlayerLocations[p.Color]]
@@ -190,9 +199,11 @@ func (t *Temples) GainPoints(p *Player, age int) *Delta {
 				j += t.Temples[i].Age2Prize
 			}
 		}
-		// fmt.Fprintf(os.Stdout, "giving %d points to %s from temple %d\n", j, p.Color.String(), i)
-		p.Points += j
+
+		pd.Points += j
 	}
+
+	return PlayerDeltaWrapper(p.Color, pd)
 }
 
 func (t *Temple) IsHighest(p *Player) int {
