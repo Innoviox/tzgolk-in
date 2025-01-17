@@ -61,18 +61,20 @@ func ComputeMove(g *Game, p *Player, ply int, rec bool) (*Move, float64) {
         // d := &Delta{}
         
         g.CurrPlayer = ccp
-        fmt.Println("TESTING MOVE", m, g.CurrPlayer, g.FirstPlayer)
-        fmt.Println("a", g.CurrPlayer, ccp)
+        // fmt.Println("TESTING MOVE", m, g.CurrPlayer, g.FirstPlayer)
+        // fmt.Println("a", g.CurrPlayer, ccp)
         
-        fmt.Println("EXECUTING", m)
+        // fmt.Println("EXECUTING", m)
         d1 := g.Calendar.Execute(m, g, func(s string){fmt.Println(s)})
         g.AddDelta(d1, 1)
+        // fmt.Println("aaa", d1.WorkerDeltas)
         // d.Add(d1)
 
         g.CurrPlayer = (ccp + 1) % len(g.Players)
-        fmt.Println("b", g.CurrPlayer, ccp)
+        // fmt.Println("b", g.CurrPlayer, ccp)
 
         d2 := g.RunStop(func(s string){fmt.Println(s)}, p)
+        // fmt.Println("bbb", d2.WorkerDeltas)
         // g.AddDelta(d2, 1)
         // d.Add(d2)
         
@@ -95,12 +97,11 @@ func ComputeMove(g *Game, p *Player, ply int, rec bool) (*Move, float64) {
         // g.AddDelta(d2, -1)
         // g.AddDelta(d, -1)
         g.CurrPlayer = ccp
-        fmt.Println(d3, d3.FirstPlayer)
+        // fmt.Println(d3, d3.FirstPlayer)
         if !g.Exact(g2) {
             fmt.Println("PLATO ERROR 2")
-            fmt.Println(d1.WorkerDeltas)
-            fmt.Println(d2.WorkerDeltas)
-            fmt.Println(d3.WorkerDeltas)
+            fmt.Println("ccc", d3.CalendarDelta)
+
             fmt.Println([]int{}[1])
         }
         // g.AddDelta(d, -1)

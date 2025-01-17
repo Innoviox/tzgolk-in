@@ -485,7 +485,7 @@ func (g *Game) TakeTurn(MarkStep func(string), random bool) *Delta {
 			move = &moves[g.Rand.Intn(len(moves))]
 		}
 	} else {
-		move, _ = ComputeMove(g, player, 2, false)
+		move, _ = ComputeMove(g, player, 1, false)
 	}
 
 	// fmt.Fprintf(os.Stdout, "Playing move %s for %s\n", move.String(), player.Color)

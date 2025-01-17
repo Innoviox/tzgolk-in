@@ -128,7 +128,11 @@ func (d *Delta) Add(o *Delta) {
                 p.WoodTiles += v.WoodTiles
                 p.FreeWorkers += v.FreeWorkers
                 p.WorkerDeduction += v.WorkerDeduction
-                p.LightSide += v.LightSide
+                if p.LightSide == 0 {
+                    p.LightSide = v.LightSide
+                } else {
+                    p.LightSide *= v.LightSide
+                }
 
                 if p.Buildings == nil {
                     p.Buildings = v.Buildings
@@ -149,23 +153,33 @@ func (d *Delta) Add(o *Delta) {
         }
     }
     // fmt.Print("b")
-
+    // fmt.Println(d.WorkerDeltas, o.WorkerDeltas)
     if o.WorkerDeltas != nil {
         if d.WorkerDeltas == nil {
+            // fmt.Println("a")
             d.WorkerDeltas = o.WorkerDeltas
         } else {
+            // fmt.Println("b")
             for k, v := range o.WorkerDeltas {
+                // fmt.Println("c")
                 w, ok := d.WorkerDeltas[k]
                 if !ok {
+                    // fmt.Println("d", k, v)
                     d.WorkerDeltas[k] = v
                     continue
                 }
-                w.Available += v.Available
+                // fmt.Println("e", k, v)
+
                 w.Wheel_id += v.Wheel_id
+                // a bit sus & I'm not sure why this works
+                w.Available = -w.Wheel_id
                 w.Position += v.Position
+                d.WorkerDeltas[k] = w
+                // fmt.Println("f", w, d.WorkerDeltas[k])
             }
         }
     }
+    // fmt.Println(d.WorkerDeltas, o.WorkerDeltas)
     // fmt.Print("c")
 
 
@@ -180,23 +194,30 @@ func (d *Delta) Add(o *Delta) {
                     continue
                 }
 
-                if len(v.OldOccupied) > 0 {
-                    w.OldOccupied = v.OldOccupied
-                }
+                // fmt.Println("Combining", w, v)
+
+                // if len(v.OldOccupied) > 0 {
+                //     w.OldOccupied = v.OldOccupied
+                // }
 
                 if len(v.NewOccupied) > 0 {
                     w.NewOccupied = v.NewOccupied
                 }
-
                 if v.PositionDeltas != nil {
-                    for k2, v2 := range v.PositionDeltas {
-                        p := w.PositionDeltas[k2]
+                    if w.PositionDeltas == nil {
+                        w.PositionDeltas = v.PositionDeltas
+                    } else {
+                        for k2, v2 := range v.PositionDeltas {
+                            p := w.PositionDeltas[k2]
 
-                        p.PData.CornTiles += v2.PData.CornTiles
-                        p.PData.WoodTiles += v2.PData.WoodTiles
-                        p.CData.Full += v2.CData.Full
+                            p.PData.CornTiles += v2.PData.CornTiles
+                            p.PData.WoodTiles += v2.PData.WoodTiles
+                            p.CData.Full += v2.CData.Full
+                            w.PositionDeltas[k2] = p
+                        }
                     }
                 }
+                d.CalendarDelta.WheelDeltas[k] = w
             }
         }
     }
@@ -217,6 +238,7 @@ func (d *Delta) Add(o *Delta) {
                         pl.PlayerLocations[k2] += v2
                     }
                 }
+                d.TemplesDelta.TempleDeltas[k] = pl
             }
         }
     }
@@ -235,6 +257,7 @@ func (d *Delta) Add(o *Delta) {
                         d.ResearchDelta.Levels[k][k2] += v2
                     }
                 }
+                d.ResearchDelta.Levels[k] = pl
             }
         }
         // fmt.Printf("%v %v\n", o.ResearchDelta, d.ResearchDelta)
