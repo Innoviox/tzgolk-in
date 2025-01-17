@@ -46,8 +46,11 @@ func ChichenX(n int, canForesight bool) Options {
 			f := WheelDelta{PositionDeltas: map[int]PositionDelta{spot.Position: PositionDelta{CData: ChichenDataDelta{
 				Full: 1,
 			}}}}
+
+			d.PlayerDeltas = map[Color]PlayerDelta{}
 			d.PlayerDeltas[p.Color] = pd
-			d.CalendarDelta.WheelDeltas[4] = f
+
+			d.CalendarDelta = CalendarDelta{WheelDeltas: map[int]WheelDelta{4: f}}
 
 			return d
 		}

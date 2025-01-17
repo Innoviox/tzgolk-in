@@ -48,7 +48,7 @@ type PlayerDelta struct {
 
 type WorkerDelta struct {
     // all args required
-    Available int
+    Unlocked int
     Wheel_id int
     Position int
 }
@@ -109,6 +109,7 @@ func (d *Delta) Add(o *Delta) {
     // fmt.Printf("%v + %v\n", d, o)
     // fmt.Print("a")
     if o.PlayerDeltas != nil {
+        // fmt.Println("PlayerDeltas 1", d.PlayerDeltas, o.PlayerDeltas)
         if d.PlayerDeltas == nil {
             d.PlayerDeltas = o.PlayerDeltas
         } else {
@@ -130,7 +131,7 @@ func (d *Delta) Add(o *Delta) {
                 p.WorkerDeduction += v.WorkerDeduction
                 if p.LightSide == 0 {
                     p.LightSide = v.LightSide
-                } else {
+                } else if v.LightSide != 0 {
                     p.LightSide *= v.LightSide
                 }
 
@@ -149,8 +150,10 @@ func (d *Delta) Add(o *Delta) {
                         p.Monuments[k2] += v2
                     }
                 }
+                d.PlayerDeltas[k] = p
             }
         }
+        // fmt.Println("PlayerDeltas 2", d.PlayerDeltas, o.PlayerDeltas)
     }
     // fmt.Print("b")
     // fmt.Println(d.WorkerDeltas, o.WorkerDeltas)
@@ -169,11 +172,16 @@ func (d *Delta) Add(o *Delta) {
                     continue
                 }
                 // fmt.Println("e", k, v)
-
+                if w.Unlocked == 0 {
+                    w.Unlocked = v.Unlocked
+                } else if v.Unlocked != 0 {
+                    w.Unlocked *= v.Unlocked
+                }
                 w.Wheel_id += v.Wheel_id
                 // a bit sus & I'm not sure why this works
-                w.Available = -w.Wheel_id
+                // w.Available = -w.Wheel_id
                 w.Position += v.Position
+                
                 d.WorkerDeltas[k] = w
                 // fmt.Println("f", w, d.WorkerDeltas[k])
             }

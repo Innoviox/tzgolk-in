@@ -78,7 +78,7 @@ func (g *Game) Init() {
 			g.Workers = append(g.Workers, &Worker{
 				Id: i * 6 + j,
 				Color: color,
-				Available: j < 3,
+				Unlocked: j < 3,
 				Wheel_id: -1,
 				Position: -1,
 			})
@@ -316,7 +316,7 @@ func (g *Game) FirstPlayerSpace(MarkStep func(string)) *Delta {
 			Corn: g.AccumulatedCorn,
 		}},
 		WorkerDeltas: map[int]WorkerDelta{worker.Id: WorkerDelta{
-			Available: 1,
+			// Available: 1,
 			Wheel_id: -1 - worker.Wheel_id, 
 			Position: -1 - worker.Position,
 		}},
@@ -453,7 +453,7 @@ func (g *Game) FoodDay(MarkStep func(string)) *Delta {
 		pd := PlayerDelta{}
 		for _, w := range g.Workers {
 			if w.Color == player.Color {
-				if w.Wheel_id != -1 || w.Available {
+				if w.Wheel_id != -1 || w.Unlocked {
 					if player.Corn + pd.Corn >= 2 - player.WorkerDeduction {
 						pd.Corn -= 2 - player.WorkerDeduction
 						paid += 1
@@ -627,8 +627,8 @@ func (g *Game) UnlockWorker(color Color) *Delta {
 	d := &Delta{WorkerDeltas: map[int]WorkerDelta{}}
 	for _, w := range g.Workers {
 		if w.Color == color {
-			if !w.Available && w.Wheel_id == -1 {
-				d.WorkerDeltas[w.Id] = WorkerDelta{Available: 1}
+			if !w.Unlocked {
+				d.WorkerDeltas[w.Id] = WorkerDelta{Unlocked: 1}
 				// w.Available = true
 				break
 			}

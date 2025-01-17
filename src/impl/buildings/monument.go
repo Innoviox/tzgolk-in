@@ -117,7 +117,7 @@ func Monument6() Monument {
         GetPoints: func (g *Game, p *Player) int {
             workers := 0
             for _, w := range g.Workers {
-                if w.Color == p.Color && w.Available {
+                if w.Color == p.Color && w.Unlocked {
                     workers += 1
                 }
             }

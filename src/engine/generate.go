@@ -42,7 +42,7 @@ func (g *Game) GenerateMoves(p *Player, key int) []Move {
 		if w.Color == p.Color {
 			if w.Wheel_id != -1 {
 				retrieval = append(retrieval, w.Id)
-			} else if w.Available {
+			} else if w.Unlocked {
 				placement = append(placement, w.Id)
 			}
 		}

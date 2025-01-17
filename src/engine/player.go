@@ -82,17 +82,28 @@ func (p *Player) AddDelta(delta PlayerDelta, mul int) {
 func (p *Player) Exact(other *Player) bool {
 	for i := 0; i < 4; i++ {
 		if p.Resources[i] != other.Resources[i] {
+			// fmt.Println("res", i, p.Resources, other.Resources)
 			return false
 		}
 	}
 
 	if !reflect.DeepEqual(p.Buildings, other.Buildings) {
+		// fmt.Println("build", p.Buildings, other.Buildings)
 		return false
 	}
 
 	if !reflect.DeepEqual(p.Monuments, other.Monuments) {
+		// fmt.Println("mon", p.Monuments, other.Monuments)
 		return false
 	}
+
+	// fmt.Println("corn", p.Corn, other.Corn)
+	// fmt.Println("points", p.Points, other.Points)
+	// fmt.Println("cornTiles", p.CornTiles, other.CornTiles)
+	// fmt.Println("woodTiles", p.WoodTiles, other.WoodTiles)
+	// fmt.Println("freeWorkers", p.FreeWorkers, other.FreeWorkers)
+	// fmt.Println("workerDeduction", p.WorkerDeduction, other.WorkerDeduction)
+	// fmt.Println("lightSide", p.LightSide, other.LightSide)
 
 	return p.Corn == other.Corn && p.Color == other.Color &&
 	p.Points == other.Points && p.CornTiles == other.CornTiles &&
@@ -105,7 +116,7 @@ func (p *Player) String(g *Game) string {
 
 	nWorkers := 0
 	for _, w := range g.Workers {
-		if w.Color == p.Color && (w.Available || w.Wheel_id > 0) {
+		if w.Color == p.Color && (w.Unlocked || w.Wheel_id != -1) {
 			nWorkers++
 		}
 	}
@@ -164,7 +175,7 @@ func (p *Player) Evaluate(g *Game) float64 {
 
 	for _, w := range g.Workers {
 		if w.Color == p.Color {
-			if (w.Available) {
+			if (w.Unlocked) {
 				points += 0.1
 			} else if w.Wheel_id != -1 {
 				points += float64(w.Position) / 10

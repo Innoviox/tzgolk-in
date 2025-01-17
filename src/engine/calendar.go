@@ -164,7 +164,8 @@ func (c *Calendar) Execute(move Move, game *Game, MarkStep func(string)) *Delta 
 			if p.FirstPlayer {
 				d.Add(&Delta{
 					WorkerDeltas: map[int]WorkerDelta{move.Workers[i]: WorkerDelta{
-						Available: -1,
+						// Available: -1,
+						Wheel_id: -2 - w.Wheel_id,
 					}},
 					CalendarDelta: CalendarDelta{
 						FirstPlayer: move.Workers[i] - c.FirstPlayer,
