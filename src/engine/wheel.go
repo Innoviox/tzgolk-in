@@ -13,7 +13,7 @@ type Wheel struct {
 	Id int
 	Size int
 
-	// map from worker id to position
+	// map from position to worker
 	Occupied map[int]int
 
 	Positions []*Position
@@ -24,6 +24,7 @@ type Wheel struct {
 // -- MARK -- Basic methods
 func MakeWheel(options []Options, Wheel_id int, wheel_name string) *Wheel {
 	positions := make([]*Position, 0)
+	occupied := make(map[int]int)
 
 	for i := 0; i < len(options); i++ {
 		positions = append(positions, &Position{
@@ -31,6 +32,7 @@ func MakeWheel(options []Options, Wheel_id int, wheel_name string) *Wheel {
 			Corn: i,
 			GetOptions: options[i],
 		})
+		occupied[i] = -1
 	}
 
 	for i := 6; i < 8; i++ {
@@ -39,12 +41,13 @@ func MakeWheel(options []Options, Wheel_id int, wheel_name string) *Wheel {
 			Corn: i,
 			GetOptions: Flatten(options),
 		})
+		occupied[i] = -1
 	}
 
 	return &Wheel{
 		Id: Wheel_id,
 		Size: len(positions),
-		Occupied: make(map[int]int),
+		Occupied: occupied,
 		Positions: positions, 
 		Name: wheel_name,
 		String: func (wheel *Wheel, workers []*Worker) string {
@@ -55,7 +58,9 @@ func MakeWheel(options []Options, Wheel_id int, wheel_name string) *Wheel {
 			out := make([]string, wheel.Size)
 		
 			for k, v := range wheel.Occupied {
-				out[v] = workers[k].Color.String()
+				if v >= 0 {
+					out[k] = workers[v].Color.String()
+				}
 			}
 		
 			for k, o := range out {
@@ -146,7 +151,7 @@ func (w *Wheel) AddDelta(delta WheelDelta, mul int) {
 // -- MARK -- Unique methods
 func (w *Wheel) AddWorker(position int, worker int) *Delta {
 	newOccupied := CopyMap(w.Occupied)
-	newOccupied[worker] = position
+	newOccupied[position] = worker
 
 	return w.MakeDelta(newOccupied, 1)
 }
@@ -178,14 +183,15 @@ func (w *Wheel) Rotate(g *Game) *Delta {
 	// workerToRemove := -1 // only one worker per wheel can fall off
 	new_occupied := make(map[int]int)
 	for k, v := range w.Occupied {
-		if v >= w.Size - 1 {
+		if v >= w.Size - 1 || v == -1 {
 			// workerToRemove = k
 		} else {
-			new_occupied[k] = v + 1
-			worker := g.GetWorker(v)
-			d.Add(&Delta{WorkerDeltas: map[int]WorkerDelta{worker.Id: WorkerDelta{
-				// Position: 1,
-			}}})
+			new_occupied[k] = -1
+			new_occupied[k + 1] = v
+			// worker := g.GetWorker(v)
+			// d.Add(&Delta{WorkerDeltas: map[int]WorkerDelta{worker.Id: WorkerDelta{
+			// 	// Position: 1,
+			// }}})
 		}
 	} 
 
@@ -200,8 +206,8 @@ func (w *Wheel) Rotate(g *Game) *Delta {
 
 func (w *Wheel) LowestUnoccupied() int {
 	for i := 0; i < w.Size; i++ {
-		_, ok := w.Occupied[i]
-		if !ok {
+		v := w.Occupied[i]
+		if v == -1 {
 			return i
 		}
 	}

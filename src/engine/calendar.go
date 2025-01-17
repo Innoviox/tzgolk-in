@@ -172,6 +172,9 @@ func (c *Calendar) Execute(move Move, game *Game, MarkStep func(string)) *Delta 
 					},
 				})
 			} else {
+				if p.Corn < 0 {
+					fmt.Println("negative corn", p.Corn)
+				}
 				d.Add(c.Wheels[p.Wheel_id].AddWorker(p.Corn, move.Workers[i]))
 				// d.Add(w.PlaceOn(p.Wheel_id, p.Corn))
 			}
@@ -192,11 +195,12 @@ func (c *Calendar) LegalPositions() []*SpecificPosition {
 
 	for _, wheel := range c.Wheels {
 		i := wheel.LowestUnoccupied()
-		
-		positions = append(positions, &SpecificPosition{
-			Wheel_id: wheel.Id,
-			Corn: i,
-		})
+		if i != -1 {
+			positions = append(positions, &SpecificPosition{
+				Wheel_id: wheel.Id,
+				Corn: i,
+			})
+		}
 	}
 
 	if c.FirstPlayer == -1 {
@@ -220,8 +224,13 @@ func (c *Calendar) Rotate(g *Game) *Delta {
 
 func (c *Calendar) WheelFor(worker int) *Wheel {
 	for _, wheel := range c.Wheels {
-		if _, ok := wheel.Occupied[worker]; ok {
-			return wheel
+		// if _, ok := wheel.Occupied[worker]; ok {
+		// 	return wheel
+		// }
+		for _, v := range wheel.Occupied {
+			if v == worker {
+				return wheel
+			}
 		}
 	}
 	return nil

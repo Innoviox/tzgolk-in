@@ -1,7 +1,7 @@
 package engine
 
 import (
-    // "fmt"
+    "fmt"
     // "os"
 )
 
@@ -97,7 +97,7 @@ func (g *Game) GetOptions(worker *Worker) []*SpecificPosition {
 	options := position.GetOptions(g, player)
 
 	// fmt.Fprintf(os.Stdout, "\tOptions for worker on wheel %s position %d: %v\n", wheel.Name, worker.Position, len(options))
-
+	fmt.Println("aergaergPosition", position)
 	// return options
 	positions := make([]*SpecificPosition, 0)
 	for _, option := range options {

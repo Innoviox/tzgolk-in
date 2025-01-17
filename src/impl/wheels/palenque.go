@@ -131,11 +131,6 @@ func PalenqueString(wheel *Wheel, workers []*Worker) string {
 
 	for k := 0; k < wheel.Size; k++ {
 		if wheel.Positions[k].PData != nil {
-			// ct := []rune{'₀', '₁', '₂', '₃', '₄'}[wheel.Positions[k].PData.CornTiles]
-			// wt := []rune{'₀', '₁', '₂', '₃', '₄'}[wheel.Positions[k].PData.WoodTiles]
-
-			// br.WriteRune(rune(wt))
-			// br.WriteRune(rune(ct))
 			fmt.Fprintf(&br, "%d%d ", wheel.Positions[k].PData.WoodTiles, wheel.Positions[k].PData.CornTiles)
 		} else {
 			fmt.Fprintf(&br, "   ")
@@ -148,7 +143,9 @@ func PalenqueString(wheel *Wheel, workers []*Worker) string {
 	out := make([]string, wheel.Size)
 
 	for k, v := range wheel.Occupied {
-		out[k] = workers[v].Color.String()
+		if v >= 0 {
+			out[k] = workers[v].Color.String()
+		}
 	}
 
 	for k, o := range out {
@@ -165,6 +162,7 @@ func PalenqueString(wheel *Wheel, workers []*Worker) string {
 
 func MakePalenque() *Wheel {
 	positions := make([]*Position, 0)
+	occupied := make(map[int]int)
 
 	options := Palenque()
 
@@ -175,6 +173,7 @@ func MakePalenque() *Wheel {
 			GetOptions: options[i],
 			// PData: MakePData(i > 2),
 		})
+		occupied[i] = -1
 	}
 
 	for i := 2; i < len(options); i++ {
@@ -184,6 +183,7 @@ func MakePalenque() *Wheel {
 			GetOptions: options[i],
 			PData: MakePData(i > 2),
 		})
+		occupied[i] = -1
 	}
 
 	for i := 6; i < 8; i++ {
@@ -192,12 +192,13 @@ func MakePalenque() *Wheel {
 			Corn: i,
 			GetOptions: Flatten(options),
 		})
+		occupied[i] = -1
 	}
 
 	return &Wheel{
 		Id: 0,
 		Size: len(positions),
-		Occupied: make(map[int]int),
+		Occupied: occupied,
 		Positions: positions, 
 		Name: "Palenque",
 		String: PalenqueString,

@@ -1,7 +1,7 @@
 package engine
 
 import (
-    // "fmt"
+    "fmt"
 )
 /*
 
@@ -53,7 +53,7 @@ func ComputeMove(g *Game, p *Player, ply int, rec bool) (*Move, float64) {
 
     ccp := g.CurrPlayer
 
-    // g2 := g.Clone()
+    g2 := g.Clone()
 
     best := float64(-100)
     var best_move Move
@@ -98,12 +98,12 @@ func ComputeMove(g *Game, p *Player, ply int, rec bool) (*Move, float64) {
         // g.AddDelta(d, -1)
         g.CurrPlayer = ccp
         // fmt.Println(d3, d3.FirstPlayer)
-        // if !g.Exact(g2) {
-        //     fmt.Println("PLATO ERROR 2")
-        //     fmt.Println("ccc", d3.ResearchDelta)
+        if !g.Exact(g2) {
+            fmt.Println("PLATO ERROR 2")
+            fmt.Println("ccc", d3.ResearchDelta)
 
-        //     fmt.Println([]int{}[1])
-        // }
+            fmt.Println([]int{}[1])
+        }
         // g.AddDelta(d, -1)
     }   
 
