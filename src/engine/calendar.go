@@ -156,15 +156,15 @@ func (c *Calendar) Execute(move Move, game *Game, MarkStep func(string)) *Delta 
 	}
 	pd.Corn -= move.Corn
 	d.Add(PlayerDeltaWrapper(move.Player, pd))
-
+	// fmt.Println(move.String())
 	for i := 0; i < len(move.Workers); i++ {
 		p := move.Positions[i]
 		w := game.GetWorker(move.Workers[i])
+		MarkStep(fmt.Sprintf("Executing step %d: %p %w", i, p, w))
 		if (move.Placing) {
 			if p.FirstPlayer {
 				d.Add(&Delta{
 					WorkerDeltas: map[int]WorkerDelta{move.Workers[i]: WorkerDelta{
-						// Available: -1,
 						Wheel_id: -2 - w.Wheel_id,
 					}},
 					CalendarDelta: CalendarDelta{
@@ -176,8 +176,11 @@ func (c *Calendar) Execute(move Move, game *Game, MarkStep func(string)) *Delta 
 				d.Add(w.PlaceOn(p.Wheel_id, p.Corn))
 			}
 		} else {
+			// fmt.Println(d, p.Execute)
 			d.Add(p.Execute)
-			d.Add(w.ReturnFrom(c.Wheels[p.Wheel_id]))
+			// fmt.Println(d, w.ReturnFrom(c.Wheels[p.Wheel_id]))
+			// d.Add(w.ReturnFrom(c.Wheels[p.Wheel_id]))
+			// fmt.Println(d)
 		}
 	}
 	

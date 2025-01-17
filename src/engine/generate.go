@@ -1,7 +1,7 @@
 package engine
 
 import (
-    "fmt"
+    // "fmt"
     // "os"
 )
 
@@ -118,6 +118,7 @@ func (g *Game) MakeRetrievalMoves(moves []Move, retrieval []int, key int) []Move
 	
 	for _, w := range retrieval {
 		worker := g.GetWorker(w)
+		wOrig := worker.Clone()
 
 		m := make([]Move, 0)
 		m = append(m, moves...)
@@ -128,9 +129,9 @@ func (g *Game) MakeRetrievalMoves(moves []Move, retrieval []int, key int) []Move
 		// fmt.Fprintf(os.Stdout, "\t\tRest %v\n", rest)
 
 		for i := 0; i < len(moves); i++ {
-			g2 := g.Clone()
+			// g2 := g.Clone()
 			d := g.Calendar.Execute(moves[i], g, func(s string){})
-			wOrig := worker.Clone()
+			
 			
 			g.AddDelta(d, 1)
 			for _, option := range g.GetOptions(wOrig) {
@@ -145,18 +146,18 @@ func (g *Game) MakeRetrievalMoves(moves []Move, retrieval []int, key int) []Move
 				// 	}
 				// }
 				m = append(m, moves[i].Retrieve(w, &SpecificPosition {
-					Wheel_id: worker.Wheel_id,
-					Corn: worker.Position,
+					Wheel_id: wOrig.Wheel_id,
+					Corn: wOrig.Position,
 					Execute: option,
 				}, 0))
 			}
 			g.AddDelta(d, -1)
-			if !g.Exact(g2) {
-				fmt.Println("PLATO ERROR 0")
-				fmt.Println(d)
-				fmt.Println(d.CalendarDelta)
-				fmt.Println([]int{}[1])
-			}
+			// if !g.Exact(g2) {
+			// 	fmt.Println("PLATO ERROR 0")
+			// 	fmt.Println(d)
+			// 	fmt.Println(d.CalendarDelta)
+			// 	fmt.Println([]int{}[1])
+			// }
 		}
 
 		out = append(out, g.MakeRetrievalMoves(m, rest, key + 1)...)
@@ -193,18 +194,18 @@ func (g *Game) MakePlacementMoves(moves []Move, placement []int, key int) []Move
 	l := len(moves)
 	for i := 0; i < l; i++ {
 		d := g.Calendar.Execute(moves[i], g, func(s string){})
-		g2 := g.Clone()
+		// g2 := g.Clone()
 		g.AddDelta(d, 1)
 
 		for _, position := range g.Calendar.LegalPositions() {
 			moves = append(moves, moves[i].Place(worker, position))
 		}
 		g.AddDelta(d, -1)
-		if !g.Exact(g2) {
-			fmt.Println("PLATO ERROR 1")
-			fmt.Println(d)
-			fmt.Println([]int{}[1])
-		}
+		// if !g.Exact(g2) {
+		// 	fmt.Println("PLATO ERROR 1")
+		// 	fmt.Println(d)
+		// 	fmt.Println([]int{}[1])
+		// }
 	}
 
 	return g.MakePlacementMoves(moves, rest, key + 1)

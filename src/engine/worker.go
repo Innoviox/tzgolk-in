@@ -36,7 +36,9 @@ func (w *Worker) Copy(other *Worker) {
 }
 
 func (w *Worker) AddDelta(delta WorkerDelta, mul int) {
-	// fmt.Println("Worker AddDelta", w, delta, mul)
+	if (w.Id == 20) {
+		// fmt.Println("Worker AddDelta", w, delta, mul)
+	}
 	w.Unlocked = Bool(delta.Unlocked, mul, w.Unlocked)
 	w.Wheel_id += delta.Wheel_id * mul
 	w.Position += delta.Position * mul
@@ -45,7 +47,9 @@ func (w *Worker) AddDelta(delta WorkerDelta, mul int) {
 	// } else {
 	// 	w.Available = false
 	// }
-	// fmt.Println("Worker Added", w)
+	if (w.Id == 20) {
+		// fmt.Println("Worker Added", w)
+	}
 }
 
 func (w *Worker) Exact(other *Worker) bool {

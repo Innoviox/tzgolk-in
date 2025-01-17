@@ -485,7 +485,7 @@ func (g *Game) TakeTurn(MarkStep func(string), random bool) *Delta {
 			move = &moves[g.Rand.Intn(len(moves))]
 		}
 	} else {
-		move, _ = ComputeMove(g, player, 1, false)
+		move, _ = ComputeMove(g, player, 2, false)
 	}
 
 	// fmt.Fprintf(os.Stdout, "Playing move %s for %s\n", move.String(), player.Color)
@@ -543,6 +543,7 @@ func (g *Game) RunStop(MarkStep func(string), stopPlayer *Player) *Delta {
 
 			d1 := g.TakeTurn(MarkStep, true)
 			g.AddDelta(d1, 1)
+			// fmt.Println("ADDING D1", d.WorkerDeltas, d1.WorkerDeltas)
 			d.Add(d1)
 			MarkStep("Test")
 			g.CurrPlayer = (g.CurrPlayer + 1) % len(g.Players)
@@ -551,6 +552,7 @@ func (g *Game) RunStop(MarkStep func(string), stopPlayer *Player) *Delta {
 		if g.Calendar.FirstPlayer != -1 {
 			d2 := g.FirstPlayerSpace(MarkStep)
 			g.AddDelta(d2, 1)
+			// fmt.Println("ADDING D2", d.WorkerDeltas, d2.WorkerDeltas)
 			d.Add(d2)
 		}
 

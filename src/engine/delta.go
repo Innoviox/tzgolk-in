@@ -2,6 +2,7 @@ package engine
 
 import (
     "fmt"
+    // "runtime/debug"
 )
 
 // everything represents a delta
@@ -166,6 +167,10 @@ func (d *Delta) Add(o *Delta) {
             for k, v := range o.WorkerDeltas {
                 // fmt.Println("c")
                 w, ok := d.WorkerDeltas[k]
+                // if k == 20 && w.Position == -4 && v.Position == -4 {
+                //     fmt.Println("a", w, v)
+                //     debug.PrintStack()
+                // }
                 if !ok {
                     // fmt.Println("d", k, v)
                     d.WorkerDeltas[k] = v
