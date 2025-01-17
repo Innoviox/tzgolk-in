@@ -40,7 +40,7 @@ func (g *Game) GenerateMoves(p *Player, key int) []Move {
 
 	for _, w := range g.Workers {
 		if w.Color == p.Color {
-			if w.Wheel_id != -1 {
+			if g.Calendar.WheelFor(w.Id) != nil {
 				retrieval = append(retrieval, w.Id)
 			} else if w.Unlocked {
 				placement = append(placement, w.Id)
@@ -83,18 +83,32 @@ func (g *Game) AddBegging(move Move, player *Player) []Move {
 	return moves
 }
 
-func (g *Game) GetOptions(worker *Worker) []*Delta {
+func (g *Game) GetOptions(worker *Worker) []*SpecificPosition {
 	// fmt.Printf("%v\n", worker)
-	wheel := g.Calendar.Wheels[worker.Wheel_id]
+	// if worker.Wheel_id < -1 || worker.Position < 0 || worker.Position >= g.Calendar.Wheels[worker.Wheel_id].Size {
+	// 	fmt.Printf("invalid worker %v\n", worker)
+	// 	return []*Delta{}
+	// }
+	wheel := g.Calendar.WheelFor(worker.Id)
 	// fmt.Fprintln(os.Stdout, "\twheel %s worker %v\n", wheel.Name, worker)
-	position := wheel.Positions[worker.Position]
+	position := wheel.Positions[wheel.Occupied[worker.Id]]
 	player := g.GetPlayerByColor(worker.Color)
 
 	options := position.GetOptions(g, player)
 
 	// fmt.Fprintf(os.Stdout, "\tOptions for worker on wheel %s position %d: %v\n", wheel.Name, worker.Position, len(options))
 
-	return options
+	// return options
+	positions := make([]*SpecificPosition, 0)
+	for _, option := range options {
+		positions = append(positions, &SpecificPosition {
+			Wheel_id: wheel.Id,
+			Corn: position.Corn,
+			Execute: option,
+		})
+	}
+
+	return positions
 }
 
 /*
@@ -134,7 +148,7 @@ func (g *Game) MakeRetrievalMoves(moves []Move, retrieval []int, key int) []Move
 			
 			
 			g.AddDelta(d, 1)
-			for _, option := range g.GetOptions(wOrig) {
+			for _, position := range g.GetOptions(wOrig) {
 				// if worker.Wheel_id != 4 {
 				// 	for j := 1; j < worker.Position; j++ {
 
@@ -145,11 +159,7 @@ func (g *Game) MakeRetrievalMoves(moves []Move, retrieval []int, key int) []Move
 				// 		}, worker.Position - j))
 				// 	}
 				// }
-				m = append(m, moves[i].Retrieve(w, &SpecificPosition {
-					Wheel_id: wOrig.Wheel_id,
-					Corn: wOrig.Position,
-					Execute: option,
-				}, 0))
+				m = append(m, moves[i].Retrieve(w, position, 0))
 			}
 			g.AddDelta(d, -1)
 			// if !g.Exact(g2) {

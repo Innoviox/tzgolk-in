@@ -116,7 +116,7 @@ func (p *Player) String(g *Game) string {
 
 	nWorkers := 0
 	for _, w := range g.Workers {
-		if w.Color == p.Color && (w.Unlocked || w.Wheel_id != -1) {
+		if w.Color == p.Color && w.Unlocked {
 			nWorkers++
 		}
 	}
@@ -173,15 +173,16 @@ func (p *Player) Evaluate(g *Game) float64 {
 		}
 	}
 
-	for _, w := range g.Workers {
-		if w.Color == p.Color {
-			if (w.Unlocked) {
-				points += 0.1
-			} else if w.Wheel_id != -1 {
-				points += float64(w.Position) / 10
-			}
-		}
-	}
+	// todo
+	// for _, w := range g.Workers {
+	// 	if w.Color == p.Color {
+	// 		if (w.Unlocked) {
+	// 			points += 0.1
+	// 		} else if w.Wheel_id != -1 {
+	// 			points += float64(w.Position) / 10
+	// 		}
+	// 	}
+	// }
 
 	return points
 }

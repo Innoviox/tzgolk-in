@@ -13,7 +13,7 @@ type Wheel struct {
 	Id int
 	Size int
 
-	// map from position => worker id
+	// map from worker id to position
 	Occupied map[int]int
 
 	Positions []*Position
@@ -55,7 +55,7 @@ func MakeWheel(options []Options, Wheel_id int, wheel_name string) *Wheel {
 			out := make([]string, wheel.Size)
 		
 			for k, v := range wheel.Occupied {
-				out[k] = workers[v].Color.String()
+				out[v] = workers[k].Color.String()
 			}
 		
 			for k, o := range out {
@@ -146,23 +146,23 @@ func (w *Wheel) AddDelta(delta WheelDelta, mul int) {
 // -- MARK -- Unique methods
 func (w *Wheel) AddWorker(position int, worker int) *Delta {
 	newOccupied := CopyMap(w.Occupied)
-	newOccupied[position] = worker
+	newOccupied[worker] = position
 
 	return w.MakeDelta(newOccupied, 1)
 }
 
-func (w *Wheel) RemoveWorker(worker int) *Delta {
-	newOccupied := CopyMap(w.Occupied)
+// func (w *Wheel) RemoveWorker(worker int) *Delta {
+// 	newOccupied := CopyMap(w.Occupied)
 	
-	for k, v := range w.Occupied {
-		if v == worker {
-			delete(newOccupied, k)
-			return w.MakeDelta(newOccupied, 1)
-		}
-	}
+// 	for k, v := range w.Occupied {
+// 		if v == worker {
+// 			delete(newOccupied, k)
+// 			return w.MakeDelta(newOccupied, 1)
+// 		}
+// 	}
 
-	return w.MakeDelta(newOccupied, 1)
-}
+// 	return w.MakeDelta(newOccupied, 1)
+// }
 
 func (w *Wheel) MakeDelta(Occupied map[int]int, Sign int) *Delta {
 	return &Delta{CalendarDelta: CalendarDelta{WheelDeltas: map[int]WheelDelta{w.Id: WheelDelta{
@@ -175,23 +175,23 @@ func (w *Wheel) MakeDelta(Occupied map[int]int, Sign int) *Delta {
 func (w *Wheel) Rotate(g *Game) *Delta {
 	d := &Delta{}
 
-	workerToRemove := -1 // only one worker per wheel can fall off
+	// workerToRemove := -1 // only one worker per wheel can fall off
 	new_occupied := make(map[int]int)
 	for k, v := range w.Occupied {
-		if k >= w.Size - 1 {
-			workerToRemove = v
+		if v >= w.Size - 1 {
+			// workerToRemove = k
 		} else {
-			new_occupied[k + 1] = v
+			new_occupied[k] = v + 1
 			worker := g.GetWorker(v)
 			d.Add(&Delta{WorkerDeltas: map[int]WorkerDelta{worker.Id: WorkerDelta{
-				Position: 1,
+				// Position: 1,
 			}}})
 		}
 	} 
 
-	if workerToRemove != -1 {
-		d.Add(g.GetWorker(workerToRemove).ReturnFrom(w))
-	}
+	// if workerToRemove != -1 {
+	// 	d.Add(g.GetWorker(workerToRemove).ReturnFrom(w))
+	// }
 
 	d.Add(w.MakeDelta(new_occupied, 1))
 

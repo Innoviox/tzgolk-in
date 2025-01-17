@@ -165,7 +165,7 @@ func (c *Calendar) Execute(move Move, game *Game, MarkStep func(string)) *Delta 
 			if p.FirstPlayer {
 				d.Add(&Delta{
 					WorkerDeltas: map[int]WorkerDelta{move.Workers[i]: WorkerDelta{
-						Wheel_id: -2 - w.Wheel_id,
+						// Wheel_id: -2 - w.Wheel_id,
 					}},
 					CalendarDelta: CalendarDelta{
 						FirstPlayer: move.Workers[i] - c.FirstPlayer,
@@ -173,7 +173,7 @@ func (c *Calendar) Execute(move Move, game *Game, MarkStep func(string)) *Delta 
 				})
 			} else {
 				d.Add(c.Wheels[p.Wheel_id].AddWorker(p.Corn, move.Workers[i]))
-				d.Add(w.PlaceOn(p.Wheel_id, p.Corn))
+				// d.Add(w.PlaceOn(p.Wheel_id, p.Corn))
 			}
 		} else {
 			// fmt.Println(d, p.Execute)
@@ -216,4 +216,13 @@ func (c *Calendar) Rotate(g *Game) *Delta {
 		d.Add(c.Wheels[i].Rotate(g))
 	}
 	return d
+}
+
+func (c *Calendar) WheelFor(worker int) *Wheel {
+	for _, wheel := range c.Wheels {
+		if _, ok := wheel.Occupied[worker]; ok {
+			return wheel
+		}
+	}
+	return nil
 }

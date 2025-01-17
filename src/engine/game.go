@@ -79,8 +79,8 @@ func (g *Game) Init() {
 				Id: i * 6 + j,
 				Color: color,
 				Unlocked: j < 3,
-				Wheel_id: -1,
-				Position: -1,
+				// Wheel_id: -1,
+				// Position: -1,
 			})
 		}
 	}
@@ -317,8 +317,8 @@ func (g *Game) FirstPlayerSpace(MarkStep func(string)) *Delta {
 		}},
 		WorkerDeltas: map[int]WorkerDelta{worker.Id: WorkerDelta{
 			// Available: 1,
-			Wheel_id: -1 - worker.Wheel_id, 
-			Position: -1 - worker.Position,
+			// Wheel_id: -1 - worker.Wheel_id, 
+			// Position: -1 - worker.Position,
 		}},
 		CalendarDelta: CalendarDelta{FirstPlayer: -1 - g.Calendar.FirstPlayer},
 		AccumulatedCorn: -g.AccumulatedCorn,
@@ -453,7 +453,7 @@ func (g *Game) FoodDay(MarkStep func(string)) *Delta {
 		pd := PlayerDelta{}
 		for _, w := range g.Workers {
 			if w.Color == player.Color {
-				if w.Wheel_id != -1 || w.Unlocked {
+				if w.Unlocked {
 					if player.Corn + pd.Corn >= 2 - player.WorkerDeduction {
 						pd.Corn -= 2 - player.WorkerDeduction
 						paid += 1
@@ -485,7 +485,7 @@ func (g *Game) TakeTurn(MarkStep func(string), random bool) *Delta {
 			move = &moves[g.Rand.Intn(len(moves))]
 		}
 	} else {
-		move, _ = ComputeMove(g, player, 2, false)
+		move, _ = ComputeMove(g, player, 1, false)
 	}
 
 	// fmt.Fprintf(os.Stdout, "Playing move %s for %s\n", move.String(), player.Color)
@@ -558,6 +558,7 @@ func (g *Game) RunStop(MarkStep func(string), stopPlayer *Player) *Delta {
 
 		d3 := g.Rotate(MarkStep)
 		g.AddDelta(d3, 1)
+		// fmt.Println("ADDING D3", d.WorkerDeltas, d3.WorkerDeltas)
 		d.Add(d3)
 	}
 	return d

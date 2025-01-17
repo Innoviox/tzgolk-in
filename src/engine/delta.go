@@ -50,8 +50,8 @@ type PlayerDelta struct {
 type WorkerDelta struct {
     // all args required
     Unlocked int
-    Wheel_id int
-    Position int
+    // Wheel_id int
+    // Position int
 }
 
 type CalendarDelta struct {
@@ -182,10 +182,17 @@ func (d *Delta) Add(o *Delta) {
                 } else if v.Unlocked != 0 {
                     w.Unlocked *= v.Unlocked
                 }
-                w.Wheel_id += v.Wheel_id
-                // a bit sus & I'm not sure why this works
-                // w.Available = -w.Wheel_id
-                w.Position += v.Position
+                // w.Wheel_id += v.Wheel_id
+                // // a bit sus & I'm not sure why this works
+                // // w.Available = -w.Wheel_id
+                // w.Position += v.Position
+
+                // if w.Position < 0 {
+                //     // if k == 20 && w.Position == -4 && v.Position == -4 {
+                //     fmt.Println("a", w, v)
+                //     debug.PrintStack()
+                // // }
+                // }
                 
                 d.WorkerDeltas[k] = w
                 // fmt.Println("f", w, d.WorkerDeltas[k])
