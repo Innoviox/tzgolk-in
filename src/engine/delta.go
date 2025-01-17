@@ -253,22 +253,28 @@ func (d *Delta) Add(o *Delta) {
     // fmt.Print("e")
 
     if o.ResearchDelta.Levels != nil {
+        // fmt.Printf("%v %v\n", d.ResearchDelta, o.ResearchDelta)
         if d.ResearchDelta.Levels == nil {
             d.ResearchDelta.Levels = o.ResearchDelta.Levels
         } else {
             for k, v := range o.ResearchDelta.Levels {
-                pl := d.ResearchDelta.Levels[k]
-                if pl == nil {
+                // fmt.Println(k, v)
+                _, ok := d.ResearchDelta.Levels[k]
+                if !ok {
+                    // fmt.Println("a")
                     d.ResearchDelta.Levels[k] = v
+                    // fmt.Println(d.ResearchDelta.Levels[k])
                 } else {
                     for k2, v2 := range v {
                         d.ResearchDelta.Levels[k][k2] += v2
                     }
+                    // d.ResearchDelta.Levels[k] = pl
                 }
-                d.ResearchDelta.Levels[k] = pl
+                
+                // fmt.Println(d.ResearchDelta.Levels[k])
             }
         }
-        // fmt.Printf("%v %v\n", o.ResearchDelta, d.ResearchDelta)
+        // fmt.Printf("%v %v\n", d.ResearchDelta, o.ResearchDelta)
     }
     // fmt.Print("f")
 

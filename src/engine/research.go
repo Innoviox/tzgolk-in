@@ -23,6 +23,7 @@ type Research struct {
 }
 
 func (r *Research) Exact(other *Research) bool {
+	// fmt.Println("Research Exact", r, other)
 	return reflect.DeepEqual(r.Levels, other.Levels)
 }
 
