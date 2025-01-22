@@ -2,6 +2,7 @@ package engine
 
 import (
     // "fmt"
+    . "tzgolkin/delta"
 )
 /*
 
@@ -58,7 +59,7 @@ func ComputeMove(g *Game, p *Player, ply int, rec bool) (*Move, float64) {
     best := float64(-100)
     var best_move Move
     for _, m := range moves {
-        // d := &Delta{}
+        // d := GetDelta()
         
         g.CurrPlayer = ccp
         // fmt.Println("TESTING MOVE", m, g.CurrPlayer, g.FirstPlayer)
@@ -66,7 +67,7 @@ func ComputeMove(g *Game, p *Player, ply int, rec bool) (*Move, float64) {
         
         // fmt.Println("EXECUTING", m)
         d1 := g.Calendar.Execute(m, g, func(s string){/*fmt.Println(s)*/})
-        g.AddDelta(d1, 1)
+        g.AddDelta(d1, 1, false)
         // fmt.Println("aaa", d1.WorkerDeltas)
         // d.Add(d1)
 
@@ -93,7 +94,7 @@ func ComputeMove(g *Game, p *Player, ply int, rec bool) (*Move, float64) {
         
         // g.Load(ply)
         d3 := Combine(d1, d2)
-        g.AddDelta(d3, -1)
+        g.AddDelta(d3, -1, true)
         // g.AddDelta(d2, -1)
         // g.AddDelta(d, -1)
         g.CurrPlayer = ccp

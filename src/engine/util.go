@@ -139,7 +139,7 @@ func RandZeros(m map[int]int, lo int, hi int, n int, r *rand.Rand) []int {
 		}
 	}
 
-	if len(result) <= n {
+	if len(result) <= n || n <= 0 {
 		return result
 	}
 

@@ -2,6 +2,7 @@ package engine
 
 import (
     "fmt"
+	. "tzgolkin/delta"
 )
 
 // type Option struct {
@@ -24,7 +25,9 @@ func Flatten(options []Options) Options {
 }
 
 func Skip() []*Delta {
-	return []*Delta{&Delta{Description: "skip"}}
+	d := GetDelta()
+	d.Description = "skip"
+	return []*Delta{d}
 }
 
 func SkipWrapper(o []*Delta) []*Delta {
@@ -47,25 +50,29 @@ func (g *Game) GetBuildingOptions(p *Player, exclude int, useResearch bool) []*D
 		costs := b.GetCosts(g, p)
 		for _, cost := range costs {
 			for _, effect := range b.GetEffects(g, p) {
-				d := &Delta{
-					PlayerDeltas: map[Color]PlayerDelta{
-						p.Color: PlayerDelta{
-							Resources: InvCost(b.Cost),
-							Buildings: map[int]int {
-								b.Id: 1,
-							},
-						},
-					},
-					Buildings: map[int]int {
-						b.Id: 1,
-					},
-					Description: fmt.Sprintf("[build %d] pay %s ", b.Id, CostString(cost)),
-					BuildingNum: b.Id,
+				d := GetDelta()
+
+				d.PlayerDeltas = PlayerDeltaMapPool.Get().(map[int]PlayerDelta)
+				pd := PlayerDelta{
+					Resources: InvCost(b.Cost),
 				}
+
+				pd.Buildings = IntMapPool.Get().(map[int]int)
+				pd.Buildings[b.Id] = 1
+
+				d.PlayerDeltas[int(int(p.Color))] = pd
+
+				d.Buildings = IntMapPool.Get().(map[int]int)
+				d.Buildings[b.Id] = 1
+
+				d.BuildingNum = b.Id
+				d.Description = fmt.Sprintf("[build %d] pay %s ", b.Id, CostString(cost))
+
 				d.Add(effect) // effect.Descriptio
 				if useResearch {
 					d.Add(g.Research.Built(p)) // g.Research.BuiltString(p)
 				}
+				PutDelta(effect)
 				options = append(options, d)
 			}
 		}
@@ -84,20 +91,25 @@ func (g *Game) GetMonumentOptions(p *Player) []*Delta {
 		m := g.Monuments[k]
 
 		if p.CanPay(m.Cost) {
-			options = append(options, &Delta{
-				PlayerDeltas: map[Color]PlayerDelta{
-					p.Color: PlayerDelta{
-						Resources: InvCost(m.Cost),
-						Monuments: map[int]int{
-							m.Id: 1,
-						},
-					},
-				},
-				Monuments: map[int]int{
-					m.Id: 1,
-				},
-				Description: fmt.Sprintf("[build %d] pay %s, get monument %d", m.Id, CostString(m.Cost), m.Id),
-			})
+			d := GetDelta()
+
+			d.PlayerDeltas = PlayerDeltaMapPool.Get().(map[int]PlayerDelta)
+			pd := PlayerDelta{
+				Resources: InvCost(m.Cost),
+			}
+
+			pd.Monuments = IntMapPool.Get().(map[int]int)
+			pd.Monuments[m.Id] = 1
+
+			d.PlayerDeltas[int(int(p.Color))] = pd
+
+			d.Monuments = IntMapPool.Get().(map[int]int)
+			d.Monuments[m.Id] = 1
+
+			d.Description = fmt.Sprintf("[build %d] pay %s, get monument %d", m.Id, CostString(m.Cost), m.Id)
+			// })
+			// Add to options slice
+			options = append(options, d)
 		}
 	}
 
@@ -144,8 +156,8 @@ func GeneratePaymentDescription(r [4]int, nr [4]int) string {
 func GenerateLevelsDescription(l Levels, nl Levels) string {
 	Descriptions := make([]string, 0)
 	for s := 0; s < 4; s++ {
-		if nl[Science(s)] > l[Science(s)] {
-			Descriptions = append(Descriptions, fmt.Sprintf("%s %d", string(ResearchDebug[s]), nl[Science(s)] - l[Science(s)]))
+		if nl[int(Science(s))] > l[int(Science(s))] {
+			Descriptions = append(Descriptions, fmt.Sprintf("%s %d", string(ResearchDebug[s]), nl[int(Science(s))] - l[int(Science(s))]))
 		}
 	}
 	return fmt.Sprintf("%v", Descriptions)
@@ -154,7 +166,7 @@ func GenerateLevelsDescription(l Levels, nl Levels) string {
 func (r *Research) GetOptionsHelper(g *Game, p *Player, resources [4]int, levels Levels, n int, free bool) []*Delta {
 	options := make([]*Delta, 0)
 	for s := 0; s < 4; s++ {
-		level := levels[Science(s)]
+		level := levels[int(Science(s))]
 		possResources := [][4]int{resources} // the resources you end up with after paying
 											 // (it's current resources since it's free)
 		if level < 3 {
@@ -166,11 +178,16 @@ func (r *Research) GetOptionsHelper(g *Game, p *Player, resources [4]int, levels
 				for k, v := range levels {
 					newLevels[k] = v
 				}
-				newLevels[Science(s)] += 1
-				d := ResourcesDelta(p.Color, p.Resources, newResources)
-				d.Add(&Delta{ResearchDelta: ResearchDelta{Levels: map[Color]Levels{p.Color: map[Science]int{
-					Science(s): 1,
-				}}}})
+				newLevels[int(Science(s))] += 1
+				d := ResourcesDelta(int(int(p.Color)), p.Resources, newResources)
+				tmpDelta := GetDelta()
+				tmpDelta.ResearchDelta.Levels = LevelsMapPool.Get().(map[int]map[int]int)
+				levels := Levels{}
+				levels[int(Science(s))] = 1
+				tmpDelta.ResearchDelta.Levels[int(int(p.Color))] = levels
+				d.Add(tmpDelta)
+				PutDelta(tmpDelta)
+
 				d.Description = GenerateResearchDescription(resources, newResources, levels, newLevels)
 				if n == 1 {
 					options = append(options, d)
@@ -207,33 +224,33 @@ func (r *Research) GetAdvancedOptions(g *Game, p *Player, resources [4]int, free
 	for _, newResources := range possResources {
 		switch Science(s) {
 		case Agriculture:
-			d := ResourcesDelta(p.Color, p.Resources, newResources)
+			d := ResourcesDelta(int(p.Color), p.Resources, newResources)
 			d.Description = fmt.Sprintf("[agr tier 4] pay %s", GeneratePaymentDescription(resources, newResources))
 			advancedOptions = append(advancedOptions, g.Temples.GainTempleStep(p, d, 1)...)
 		case Resources:
 			for i := 0; i < 3; i++ {
 				for j := 0; j < 3; j++ {
-					d := ResourcesDelta(p.Color, p.Resources, newResources)
-					playerDelta := d.PlayerDeltas[p.Color]
+					d := ResourcesDelta(int(p.Color), p.Resources, newResources)
+					playerDelta := d.PlayerDeltas[int(p.Color)]
 					playerDelta.Resources[i] += 1
 					playerDelta.Resources[j] += 1
-					d.PlayerDeltas[p.Color] = playerDelta
+					d.PlayerDeltas[int(p.Color)] = playerDelta
 					d.Description = fmt.Sprintf("[res tier 4] pay %s, 1 %s, 1 %s", GeneratePaymentDescription(resources, newResources), string(ResourceDebug[i]), string(ResourceDebug[j]))
 					advancedOptions = append(advancedOptions, d)
 				}
 			}
 		case Construction:
-			d := ResourcesDelta(p.Color, p.Resources, newResources)
-			playerDelta := d.PlayerDeltas[p.Color]
+			d := ResourcesDelta(int(p.Color), p.Resources, newResources)
+			playerDelta := d.PlayerDeltas[int(p.Color)]
 			playerDelta.Points = 3
-			d.PlayerDeltas[p.Color] = playerDelta // todo do I need this assignment
+			d.PlayerDeltas[int(p.Color)] = playerDelta // todo do I need this assignment
 			d.Description = fmt.Sprintf("[cons tier 4] pay %s, 3 points", GeneratePaymentDescription(resources, newResources))
 			advancedOptions = append(advancedOptions, d)
 		case Theology:
-			d := ResourcesDelta(p.Color, p.Resources, newResources)
-			playerDelta := d.PlayerDeltas[p.Color]
+			d := ResourcesDelta(int(p.Color), p.Resources, newResources)
+			playerDelta := d.PlayerDeltas[int(p.Color)]
 			playerDelta.Resources[Skull] += 1
-			d.PlayerDeltas[p.Color] = playerDelta
+			d.PlayerDeltas[int(p.Color)] = playerDelta
 			d.Description = fmt.Sprintf("[theo tier 4] pay %s", GeneratePaymentDescription(resources, newResources))
 			advancedOptions = append(advancedOptions, d)
 		}
@@ -246,15 +263,15 @@ func (r *Research) FreeResearch(g *Game, p *Player, s Science) []*Delta {
 	if g.Research.HasLevel(p.Color, s, 3) {
 		return r.GetAdvancedOptions(g, p, p.Resources, true, s)
 	} else {
-		return []*Delta{&Delta{
-			ResearchDelta: ResearchDelta{
-				Levels: map[Color]Levels{
-					p.Color: Levels{
-						s: 1,
-					},
-				},
-			},
-			Description: fmt.Sprintf("free %s", string(ResearchDebug[s])),
-		}}
+		d := GetDelta()
+
+		d.ResearchDelta.Levels = LevelsMapPool.Get().(map[int]map[int]int)
+		levels := Levels{}
+		levels[int(s)] = 1
+		d.ResearchDelta.Levels[int(int(p.Color))] = levels
+
+		d.Description = fmt.Sprintf("free %s", string(ResearchDebug[s]))
+
+		return []*Delta{d}
 	}
 }

@@ -2,6 +2,7 @@ package engine
 
 import (
 	"fmt"
+	. "tzgolkin/delta"
 )
 
 type Worker struct {

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strings"
 	"reflect"
+	. "tzgolkin/delta"
 )
 
 // '⁰'
@@ -182,13 +183,21 @@ func (w *Wheel) RemoveWorker(worker int) *Delta {
 }
 
 func (w *Wheel) MakeDelta(Occupied map[int]int) *Delta {
-	return &Delta{CalendarDelta: CalendarDelta{WheelDeltas: map[int]WheelDelta{w.Id: WheelDelta{
+	// return &Delta{CalendarDelta: CalendarDelta{WheelDeltas: map[int]WheelDelta{w.Id: WheelDelta{
+	// 	Occupied: Occupied,
+	// }}}}
+	d := GetDelta()
+	d.CalendarDelta.WheelDeltas = WheelDeltaMapPool.Get().(map[int]WheelDelta)
+	wd := WheelDelta{
 		Occupied: Occupied,
-	}}}}
+	}
+	d.CalendarDelta.WheelDeltas[w.Id] = wd
+
+	return d
 }
 
 func (w *Wheel) Rotate(g *Game) *Delta {
-	d := &Delta{}
+	d := GetDelta()
 
 	// workerToRemove := -1 // only one worker per wheel can fall off
 	new_occupied := make(map[int]int)

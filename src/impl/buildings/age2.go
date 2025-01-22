@@ -5,6 +5,7 @@ import (
     // "math/rand"
     . "tzgolkin/engine"
     . "tzgolkin/impl/wheels"
+    . "tzgolkin/delta"
 )
 
 func Age2Building1() Building {
@@ -14,7 +15,7 @@ func Age2Building1() Building {
         GetEffects: func (g *Game, p *Player) []*Delta {
             return []*Delta {Combine(
                 g.Temples.Step(p, 2, 2),
-                PlayerDeltaWrapper(p.Color, PlayerDelta{
+                PlayerDeltaWrapper(int(p.Color), PlayerDelta{
                     Points: 3,
                 }),
             )}
@@ -30,7 +31,7 @@ func Age2Building2() Building {
         GetEffects: func (g *Game, p *Player) []*Delta {
             return []*Delta {Combine(
                 g.Temples.Step(p, 0, 2),
-                PlayerDeltaWrapper(p.Color, PlayerDelta{
+                PlayerDeltaWrapper(int(p.Color), PlayerDelta{
                     Points: 2,
                 }),
             )}
@@ -46,7 +47,7 @@ func Age2Building3() Building {
         GetEffects: func (g *Game, p *Player) []*Delta {
             return []*Delta {Combine(
                 g.Temples.Step(p, 1, 2),
-                PlayerDeltaWrapper(p.Color, PlayerDelta{
+                PlayerDeltaWrapper(int(p.Color), PlayerDelta{
                     Points: 4,
                 }),
             )}
@@ -91,7 +92,7 @@ func Age2Building6() Building {
         GetEffects: func (g *Game, p *Player) []*Delta {
             options := make([]*Delta, 0)
             for _, o := range g.Research.GetOptions(g, p, 1, true) {
-                d := PlayerDeltaWrapper(p.Color, PlayerDelta{
+                d := PlayerDeltaWrapper(int(p.Color), PlayerDelta{
                     Resources: [4]int{0, 1, 0, 0},
                 })
 
@@ -112,7 +113,7 @@ func Age2Building7() Building {
         GetEffects: func (g *Game, p *Player) []*Delta {
             return []*Delta {Combine(
                 g.UnlockWorker(p.Color),
-                PlayerDeltaWrapper(p.Color, PlayerDelta{
+                PlayerDeltaWrapper(int(p.Color), PlayerDelta{
                     Points: 6,
                 }),
             )}
@@ -129,12 +130,12 @@ func Age2Building8() Building {
         GetEffects: func (g *Game, p *Player) []*Delta {
             options := make([]*Delta, 0)
             for _, o := range Uxmal2(g, p) {
-                options = append(options, Combine(o, PlayerDeltaWrapper(p.Color, PlayerDelta{
+                options = append(options, Combine(o, PlayerDeltaWrapper(int(p.Color), PlayerDelta{
                     Points: 6,
                 })))
             }
 
-            options = append(options, PlayerDeltaWrapper(p.Color, PlayerDelta{
+            options = append(options, PlayerDeltaWrapper(int(p.Color), PlayerDelta{
                 Points: 6,
             }))
 
@@ -149,7 +150,7 @@ func Age2Building9() Building {
         Id: 23,
         Cost: [4]int{1, 0, 2, 0},
         GetEffects: func (g *Game, p *Player) []*Delta {
-            return []*Delta{PlayerDeltaWrapper(p.Color, PlayerDelta{
+            return []*Delta{PlayerDeltaWrapper(int(p.Color), PlayerDelta{
                 Points: 8,
             })}
         },
@@ -162,7 +163,7 @@ func Age2Building10() Building {
         Id: 24,
         Cost: [4]int{2, 0, 0, 0},
         GetEffects: func (g *Game, p *Player) []*Delta {
-            return []*Delta{PlayerDeltaWrapper(p.Color, PlayerDelta{
+            return []*Delta{PlayerDeltaWrapper(int(p.Color), PlayerDelta{
                 FreeWorkers: 3,
             })}
         },
@@ -175,7 +176,7 @@ func Age2Building11() Building {
         Id: 25,
         Cost: [4]int{1, 2, 1, 0},
         GetEffects: func (g *Game, p *Player) []*Delta {
-            d := PlayerDeltaWrapper(p.Color, PlayerDelta{
+            d := PlayerDeltaWrapper(int(p.Color), PlayerDelta{
                 Points: 3,
             })
             for i := 0; i < 3; i++ {
@@ -194,7 +195,7 @@ func Age2Building12() Building {
         GetEffects: func (g *Game, p *Player) []*Delta {
             options := make([]*Delta, 0)
             for _, o := range g.Research.GetOptions(g, p, 1, true) {
-                d := PlayerDeltaWrapper(p.Color, PlayerDelta{
+                d := PlayerDeltaWrapper(int(p.Color), PlayerDelta{
                     Resources: [4]int{0, 0, 0, 1},
                 })
                 d.Add(o)
@@ -213,7 +214,7 @@ func Age2Building13() Building {
         GetEffects: func (g *Game, p *Player) []*Delta {
             options := make([]*Delta, 0)
             for _, o := range g.Research.FreeResearch(g, p, Construction) {
-                d := PlayerDeltaWrapper(p.Color, PlayerDelta{
+                d := PlayerDeltaWrapper(int(p.Color), PlayerDelta{
                     Points: 3,
                 })
                 d.Add(o)
@@ -273,7 +274,7 @@ func Age2Building17() Building {
         GetEffects: func (g *Game, p *Player) []*Delta {
             options := make([]*Delta, 0)
             for _, o := range g.Research.GetOptions(g, p, 1, true) {
-                d := PlayerDeltaWrapper(p.Color, PlayerDelta{
+                d := PlayerDeltaWrapper(int(p.Color), PlayerDelta{
                     Corn: 6,
                 })
                 d.Add(o)
@@ -292,7 +293,7 @@ func Age2Building18() Building {
         GetEffects: func (g *Game, p *Player) []*Delta {
             options := make([]*Delta, 0)
             for _, o := range g.Research.GetOptions(g, p, 1, true) {
-                d := PlayerDeltaWrapper(p.Color, PlayerDelta{
+                d := PlayerDeltaWrapper(int(p.Color), PlayerDelta{
                     Resources: [4]int{0, 0, 1, 0},
                 })
                 d.Add(o)

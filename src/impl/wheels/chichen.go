@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strings"
 	. "tzgolkin/engine"
+	. "tzgolkin/delta"
 )
 
 func Chichen0(g *Game, p *Player) []*Delta {
@@ -47,8 +48,8 @@ func ChichenX(n int, canForesight bool) Options {
 				Full: 1,
 			}}}}
 
-			d.PlayerDeltas = map[Color]PlayerDelta{}
-			d.PlayerDeltas[p.Color] = pd
+			d.PlayerDeltas = map[int]PlayerDelta{}
+			d.PlayerDeltas[int(p.Color)] = pd
 
 			d.CalendarDelta = CalendarDelta{WheelDeltas: map[int]WheelDelta{4: f}}
 
@@ -97,7 +98,11 @@ func ChichenX(n int, canForesight bool) Options {
 						r := [4]int{0, 0, 0, 0}
 						r[i] = -1 
 
-						d := &Delta{PlayerDeltas: map[Color]PlayerDelta{p.Color: PlayerDelta{Resources: r}}}
+						d := GetDelta()
+						d.PlayerDeltas = PlayerDeltaMapPool.Get().(map[int]PlayerDelta)
+						d.PlayerDeltas[int(p.Color)] = PlayerDelta{
+							Resources: r,
+						}
 						d.Description = fmt.Sprintf("[theo] pay 1 %s", string(ResourceDebug[i]))
 
 						d.Add(o)

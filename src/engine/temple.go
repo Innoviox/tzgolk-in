@@ -5,6 +5,7 @@ import (
 	// "os"
 	"strings"
 	"reflect"
+	. "tzgolkin/delta"
 )
 
 type Temple struct {
@@ -50,7 +51,7 @@ func (t *Temple) Copy(other *Temple) {
 
 func (t *Temple) AddDelta(delta TempleDelta, mul int) {
 	for k, v := range delta.PlayerLocations {
-		t.PlayerLocations[k] += v * mul
+		t.PlayerLocations[Color(k)] += v * mul
 	}
 }
 
@@ -154,16 +155,24 @@ func (t *Temples) String() string {
 }
 
 func (t *Temples) Step(p *Player, temple int, dir int) *Delta {
-	
-	d :=&Delta{TemplesDelta: TemplesDelta{TempleDeltas: map[int]TempleDelta{temple: TempleDelta{PlayerLocations: map[Color]int{
-		p.Color: dir,
-	}}}}}
+	d := GetDelta()
+	d.TemplesDelta.TempleDeltas = TempleDeltaMapPool.Get().(map[int]TempleDelta)
+
+	playerLocs := PlayerLocationsMapPool.Get().(map[int]int)
+	playerLocs[int(p.Color)] = dir
+
+	td := TempleDelta{
+		PlayerLocations: playerLocs,
+	}
+
+	d.TemplesDelta.TempleDeltas[temple] = td
+
 
 	if t.Temples[temple].PlayerLocations[p.Color] == t.Temples[temple].Steps - 1 {
 		pd := PlayerDelta{
 			LightSide: 1,
 		}
-		d.Add(PlayerDeltaWrapper(p.Color, pd))
+		d.Add(PlayerDeltaWrapper(int(p.Color), pd))
 	}
 	
 	return d
@@ -190,7 +199,7 @@ func (t *Temples) GainResources(p *Player) *Delta {
 		}
 	}
 
-	return PlayerDeltaWrapper(p.Color, pd)
+	return PlayerDeltaWrapper(int(p.Color), pd)
 }
 
 func (t *Temples) GainPoints(p *Player, age int) *Delta {
@@ -217,7 +226,7 @@ func (t *Temples) GainPoints(p *Player, age int) *Delta {
 		pd.Points += j
 	}
 
-	return PlayerDeltaWrapper(p.Color, pd)
+	return PlayerDeltaWrapper(int(p.Color), pd)
 }
 
 func (t *Temple) IsHighest(p *Player) int {
