@@ -225,7 +225,7 @@ func (c *Calendar) Rotate(g *Game) *Delta {
 
 func (c *Calendar) WheelFor(worker int) *Wheel {
 	for _, wheel := range c.Wheels {
-		fmt.Println(wheel.Name, wheel.Occupied)
+		// fmt.Println(wheel.Name, wheel.Occupied)
 		for k, v := range wheel.Occupied {
 			if k == worker && v >= 0 {
 				return wheel

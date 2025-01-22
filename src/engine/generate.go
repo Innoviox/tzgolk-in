@@ -85,11 +85,16 @@ func (g *Game) AddBegging(move Move, player *Player) []Move {
 
 func (g *Game) GetOptions(worker *Worker) []*SpecificPosition {
 	fmt.Printf("%v\n", worker)
+	positions := make([]*SpecificPosition, 0)
 	// if worker.Wheel_id < -1 || worker.Position < 0 || worker.Position >= g.Calendar.Wheels[worker.Wheel_id].Size {
 	// 	fmt.Printf("invalid worker %v\n", worker)
 	// 	return []*Delta{}
 	// }
 	wheel := g.Calendar.WheelFor(worker.Id)
+	if (wheel == nil ) {
+		fmt.Printf("[FATAL ERROR] wheel not found for worker %v\n", worker)
+		return positions
+	}
 	fmt.Printf("\twheel %s worker %v\n", wheel.Name, worker)
 	position := wheel.Positions[wheel.Occupied[worker.Id]]
 	player := g.GetPlayerByColor(worker.Color)
@@ -99,7 +104,6 @@ func (g *Game) GetOptions(worker *Worker) []*SpecificPosition {
 	// fmt.Fprintf(os.Stdout, "\tOptions for worker on wheel %s position %d: %v\n", wheel.Name, worker.Position, len(options))
 	// fmt.Println("aergaergPosition", position)
 	// return options
-	positions := make([]*SpecificPosition, 0)
 	for _, option := range options {
 		positions = append(positions, &SpecificPosition {
 			Wheel_id: wheel.Id,

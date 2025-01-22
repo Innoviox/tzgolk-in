@@ -198,7 +198,7 @@ func (d *Delta) Add(o *Delta) {
                 // continue
             }
 
-            fmt.Println("Combining", w, v)
+            // fmt.Println("Combining", w, v)
 
             // if len(v.OldOccupied) > 0 {
             //     w.OldOccupied = v.OldOccupied
@@ -222,7 +222,7 @@ func (d *Delta) Add(o *Delta) {
             //     }
             // }
             w.Occupied = AddMap(w.Occupied, v.Occupied)
-            fmt.Println("Combined", w, v)
+            // fmt.Println("Combined", w, v)
             if v.PositionDeltas != nil {
                 if w.PositionDeltas == nil {
                     w.PositionDeltas = map[int]PositionDelta{}
