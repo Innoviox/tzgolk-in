@@ -135,7 +135,7 @@ func ChichenString(wheel *Wheel, workers []*Worker) string {
 
 	for k, v := range wheel.Occupied {
 		if v >= 0 {
-			out[k] = workers[v].Color.String()
+			out[v] = workers[k].Color.String()
 		}
 	}
 
@@ -155,7 +155,6 @@ func ChichenString(wheel *Wheel, workers []*Worker) string {
 
 func MakeChichen() *Wheel {
 	positions := make([]*Position, 0)
-	occupied := make(map[int]int)
 
 	options := Chichen()
 
@@ -166,7 +165,6 @@ func MakeChichen() *Wheel {
 			GetOptions: options[i],
 			CData: MakeCData(),
 		})
-		occupied[i] = -1
 	}
 
 	positions = append(positions, &Position {
@@ -174,12 +172,11 @@ func MakeChichen() *Wheel {
 		Corn: 10,
 		GetOptions: Flatten(options),
 	})
-	occupied[10] = -1
 
 	return &Wheel {
 		Id: 4,
 		Size: len(positions),
-		Occupied: occupied,
+		Occupied: MakeOccupied(24),
 		Positions: positions,
 		Name: "Chichen Itza",
 		String: ChichenString,

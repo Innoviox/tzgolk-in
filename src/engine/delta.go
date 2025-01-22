@@ -63,9 +63,10 @@ type CalendarDelta struct {
 
 type WheelDelta struct {
     // todo how should this work?
-    OldOccupied map[int]int
-    NewOccupied map[int]int
-    Sign int
+    // OldOccupied map[int]int
+    // NewOccupied map[int]int
+    // Sign int
+    Occupied map[int]int
     PositionDeltas map[int]PositionDelta
 }
 
@@ -107,52 +108,37 @@ func Bool(d int, m int, current bool) bool {
 
 // todo MarkDelta function or something
 func (d *Delta) Add(o *Delta) {
-    // fmt.Printf("%v + %v\n", d, o)
-    // fmt.Print("a")
     if o.PlayerDeltas != nil {
         // fmt.Println("PlayerDeltas 1", d.PlayerDeltas, o.PlayerDeltas)
         if d.PlayerDeltas == nil {
-            d.PlayerDeltas = o.PlayerDeltas
-        } else {
-            for k, v := range o.PlayerDeltas {
-                p, ok := d.PlayerDeltas[k]
-                if !ok {
-                    d.PlayerDeltas[k] = v
-                    continue
-                }
-                p.Resources[0] += v.Resources[0]
-                p.Resources[1] += v.Resources[1]
-                p.Resources[2] += v.Resources[2]
-                p.Resources[3] += v.Resources[3]
-                p.Corn += v.Corn
-                p.Points += v.Points
-                p.CornTiles += v.CornTiles
-                p.WoodTiles += v.WoodTiles
-                p.FreeWorkers += v.FreeWorkers
-                p.WorkerDeduction += v.WorkerDeduction
-                if p.LightSide == 0 {
-                    p.LightSide = v.LightSide
-                } else if v.LightSide != 0 {
-                    p.LightSide *= v.LightSide
-                }
+            d.PlayerDeltas = map[Color]PlayerDelta{}
+        }
 
-                if p.Buildings == nil {
-                    p.Buildings = v.Buildings
-                } else {
-                    for k2, v2 := range v.Buildings {
-                        p.Buildings[k2] += v2
-                    }
-                }
-
-                if p.Monuments == nil {
-                    p.Monuments = v.Monuments
-                } else {
-                    for k2, v2 := range v.Monuments {
-                        p.Monuments[k2] += v2
-                    }
-                }
-                d.PlayerDeltas[k] = p
+        for k, v := range o.PlayerDeltas {
+            p, ok := d.PlayerDeltas[k]
+            if !ok {
+                p = PlayerDelta{}
             }
+            p.Resources[0] += v.Resources[0]
+            p.Resources[1] += v.Resources[1]
+            p.Resources[2] += v.Resources[2]
+            p.Resources[3] += v.Resources[3]
+            p.Corn += v.Corn
+            p.Points += v.Points
+            p.CornTiles += v.CornTiles
+            p.WoodTiles += v.WoodTiles
+            p.FreeWorkers += v.FreeWorkers
+            p.WorkerDeduction += v.WorkerDeduction
+            if p.LightSide == 0 {
+                p.LightSide = v.LightSide
+            } else if v.LightSide != 0 {
+                p.LightSide *= v.LightSide
+            }
+
+            p.Buildings = AddMap(p.Buildings, v.Buildings)
+            p.Monuments = AddMap(p.Monuments, v.Monuments)
+
+            d.PlayerDeltas[k] = p
         }
         // fmt.Println("PlayerDeltas 2", d.PlayerDeltas, o.PlayerDeltas)
     }
@@ -161,42 +147,40 @@ func (d *Delta) Add(o *Delta) {
     if o.WorkerDeltas != nil {
         if d.WorkerDeltas == nil {
             // fmt.Println("a")
-            d.WorkerDeltas = o.WorkerDeltas
-        } else {
-            // fmt.Println("b")
-            for k, v := range o.WorkerDeltas {
-                // fmt.Println("c")
-                w, ok := d.WorkerDeltas[k]
-                // if k == 20 && w.Position == -4 && v.Position == -4 {
-                //     fmt.Println("a", w, v)
-                //     debug.PrintStack()
-                // }
-                if !ok {
-                    // fmt.Println("d", k, v)
-                    d.WorkerDeltas[k] = v
-                    continue
-                }
-                // fmt.Println("e", k, v)
-                if w.Unlocked == 0 {
-                    w.Unlocked = v.Unlocked
-                } else if v.Unlocked != 0 {
-                    w.Unlocked *= v.Unlocked
-                }
-                // w.Wheel_id += v.Wheel_id
-                // // a bit sus & I'm not sure why this works
-                // // w.Available = -w.Wheel_id
-                // w.Position += v.Position
-
-                // if w.Position < 0 {
-                //     // if k == 20 && w.Position == -4 && v.Position == -4 {
-                //     fmt.Println("a", w, v)
-                //     debug.PrintStack()
-                // // }
-                // }
-                
-                d.WorkerDeltas[k] = w
-                // fmt.Println("f", w, d.WorkerDeltas[k])
+            d.WorkerDeltas = map[int]WorkerDelta{}
+        }
+        // fmt.Println("b")
+        for k, v := range o.WorkerDeltas {
+            // fmt.Println("c")
+            w, ok := d.WorkerDeltas[k]
+            // if k == 20 && w.Position == -4 && v.Position == -4 {
+            //     fmt.Println("a", w, v)
+            //     debug.PrintStack()
+            // }
+            if !ok {
+                // fmt.Println("d", k, v)
+                w = WorkerDelta{}
             }
+            // fmt.Println("e", k, v)
+            if w.Unlocked == 0 {
+                w.Unlocked = v.Unlocked
+            } else if v.Unlocked != 0 {
+                w.Unlocked *= v.Unlocked
+            }
+            // w.Wheel_id += v.Wheel_id
+            // // a bit sus & I'm not sure why this works
+            // // w.Available = -w.Wheel_id
+            // w.Position += v.Position
+
+            // if w.Position < 0 {
+            //     // if k == 20 && w.Position == -4 && v.Position == -4 {
+            //     fmt.Println("a", w, v)
+            //     debug.PrintStack()
+            // // }
+            // }
+            
+            d.WorkerDeltas[k] = w
+            // fmt.Println("f", w, d.WorkerDeltas[k])
         }
     }
     // fmt.Println(d.WorkerDeltas, o.WorkerDeltas)
@@ -205,40 +189,61 @@ func (d *Delta) Add(o *Delta) {
 
     if o.CalendarDelta.WheelDeltas != nil {
         if d.CalendarDelta.WheelDeltas == nil {
-            d.CalendarDelta.WheelDeltas = o.CalendarDelta.WheelDeltas
-        } else {
-            for k, v := range o.CalendarDelta.WheelDeltas {
-                w, ok := d.CalendarDelta.WheelDeltas[k]
-                if !ok {
-                    d.CalendarDelta.WheelDeltas[k] = v
-                    continue
+            d.CalendarDelta.WheelDeltas = map[int]WheelDelta{}
+        } 
+        for k, v := range o.CalendarDelta.WheelDeltas {
+            w, ok := d.CalendarDelta.WheelDeltas[k]
+            if !ok {
+                w = WheelDelta{}
+                // continue
+            }
+
+            fmt.Println("Combining", w, v)
+
+            // if len(v.OldOccupied) > 0 {
+            //     w.OldOccupied = v.OldOccupied
+            // }
+
+            // if len(v.NewOccupied) > 0 {
+            //     w.NewOccupied = v.NewOccupied
+            // }
+            // if v.Occupied != nil {
+            //     if w.Occupied == nil {
+            //         w.Occupied = v.Occupied
+            //     } else {
+            //         for k2, v2 := range v.Occupied {
+            //             v3, ok := w.Occupied[k2]
+            //             if !ok {
+            //                 w.Occupied[k2] = v2
+            //             } else {
+            //                 w.Occupied[k2] = v3 + v2
+            //             }
+            //         }
+            //     }
+            // }
+            w.Occupied = AddMap(w.Occupied, v.Occupied)
+            fmt.Println("Combined", w, v)
+            if v.PositionDeltas != nil {
+                if w.PositionDeltas == nil {
+                    w.PositionDeltas = map[int]PositionDelta{}
                 }
 
-                // fmt.Println("Combining", w, v)
-
-                // if len(v.OldOccupied) > 0 {
-                //     w.OldOccupied = v.OldOccupied
-                // }
-
-                if len(v.NewOccupied) > 0 {
-                    w.NewOccupied = v.NewOccupied
-                }
-                if v.PositionDeltas != nil {
-                    if w.PositionDeltas == nil {
-                        w.PositionDeltas = v.PositionDeltas
-                    } else {
-                        for k2, v2 := range v.PositionDeltas {
-                            p := w.PositionDeltas[k2]
-
-                            p.PData.CornTiles += v2.PData.CornTiles
-                            p.PData.WoodTiles += v2.PData.WoodTiles
-                            p.CData.Full += v2.CData.Full
-                            w.PositionDeltas[k2] = p
+                for k2, v2 := range v.PositionDeltas {
+                    p, ok := w.PositionDeltas[k2]
+                    if !ok {
+                        p = PositionDelta{
+                            PData: PalenqueDataDelta{},
+                            CData: ChichenDataDelta{},
                         }
                     }
+
+                    p.PData.CornTiles += v2.PData.CornTiles
+                    p.PData.WoodTiles += v2.PData.WoodTiles
+                    p.CData.Full += v2.CData.Full
+                    w.PositionDeltas[k2] = p
                 }
-                d.CalendarDelta.WheelDeltas[k] = w
             }
+            d.CalendarDelta.WheelDeltas[k] = w
         }
     }
     // fmt.Print("d")
@@ -247,19 +252,16 @@ func (d *Delta) Add(o *Delta) {
 
     if o.TemplesDelta.TempleDeltas != nil {
         if d.TemplesDelta.TempleDeltas == nil {
-            d.TemplesDelta.TempleDeltas = o.TemplesDelta.TempleDeltas
-        } else {
-            for k, v := range o.TemplesDelta.TempleDeltas {
-                pl := d.TemplesDelta.TempleDeltas[k]
-                if pl.PlayerLocations == nil {
-                    pl.PlayerLocations = v.PlayerLocations
-                } else {
-                    for k2, v2 := range v.PlayerLocations {
-                        pl.PlayerLocations[k2] += v2
-                    }
-                }
-                d.TemplesDelta.TempleDeltas[k] = pl
+            d.TemplesDelta.TempleDeltas = map[int]TempleDelta{}
+        }
+
+        for k, v := range o.TemplesDelta.TempleDeltas {
+            pl, ok := d.TemplesDelta.TempleDeltas[k]
+            if !ok {
+                pl = TempleDelta{PlayerLocations: map[Color]int{}}
             }
+            pl.PlayerLocations = AddMap(pl.PlayerLocations, v.PlayerLocations)
+            d.TemplesDelta.TempleDeltas[k] = pl
         }
     }
     // fmt.Print("e")
@@ -267,49 +269,54 @@ func (d *Delta) Add(o *Delta) {
     if o.ResearchDelta.Levels != nil {
         // fmt.Printf("%v %v\n", d.ResearchDelta, o.ResearchDelta)
         if d.ResearchDelta.Levels == nil {
-            d.ResearchDelta.Levels = o.ResearchDelta.Levels
-        } else {
-            for k, v := range o.ResearchDelta.Levels {
-                // fmt.Println(k, v)
-                _, ok := d.ResearchDelta.Levels[k]
-                if !ok {
-                    // fmt.Println("a")
-                    d.ResearchDelta.Levels[k] = v
-                    // fmt.Println(d.ResearchDelta.Levels[k])
-                } else {
-                    for k2, v2 := range v {
-                        d.ResearchDelta.Levels[k][k2] += v2
-                    }
-                    // d.ResearchDelta.Levels[k] = pl
-                }
-                
+            d.ResearchDelta.Levels = map[Color]Levels{}
+        }
+
+        for k, v := range o.ResearchDelta.Levels {
+            // fmt.Println(k, v)
+            pl, ok := d.ResearchDelta.Levels[k]
+            if !ok {
+                // fmt.Println("a")
+                // d.ResearchDelta.Levels[k] = v
+                pl = Levels{}
                 // fmt.Println(d.ResearchDelta.Levels[k])
             }
+            // for k2, v2 := range v {
+            //     // d.ResearchDelta.Levels[k][k2] += v2
+
+            // }
+            pl = AddMap(pl, v)
+            d.ResearchDelta.Levels[k] = pl
+                // d.ResearchDelta.Levels[k] = pl
+            
+            // fmt.Println(d.ResearchDelta.Levels[k])
         }
         // fmt.Printf("%v %v\n", d.ResearchDelta, o.ResearchDelta)
     }
     // fmt.Print("f")
 
-    if o.Monuments != nil {
-        if d.Monuments == nil {
-            d.Monuments = o.Monuments
-        } else {
-            for k, v := range o.Monuments {
-                d.Monuments[k] += v
-            }
-        }
-    }
+    // if o.Monuments != nil {
+        // if d.Monuments == nil {
+        //     d.Monuments = o.Monuments
+        // } else {
+        //     for k, v := range o.Monuments {
+        //         d.Monuments[k] += v
+        //     }
+        // }
+    d.Monuments = AddMap(d.Monuments, o.Monuments)
+    // }
     // fmt.Print("g")
 
-    if o.Buildings != nil {
-        if d.Buildings == nil {
-            d.Buildings = o.Buildings
-        } else {
-            for k, v := range o.Buildings {
-                d.Buildings[k] += v
-            }
-        }
-    }
+    // if o.Buildings != nil {
+        // if d.Buildings == nil {
+        //     d.Buildings = o.Buildings
+        // } else {
+        //     for k, v := range o.Buildings {
+        //         d.Buildings[k] += v
+        //     }
+        // }
+    d.Buildings = AddMap(d.Buildings, o.Buildings)
+    // }
     // fmt.Print("h")
 
     d.CurrPlayer += o.CurrPlayer
@@ -344,40 +351,4 @@ func ResourcesDelta(color Color, old [4]int, new [4]int) *Delta {
 
 func PlayerDeltaWrapper(color Color, pd PlayerDelta) *Delta {
     return &Delta{PlayerDeltas: map[Color]PlayerDelta{color: pd}}
-}
-
-func (d *Delta) Clone() *Delta {
-    d2 := &Delta{
-        PlayerDeltas: CopyMap(d.PlayerDeltas),
-        WorkerDeltas: CopyMap(d.WorkerDeltas),
-        CalendarDelta: CalendarDelta {
-            WheelDeltas: CopyMap(d.CalendarDelta.WheelDeltas),
-            Rotation: d.CalendarDelta.Rotation,
-            FirstPlayer: d.CalendarDelta.FirstPlayer,
-        },
-        TemplesDelta: TemplesDelta{
-            TempleDeltas: map[int]TempleDelta{},
-        },
-        ResearchDelta: ResearchDelta {
-            Levels: map[Color]Levels{},
-        },
-        Monuments: CopyMap(d.Monuments),
-        Buildings: CopyMap(d.Buildings),
-        CurrPlayer: d.CurrPlayer,
-        FirstPlayer: d.FirstPlayer,
-        AccumulatedCorn: d.AccumulatedCorn,
-        Age: d.Age,
-        Day: d.Day,
-        Over: d.Over,
-        Description: d.Description,
-        BuildingNum: d.BuildingNum,
-    }
-
-    if d.ResearchDelta.Levels != nil {
-        for k, v := range d.ResearchDelta.Levels {
-            d2.ResearchDelta.Levels[k] = CopyMap(v)
-        }
-    }
-    
-    return d2
 }

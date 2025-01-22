@@ -4,9 +4,7 @@
 
 GODEBUG=gctrace=1 go run .
 
-go build && ./tzgolkin -cpuprofile=test4.prof
-
-go tool pprof tzgolkin test3.prof
+wgo tool pprof tzgolkin test3.prof
 
 ## Delta switch
 

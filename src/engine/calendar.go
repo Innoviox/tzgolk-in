@@ -181,6 +181,7 @@ func (c *Calendar) Execute(move Move, game *Game, MarkStep func(string)) *Delta 
 		} else {
 			// fmt.Println(d, p.Execute)
 			d.Add(p.Execute)
+			d.Add(c.Wheels[p.Wheel_id].RemoveWorker(move.Workers[i]))
 			// fmt.Println(d, w.ReturnFrom(c.Wheels[p.Wheel_id]))
 			// d.Add(w.ReturnFrom(c.Wheels[p.Wheel_id]))
 			// fmt.Println(d)
@@ -224,11 +225,9 @@ func (c *Calendar) Rotate(g *Game) *Delta {
 
 func (c *Calendar) WheelFor(worker int) *Wheel {
 	for _, wheel := range c.Wheels {
-		// if _, ok := wheel.Occupied[worker]; ok {
-		// 	return wheel
-		// }
-		for _, v := range wheel.Occupied {
-			if v == worker {
+		fmt.Println(wheel.Name, wheel.Occupied)
+		for k, v := range wheel.Occupied {
+			if k == worker && v >= 0 {
 				return wheel
 			}
 		}

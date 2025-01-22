@@ -176,7 +176,7 @@ func (r *Research) GetOptionsHelper(g *Game, p *Player, resources [4]int, levels
 					options = append(options, d)
 				} else {
 					for _, o := range r.GetOptionsHelper(g, p, newResources, newLevels, n - 1, free) {
-						options = append(options, Combine(d.Clone(), o))
+						options = append(options, Combine(d, o))
 					}
 				}
 			}
@@ -188,7 +188,7 @@ func (r *Research) GetOptionsHelper(g *Game, p *Player, resources [4]int, levels
 			} else {
 				for _, o1 := range advancedOptions {
 					for _, o2 := range r.GetOptionsHelper(g, p, resources, levels, n - 1, free) {
-						options = append(options, Combine(o1.Clone(), o2))
+						options = append(options, Combine(o1, o2))
 					}
 				}
 			}

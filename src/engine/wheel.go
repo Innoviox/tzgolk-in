@@ -13,7 +13,7 @@ type Wheel struct {
 	Id int
 	Size int
 
-	// map from position to worker
+	// map from worker to position
 	Occupied map[int]int
 
 	Positions []*Position
@@ -21,10 +21,17 @@ type Wheel struct {
 	String func(*Wheel, []*Worker) string
 }
 
+func MakeOccupied(size int) map[int]int {
+	occupied := make(map[int]int)
+	for i := 0; i < size; i++ {
+		occupied[i] = -1
+	}
+	return occupied
+}
+
 // -- MARK -- Basic methods
 func MakeWheel(options []Options, Wheel_id int, wheel_name string) *Wheel {
 	positions := make([]*Position, 0)
-	occupied := make(map[int]int)
 
 	for i := 0; i < len(options); i++ {
 		positions = append(positions, &Position{
@@ -32,7 +39,6 @@ func MakeWheel(options []Options, Wheel_id int, wheel_name string) *Wheel {
 			Corn: i,
 			GetOptions: options[i],
 		})
-		occupied[i] = -1
 	}
 
 	for i := 6; i < 8; i++ {
@@ -41,13 +47,12 @@ func MakeWheel(options []Options, Wheel_id int, wheel_name string) *Wheel {
 			Corn: i,
 			GetOptions: Flatten(options),
 		})
-		occupied[i] = -1
 	}
 
 	return &Wheel{
 		Id: Wheel_id,
 		Size: len(positions),
-		Occupied: occupied,
+		Occupied: MakeOccupied(24),
 		Positions: positions, 
 		Name: wheel_name,
 		String: func (wheel *Wheel, workers []*Worker) string {
@@ -59,7 +64,7 @@ func MakeWheel(options []Options, Wheel_id int, wheel_name string) *Wheel {
 		
 			for k, v := range wheel.Occupied {
 				if v >= 0 {
-					out[k] = workers[v].Color.String()
+					out[v] = workers[k].Color.String()
 				}
 			}
 		
@@ -135,13 +140,17 @@ func (w *Wheel) Exact(other *Wheel) bool {
 
 func (w *Wheel) AddDelta(delta WheelDelta, mul int) {
 	// todo how should this work?
-	if delta.Sign != 0 {
-		if mul * delta.Sign < 0 {
-			w.Occupied = CopyMap(delta.OldOccupied)
-		} else {
-			w.Occupied = CopyMap(delta.NewOccupied)
+	// if delta.Sign != 0 {
+		// if mul * delta.Sign < 0 {
+		// 	w.Occupied = CopyMap(delta.OldOccupied)
+		// } else {
+		// 	w.Occupied = CopyMap(delta.NewOccupied)
+		// }
+		for k, v := range delta.Occupied {
+			w.Occupied[k] += v * mul
 		}
-	}
+
+	// }
 
 	for i, p := range delta.PositionDeltas {
 		w.Positions[i].AddDelta(p, mul)
@@ -150,13 +159,14 @@ func (w *Wheel) AddDelta(delta WheelDelta, mul int) {
 
 // -- MARK -- Unique methods
 func (w *Wheel) AddWorker(position int, worker int) *Delta {
-	newOccupied := CopyMap(w.Occupied)
-	newOccupied[position] = worker
+	// newOccupied := CopyMap(w.Occupied)
+	// newOccupied[position] = worker
 
-	return w.MakeDelta(newOccupied, 1)
+	// return w.MakeDelta(newOccupied, 1)
+	return w.MakeDelta(map[int]int{worker: position + 1})
 }
 
-// func (w *Wheel) RemoveWorker(worker int) *Delta {
+func (w *Wheel) RemoveWorker(worker int) *Delta {
 // 	newOccupied := CopyMap(w.Occupied)
 	
 // 	for k, v := range w.Occupied {
@@ -167,13 +177,13 @@ func (w *Wheel) AddWorker(position int, worker int) *Delta {
 // 	}
 
 // 	return w.MakeDelta(newOccupied, 1)
-// }
+	currentPosition := w.Occupied[worker]
+	return w.MakeDelta(map[int]int{worker: -(currentPosition + 1)})
+}
 
-func (w *Wheel) MakeDelta(Occupied map[int]int, Sign int) *Delta {
+func (w *Wheel) MakeDelta(Occupied map[int]int) *Delta {
 	return &Delta{CalendarDelta: CalendarDelta{WheelDeltas: map[int]WheelDelta{w.Id: WheelDelta{
-		OldOccupied: CopyMap(w.Occupied),
-		NewOccupied: Occupied,
-		Sign: Sign,
+		Occupied: Occupied,
 	}}}}
 }
 
@@ -185,9 +195,11 @@ func (w *Wheel) Rotate(g *Game) *Delta {
 	for k, v := range w.Occupied {
 		if v >= w.Size - 1 || v == -1 {
 			// workerToRemove = k
+			new_occupied[k] = -(v + 1)
 		} else {
-			new_occupied[k] = -1
-			new_occupied[k + 1] = v
+			// new_occupied[k] = -1
+			// new_occupied[k + 1] = v
+			new_occupied[k] = 1
 			// worker := g.GetWorker(v)
 			// d.Add(&Delta{WorkerDeltas: map[int]WorkerDelta{worker.Id: WorkerDelta{
 			// 	// Position: 1,
@@ -199,18 +211,27 @@ func (w *Wheel) Rotate(g *Game) *Delta {
 	// 	d.Add(g.GetWorker(workerToRemove).ReturnFrom(w))
 	// }
 
-	d.Add(w.MakeDelta(new_occupied, 1))
+	d.Add(w.MakeDelta(new_occupied))
 
 	return d
 }
 
 func (w *Wheel) LowestUnoccupied() int {
 	for i := 0; i < w.Size; i++ {
-		v := w.Occupied[i]
+		v := w.WorkerOnSpot(i)
 		if v == -1 {
 			return i
 		}
 	}
 
+	return -1
+}
+
+func (w *Wheel) WorkerOnSpot(i int) int {
+	for k, v := range w.Occupied {
+		if v == i {
+			return k
+		}
+	}
 	return -1
 }

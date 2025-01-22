@@ -503,7 +503,7 @@ func (g *Game) TakeTurn(MarkStep func(string), random bool) *Delta {
 }
 
 func (g *Game) Run(MarkStep func(string), random bool) {
-	for !g.IsOver() && g.Day < 4 {
+	for !g.IsOver() /* && g.Day < 4 */ {
 		g.CurrPlayer = g.FirstPlayer
 		for i := 0; i < len(g.Players); i++ {
 			g.AddDelta(g.TakeTurn(MarkStep, random), 1)

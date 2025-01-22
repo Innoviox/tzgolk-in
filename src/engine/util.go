@@ -111,6 +111,25 @@ func CopyMap[K comparable, V any](m map[K]V) map[K]V {
 	return new
 }
 
+func AddMap[K comparable](m map[K]int, other map[K]int) map[K]int {
+	r := make(map[K]int)
+
+	for k, v := range m {
+		r[k] = v
+	}
+
+	for k, v := range other {
+		v1, ok := r[k]
+		if !ok {
+			r[k] = v
+		} else {
+			r[k] = v1 + v
+		}
+	}
+
+	return r
+}
+
 func RandZeros(m map[int]int, lo int, hi int, n int, r *rand.Rand) []int {
 	result := make([]int, 0)
 
