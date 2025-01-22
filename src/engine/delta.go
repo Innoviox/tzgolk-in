@@ -109,7 +109,6 @@ func Bool(d int, m int, current bool) bool {
 // todo MarkDelta function or something
 func (d *Delta) Add(o *Delta) {
     if o.PlayerDeltas != nil {
-        // fmt.Println("PlayerDeltas 1", d.PlayerDeltas, o.PlayerDeltas)
         if d.PlayerDeltas == nil {
             d.PlayerDeltas = map[Color]PlayerDelta{}
         }
@@ -140,52 +139,26 @@ func (d *Delta) Add(o *Delta) {
 
             d.PlayerDeltas[k] = p
         }
-        // fmt.Println("PlayerDeltas 2", d.PlayerDeltas, o.PlayerDeltas)
     }
-    // fmt.Print("b")
-    // fmt.Println(d.WorkerDeltas, o.WorkerDeltas)
+
     if o.WorkerDeltas != nil {
         if d.WorkerDeltas == nil {
-            // fmt.Println("a")
             d.WorkerDeltas = map[int]WorkerDelta{}
         }
-        // fmt.Println("b")
         for k, v := range o.WorkerDeltas {
-            // fmt.Println("c")
             w, ok := d.WorkerDeltas[k]
-            // if k == 20 && w.Position == -4 && v.Position == -4 {
-            //     fmt.Println("a", w, v)
-            //     debug.PrintStack()
-            // }
             if !ok {
-                // fmt.Println("d", k, v)
                 w = WorkerDelta{}
             }
-            // fmt.Println("e", k, v)
             if w.Unlocked == 0 {
                 w.Unlocked = v.Unlocked
             } else if v.Unlocked != 0 {
                 w.Unlocked *= v.Unlocked
             }
-            // w.Wheel_id += v.Wheel_id
-            // // a bit sus & I'm not sure why this works
-            // // w.Available = -w.Wheel_id
-            // w.Position += v.Position
-
-            // if w.Position < 0 {
-            //     // if k == 20 && w.Position == -4 && v.Position == -4 {
-            //     fmt.Println("a", w, v)
-            //     debug.PrintStack()
-            // // }
-            // }
             
             d.WorkerDeltas[k] = w
-            // fmt.Println("f", w, d.WorkerDeltas[k])
         }
     }
-    // fmt.Println(d.WorkerDeltas, o.WorkerDeltas)
-    // fmt.Print("c")
-
 
     if o.CalendarDelta.WheelDeltas != nil {
         if d.CalendarDelta.WheelDeltas == nil {
@@ -195,34 +168,8 @@ func (d *Delta) Add(o *Delta) {
             w, ok := d.CalendarDelta.WheelDeltas[k]
             if !ok {
                 w = WheelDelta{}
-                // continue
             }
-
-            // fmt.Println("Combining", w, v)
-
-            // if len(v.OldOccupied) > 0 {
-            //     w.OldOccupied = v.OldOccupied
-            // }
-
-            // if len(v.NewOccupied) > 0 {
-            //     w.NewOccupied = v.NewOccupied
-            // }
-            // if v.Occupied != nil {
-            //     if w.Occupied == nil {
-            //         w.Occupied = v.Occupied
-            //     } else {
-            //         for k2, v2 := range v.Occupied {
-            //             v3, ok := w.Occupied[k2]
-            //             if !ok {
-            //                 w.Occupied[k2] = v2
-            //             } else {
-            //                 w.Occupied[k2] = v3 + v2
-            //             }
-            //         }
-            //     }
-            // }
             w.Occupied = AddMap(w.Occupied, v.Occupied)
-            // fmt.Println("Combined", w, v)
             if v.PositionDeltas != nil {
                 if w.PositionDeltas == nil {
                     w.PositionDeltas = map[int]PositionDelta{}
@@ -246,7 +193,6 @@ func (d *Delta) Add(o *Delta) {
             d.CalendarDelta.WheelDeltas[k] = w
         }
     }
-    // fmt.Print("d")
     d.CalendarDelta.Rotation += o.CalendarDelta.Rotation
     d.CalendarDelta.FirstPlayer += o.CalendarDelta.FirstPlayer
 
@@ -264,60 +210,23 @@ func (d *Delta) Add(o *Delta) {
             d.TemplesDelta.TempleDeltas[k] = pl
         }
     }
-    // fmt.Print("e")
 
     if o.ResearchDelta.Levels != nil {
-        // fmt.Printf("%v %v\n", d.ResearchDelta, o.ResearchDelta)
         if d.ResearchDelta.Levels == nil {
             d.ResearchDelta.Levels = map[Color]Levels{}
         }
 
         for k, v := range o.ResearchDelta.Levels {
-            // fmt.Println(k, v)
             pl, ok := d.ResearchDelta.Levels[k]
             if !ok {
-                // fmt.Println("a")
-                // d.ResearchDelta.Levels[k] = v
                 pl = Levels{}
-                // fmt.Println(d.ResearchDelta.Levels[k])
             }
-            // for k2, v2 := range v {
-            //     // d.ResearchDelta.Levels[k][k2] += v2
-
-            // }
             pl = AddMap(pl, v)
             d.ResearchDelta.Levels[k] = pl
-                // d.ResearchDelta.Levels[k] = pl
-            
-            // fmt.Println(d.ResearchDelta.Levels[k])
         }
-        // fmt.Printf("%v %v\n", d.ResearchDelta, o.ResearchDelta)
     }
-    // fmt.Print("f")
-
-    // if o.Monuments != nil {
-        // if d.Monuments == nil {
-        //     d.Monuments = o.Monuments
-        // } else {
-        //     for k, v := range o.Monuments {
-        //         d.Monuments[k] += v
-        //     }
-        // }
     d.Monuments = AddMap(d.Monuments, o.Monuments)
-    // }
-    // fmt.Print("g")
-
-    // if o.Buildings != nil {
-        // if d.Buildings == nil {
-        //     d.Buildings = o.Buildings
-        // } else {
-        //     for k, v := range o.Buildings {
-        //         d.Buildings[k] += v
-        //     }
-        // }
     d.Buildings = AddMap(d.Buildings, o.Buildings)
-    // }
-    // fmt.Print("h")
 
     d.CurrPlayer += o.CurrPlayer
     d.FirstPlayer += o.FirstPlayer
@@ -331,8 +240,6 @@ func (d *Delta) Add(o *Delta) {
     if o.BuildingNum != 0 {
         d.BuildingNum = o.BuildingNum
     }
-    // fmt.Print("i!\n")
-    // fmt.Printf("%v\n", d)
 }
 
 func Combine(d1 *Delta, d2 *Delta) *Delta {

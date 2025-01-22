@@ -509,6 +509,7 @@ func (g *Game) Run(MarkStep func(string), random bool) {
 			g.AddDelta(g.TakeTurn(MarkStep, random), 1)
 			MarkStep("Test")
 			g.CurrPlayer = (g.CurrPlayer + 1) % len(g.Players)
+			return
 		}
 
 		if g.Calendar.FirstPlayer != -1 {
@@ -527,7 +528,7 @@ func (g *Game) RunStop(MarkStep func(string), stopPlayer *Player) *Delta {
 	d := &Delta{}
 	run1 := mod(g.FirstPlayer - int(stopPlayer.Color) + 3, 4)
 	ran := false
-	for !g.IsOver() /* && g.Day < 4 */ {
+	for !g.IsOver() {
 		k := run1
 		if ran {
 			k = 4
