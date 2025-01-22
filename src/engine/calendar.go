@@ -152,10 +152,10 @@ func (c *Calendar) Execute(move Move, game *Game, MarkStep func(string)) *Delta 
 	if move.Begged != -1 {
 		pd.Corn = 3 - player.Corn
 		// todo use actual Step for lightsiding
-		d.Add(game.Temples.Step(player, move.Begged, -1))
+		d.Add(game.Temples.Step(player, move.Begged, -1), true)
 	}
 	pd.Corn -= move.Corn
-	d.Add(PlayerDeltaWrapper(move.Player, pd))
+	d.Add(PlayerDeltaWrapper(move.Player, pd), true)
 	// fmt.Println(move.String())
 	for i := 0; i < len(move.Workers); i++ {
 		p := move.Positions[i]
@@ -164,24 +164,21 @@ func (c *Calendar) Execute(move Move, game *Game, MarkStep func(string)) *Delta 
 		if (move.Placing) {
 			if p.FirstPlayer {
 				d.Add(&Delta{
-					WorkerDeltas: map[int]WorkerDelta{move.Workers[i]: WorkerDelta{
-						// Wheel_id: -2 - w.Wheel_id,
-					}},
 					CalendarDelta: CalendarDelta{
 						FirstPlayer: move.Workers[i] - c.FirstPlayer,
 					},
-				})
+				}, true)
 			} else {
 				if p.Corn < 0 {
 					fmt.Println("negative corn", p.Corn)
 				}
-				d.Add(c.Wheels[p.Wheel_id].AddWorker(p.Corn, move.Workers[i]))
+				d.Add(c.Wheels[p.Wheel_id].AddWorker(p.Corn, move.Workers[i]), true)
 				// d.Add(w.PlaceOn(p.Wheel_id, p.Corn))
 			}
 		} else {
 			// fmt.Println(d, p.Execute)
-			d.Add(p.Execute)
-			d.Add(c.Wheels[p.Wheel_id].RemoveWorker(move.Workers[i]))
+			d.Add(p.Execute, true)
+			d.Add(c.Wheels[p.Wheel_id].RemoveWorker(move.Workers[i]), true)
 			// fmt.Println(d, w.ReturnFrom(c.Wheels[p.Wheel_id]))
 			// d.Add(w.ReturnFrom(c.Wheels[p.Wheel_id]))
 			// fmt.Println(d)
@@ -218,7 +215,7 @@ func (c *Calendar) LegalPositions() []*SpecificPosition {
 func (c *Calendar) Rotate(g *Game) *Delta {
 	d := &Delta{}
 	for i := 0; i < len(c.Wheels); i++ {
-		d.Add(c.Wheels[i].Rotate(g))
+		d.Add(c.Wheels[i].Rotate(g), true)
 	}
 	return d
 }

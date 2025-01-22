@@ -74,8 +74,8 @@ func Age2Building5() Building {
             options := make([]*Delta, 0)
             for _, o := range g.Research.FreeResearch(g, p, Theology) {
                 d := g.Temples.Step(p, 0, 1)
-                d.Add(g.Temples.Step(p, 2, 1))
-                d.Add(o)
+                d.Add(g.Temples.Step(p, 2, 1), true)
+                d.Add(o, true)
                 options = append(options, d)
             }
             return options
@@ -95,7 +95,7 @@ func Age2Building6() Building {
                     Resources: [4]int{0, 1, 0, 0},
                 })
 
-                d.Add(o)
+                d.Add(o, true)
                 options = append(options, d)
             }
 
@@ -179,7 +179,7 @@ func Age2Building11() Building {
                 Points: 3,
             })
             for i := 0; i < 3; i++ {
-                d.Add(g.Temples.Step(p, i, 1))
+                d.Add(g.Temples.Step(p, i, 1), true)
             }
             return []*Delta{d}
         },
@@ -197,7 +197,7 @@ func Age2Building12() Building {
                 d := PlayerDeltaWrapper(p.Color, PlayerDelta{
                     Resources: [4]int{0, 0, 0, 1},
                 })
-                d.Add(o)
+                d.Add(o, true)
                 options = append(options, d)
             }
             return options
@@ -216,7 +216,7 @@ func Age2Building13() Building {
                 d := PlayerDeltaWrapper(p.Color, PlayerDelta{
                     Points: 3,
                 })
-                d.Add(o)
+                d.Add(o, true)
                 options = append(options, d)
             }
             return options
@@ -276,7 +276,7 @@ func Age2Building17() Building {
                 d := PlayerDeltaWrapper(p.Color, PlayerDelta{
                     Corn: 6,
                 })
-                d.Add(o)
+                d.Add(o, true)
                 options = append(options, d)
             }
             return options
@@ -295,7 +295,7 @@ func Age2Building18() Building {
                 d := PlayerDeltaWrapper(p.Color, PlayerDelta{
                     Resources: [4]int{0, 0, 1, 0},
                 })
-                d.Add(o)
+                d.Add(o, true)
                 options = append(options, d)
             }
             return options

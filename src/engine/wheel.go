@@ -211,7 +211,7 @@ func (w *Wheel) Rotate(g *Game) *Delta {
 	// 	d.Add(g.GetWorker(workerToRemove).ReturnFrom(w))
 	// }
 
-	d.Add(w.MakeDelta(new_occupied))
+	d.Add(w.MakeDelta(new_occupied), true)
 
 	return d
 }

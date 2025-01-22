@@ -56,7 +56,7 @@ func MakeController(rand *rand.Rand) *Controller {
 }
 
 func (c *Controller) Run(MarkStep func(string)) {
-    c.game.Run(MarkStep, false)
+    c.game.Run(MarkStep, true)
 }
 
 func (c *Controller) IsOver() bool {

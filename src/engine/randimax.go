@@ -66,7 +66,7 @@ func ComputeMove(g *Game, p *Player, ply int, rec bool) (*Move, float64) {
         
         // fmt.Println("EXECUTING", m)
         d1 := g.Calendar.Execute(m, g, func(s string){/*fmt.Println(s)*/})
-        g.AddDelta(d1, 1)
+        g.AddDelta(d1, 1, false)
         // fmt.Println("aaa", d1.WorkerDeltas)
         // d.Add(d1)
 
@@ -93,7 +93,7 @@ func ComputeMove(g *Game, p *Player, ply int, rec bool) (*Move, float64) {
         
         // g.Load(ply)
         d3 := Combine(d1, d2)
-        g.AddDelta(d3, -1)
+        g.AddDelta(d3, -1, true)
         // g.AddDelta(d2, -1)
         // g.AddDelta(d, -1)
         g.CurrPlayer = ccp

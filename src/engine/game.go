@@ -88,10 +88,10 @@ func (g *Game) Init() {
 	g.Research = MakeResearch()
 
 	g.NBuildings = 6
-	g.AddDelta(g.DealBuildings(), 1)
+	g.AddDelta(g.DealBuildings(), 1, true)
 
 	g.NMonuments = 6
-	g.AddDelta(g.DealMonuments(), 1)
+	g.AddDelta(g.DealMonuments(), 1, true)
 
 	g.TileSetup()
 
@@ -233,7 +233,7 @@ func (g *Game) Exact(other *Game) bool {
 		g.Over == other.Over
 }
 
-func (g *Game) AddDelta(delta *Delta, mul int) {
+func (g *Game) AddDelta(delta *Delta, mul int, clear bool) {
 	for _, p := range g.Players {
 		res, ok := delta.PlayerDeltas[p.Color]
 		if ok {
@@ -263,6 +263,10 @@ func (g *Game) AddDelta(delta *Delta, mul int) {
 	g.Age += delta.Age * mul
 	g.Day += delta.Day * mul
 	g.Over = Bool(delta.Over, mul, g.Over)
+
+	if clear {
+		delta.Put()
+	}
 }
 
 func (g *Game) Save(key int) {
@@ -359,10 +363,10 @@ func (g *Game) FirstPlayerSpace(MarkStep func(string)) *Delta {
 		// todo actually decide
 		d.Add(PlayerDeltaWrapper(player.Color, PlayerDelta{
 			LightSide: -1,
-		}))
+		}), true)
 		// fmt.Fprintf(os.Stdout, "Player %s has gone dark\n", player.Color)
 		MarkStep(fmt.Sprintf("Player %s has gone dark", player.Color.String()))
-		d.Add(g.Rotate(MarkStep))
+		d.Add(g.Rotate(MarkStep), true)
 	}
 
 	return d
@@ -373,7 +377,7 @@ func (g *Game) Rotate(MarkStep func(string)) *Delta {
 	delta := g.Calendar.Rotate(g)
 	delta.AccumulatedCorn = 1
 	MarkStep("Rotated Calendar")
-	delta.Add(g.CheckDay(MarkStep))
+	delta.Add(g.CheckDay(MarkStep), true)
 	delta.Day = 1
 
 	return delta
@@ -383,10 +387,10 @@ func (g *Game) CheckDay(MarkStep func(string)) *Delta {
 	d := &Delta{}
 	for _, day := range g.ResDays {
 		if g.Day == day {
-			d.Add(g.FoodDay(MarkStep))
+			d.Add(g.FoodDay(MarkStep), true)
 
 			for _, player := range g.Players {
-				d.Add(g.Temples.GainResources(player))
+				d.Add(g.Temples.GainResources(player), true)
 			}
 
 			MarkStep("Gained resources")
@@ -397,10 +401,10 @@ func (g *Game) CheckDay(MarkStep func(string)) *Delta {
 
 	for _, day := range g.PointDays {
 		if g.Day == day {
-			d.Add(g.FoodDay(MarkStep))
+			d.Add(g.FoodDay(MarkStep), true)
 			
 			for _, player := range g.Players {
-				d.Add(g.Temples.GainPoints(player, g.Age))
+				d.Add(g.Temples.GainPoints(player, g.Age), true)
 			}
 
 			MarkStep("Gained points")
@@ -414,10 +418,10 @@ func (g *Game) CheckDay(MarkStep func(string)) *Delta {
 						d.Buildings[k] = -1
 					}
 				}
-				d.Add(g.DealBuildings())
+				d.Add(g.DealBuildings(), true)
 				MarkStep("Dealt new buildings")
 			} else {
-				d.Add(g.EndGame(MarkStep))
+				d.Add(g.EndGame(MarkStep), true)
 			}
 			return d
 		}
@@ -492,13 +496,13 @@ func (g *Game) TakeTurn(MarkStep func(string), random bool) *Delta {
 	
 	if move != nil {
 		MarkStep(fmt.Sprintf("Playing move %s for %s", move.String(), player.Color.String()))
-		d.Add(g.Calendar.Execute(*move, g, MarkStep))
+		d.Add(g.Calendar.Execute(*move, g, MarkStep), true)
 	} else {
 		MarkStep(fmt.Sprintf("[FATAL ERROR] No move for %s", player.Color.String()))
 	}
 	// player.Corn -= move.Corn
 
-	d.Add(g.DealBuildings())
+	d.Add(g.DealBuildings(), true)
 	return d
 }
 
@@ -506,17 +510,17 @@ func (g *Game) Run(MarkStep func(string), random bool) {
 	for !g.IsOver() /* && g.Day < 4 */ {
 		g.CurrPlayer = g.FirstPlayer
 		for i := 0; i < len(g.Players); i++ {
-			g.AddDelta(g.TakeTurn(MarkStep, random), 1)
+			g.AddDelta(g.TakeTurn(MarkStep, random), 1, true)
 			MarkStep("Test")
 			g.CurrPlayer = (g.CurrPlayer + 1) % len(g.Players)
 			return
 		}
 
 		if g.Calendar.FirstPlayer != -1 {
-			g.AddDelta(g.FirstPlayerSpace(MarkStep), 1)
+			g.AddDelta(g.FirstPlayerSpace(MarkStep), 1, true)
 		}
 
-		g.AddDelta(g.Rotate(MarkStep), 1)
+		g.AddDelta(g.Rotate(MarkStep), 1, true)
 	}
 }
 
@@ -543,24 +547,27 @@ func (g *Game) RunStop(MarkStep func(string), stopPlayer *Player) *Delta {
 			}
 
 			d1 := g.TakeTurn(MarkStep, true)
-			g.AddDelta(d1, 1)
+			d.Add(d1, false)
+			g.AddDelta(d1, 1, true)
 			// fmt.Println("ADDING D1", d.WorkerDeltas, d1.WorkerDeltas)
-			d.Add(d1)
+			
 			MarkStep("Test")
 			g.CurrPlayer = (g.CurrPlayer + 1) % len(g.Players)
 		}
 
 		if g.Calendar.FirstPlayer != -1 {
 			d2 := g.FirstPlayerSpace(MarkStep)
-			g.AddDelta(d2, 1)
+			d.Add(d2, false)
+			g.AddDelta(d2, 1, true)
 			// fmt.Println("ADDING D2", d.WorkerDeltas, d2.WorkerDeltas)
-			d.Add(d2)
+			
 		}
 
 		d3 := g.Rotate(MarkStep)
-		g.AddDelta(d3, 1)
+		d.Add(d3, false)
+		g.AddDelta(d3, 1, true)
 		// fmt.Println("ADDING D3", d.WorkerDeltas, d3.WorkerDeltas)
-		d.Add(d3)
+		
 	}
 	return d
 

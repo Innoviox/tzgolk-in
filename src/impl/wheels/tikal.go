@@ -30,7 +30,7 @@ func Tikal4(g *Game, p *Player) []*Delta {
 		o1 := o//.Clone()
 
 		// g2 := g.Clone()
-		g.AddDelta(o1, 1)
+		g.AddDelta(o1, 1, false)
 
 		for _, o2 := range g.GetBuildingOptions(p, o.BuildingNum, false) {
 			d := Combine(o, o2)
@@ -38,7 +38,7 @@ func Tikal4(g *Game, p *Player) []*Delta {
 			options = append(options, d)
 		}
 
-		g.AddDelta(o1, -1)
+		g.AddDelta(o1, -1, true)
 		// if !g.Exact(g2) {
 		// 	fmt.Println("PLATO ERROR %")
 		// 	fmt.Println(o1)
@@ -69,8 +69,8 @@ func Tikal5(g *Game, p *Player) []*Delta {
 						Resources: r,
 					})
 
-					d.Add(g.Temples.Step(p, j, 1))
-					d.Add(g.Temples.Step(p, k, 1))
+					d.Add(g.Temples.Step(p, j, 1), true)
+					d.Add(g.Temples.Step(p, k, 1), true)
 
 					d.Description = fmt.Sprintf("pay 1 %s, 1 %sT, 1 %sT", string(ResourceDebug[i]), string(TempleDebug[j]), string(TempleDebug[k]))
 

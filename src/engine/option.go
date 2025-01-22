@@ -62,9 +62,9 @@ func (g *Game) GetBuildingOptions(p *Player, exclude int, useResearch bool) []*D
 					Description: fmt.Sprintf("[build %d] pay %s ", b.Id, CostString(cost)),
 					BuildingNum: b.Id,
 				}
-				d.Add(effect) // effect.Descriptio
+				d.Add(effect, true) // effect.Descriptio
 				if useResearch {
-					d.Add(g.Research.Built(p)) // g.Research.BuiltString(p)
+					d.Add(g.Research.Built(p), true) // g.Research.BuiltString(p)
 				}
 				options = append(options, d)
 			}
@@ -110,7 +110,7 @@ func (t *Temples) GainTempleStep(p *Player, o *Delta, dir int) []*Delta {
 	for i := 0; i < 3; i++ {
 		if t.CanStep(p, i, dir) {
 			d := t.Step(p, i, dir)
-			d.Add(o)
+			d.Add(o, false)
 			options = append(options, d)
 		}
 	}
@@ -170,7 +170,7 @@ func (r *Research) GetOptionsHelper(g *Game, p *Player, resources [4]int, levels
 				d := ResourcesDelta(p.Color, p.Resources, newResources)
 				d.Add(&Delta{ResearchDelta: ResearchDelta{Levels: map[Color]Levels{p.Color: map[Science]int{
 					Science(s): 1,
-				}}}})
+				}}}}, true)
 				d.Description = GenerateResearchDescription(resources, newResources, levels, newLevels)
 				if n == 1 {
 					options = append(options, d)

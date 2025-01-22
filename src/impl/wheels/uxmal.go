@@ -110,8 +110,8 @@ func Uxmal4(g *Game, p *Player) []*Delta {
 					},
 				})
 
-				d.Add(effect)
-				d.Add(g.Research.Built(p))
+				d.Add(effect, true)
+				d.Add(g.Research.Built(p), true)
 
 				d.Buildings = map[int]int{
 					b.Id: 1,

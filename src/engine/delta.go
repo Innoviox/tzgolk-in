@@ -3,11 +3,53 @@ package engine
 import (
     "fmt"
     // "runtime/debug"
+    "sync"
 )
+
+var (
+    DeltaPool = sync.Pool{
+        New: func() interface{} {
+            return &Delta{}
+        },
+    }
+)
+
+func GetDelta() *Delta {
+    d := DeltaPool.Get().(*Delta)
+    // d.reset()
+    return d
+}
+
+// PutDelta returns a Delta to the pool
+func (d *Delta) Put() {
+    if d == nil {
+        return
+    }
+    d.reset()
+    // d.cleanup()
+    DeltaPool.Put(d)
+}
+
+func (d *Delta) reset() {
+    d.PlayerDeltas = nil
+    d.WorkerDeltas = nil
+    d.CalendarDelta = CalendarDelta{}
+    d.TemplesDelta = TemplesDelta{}
+    d.ResearchDelta = ResearchDelta{}
+    d.Monuments = nil
+    d.Buildings = nil
+    d.CurrPlayer = 0
+    d.FirstPlayer = 0
+    d.AccumulatedCorn = 0
+    d.Age = 0
+    d.Day = 0
+    d.Over = 0
+    d.Description = ""
+    d.BuildingNum = 0
+}
 
 // everything represents a delta
 // booleans are ints; positive means true, negative means false
-
 type Delta struct {
     PlayerDeltas map[Color]PlayerDelta
     WorkerDeltas map[int]WorkerDelta
@@ -107,7 +149,7 @@ func Bool(d int, m int, current bool) bool {
 }
 
 // todo MarkDelta function or something
-func (d *Delta) Add(o *Delta) {
+func (d *Delta) Add(o *Delta, clear bool) {
     if o.PlayerDeltas != nil {
         if d.PlayerDeltas == nil {
             d.PlayerDeltas = map[Color]PlayerDelta{}
@@ -240,12 +282,16 @@ func (d *Delta) Add(o *Delta) {
     if o.BuildingNum != 0 {
         d.BuildingNum = o.BuildingNum
     }
+
+    if clear {
+        o.Put()
+    }
 }
 
 func Combine(d1 *Delta, d2 *Delta) *Delta {
     d := &Delta{}
-    d.Add(d1)
-    d.Add(d2)
+    d.Add(d1, false)
+    d.Add(d2, false)
     return d
 }
 

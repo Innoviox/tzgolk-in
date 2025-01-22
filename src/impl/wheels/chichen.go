@@ -100,7 +100,7 @@ func ChichenX(n int, canForesight bool) Options {
 						d := &Delta{PlayerDeltas: map[Color]PlayerDelta{p.Color: PlayerDelta{Resources: r}}}
 						d.Description = fmt.Sprintf("[theo] pay 1 %s", string(ResourceDebug[i]))
 
-						d.Add(o)
+						d.Add(o, true)
 						options = append(options, g.Temples.GainTempleStep(p, d, 1)...)
 					}
 				}

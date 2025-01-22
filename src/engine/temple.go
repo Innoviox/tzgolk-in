@@ -163,7 +163,7 @@ func (t *Temples) Step(p *Player, temple int, dir int) *Delta {
 		pd := PlayerDelta{
 			LightSide: 1,
 		}
-		d.Add(PlayerDeltaWrapper(p.Color, pd))
+		d.Add(PlayerDeltaWrapper(p.Color, pd), true)
 	}
 	
 	return d

@@ -32,7 +32,7 @@ func Palenque2(g *Game, p *Player) []*Delta {
 			PositionDeltas: map[int]PositionDelta{2: PositionDelta{PData: PalenqueDataDelta{
 				CornTiles: -1,
 			}}},
-		}}}})
+		}}}}, true)
 
 		d.Description = fmt.Sprintf("4 + %d Corn", g.Research.CornBonus(p.Color, Blue))
 		options = append(options, d)
@@ -64,7 +64,7 @@ func Jungle(Corn int, wood int, position int) Options {
 				PositionDeltas: map[int]PositionDelta{position: PositionDelta{PData: PalenqueDataDelta{
 					WoodTiles: -1,
 				}}},
-			}}}})
+			}}}}, true)
 
 			d.Description = fmt.Sprintf("%d + %d wood", wood, g.Research.ResourceBonus(p.Color, Wood))
 			options = append(options, d)
@@ -79,7 +79,7 @@ func Jungle(Corn int, wood int, position int) Options {
 					WoodTiles: -1,
 					CornTiles: -1,
 				}}},
-			}}}})
+			}}}}, true)
 
 			d2.Description = fmt.Sprintf("%d + %d Corn", Corn, g.Research.CornBonus(p.Color, Green))
 			options = append(options, g.Temples.GainTempleStep(p, d2, -1)...)
@@ -95,7 +95,7 @@ func Jungle(Corn int, wood int, position int) Options {
 				PositionDeltas: map[int]PositionDelta{position: PositionDelta{PData: PalenqueDataDelta{
 					CornTiles: -1,
 				}}},
-			}}}})
+			}}}}, true)
 
 			d.Description = fmt.Sprintf("%d + %d Corn", Corn, g.Research.CornBonus(p.Color, Green))
 			options = append(options, d)
