@@ -3,6 +3,7 @@ package engine
 import (
 	"fmt"
 	"strings"
+	. "tzgolkin/delta"
 )
 
 type Position struct {

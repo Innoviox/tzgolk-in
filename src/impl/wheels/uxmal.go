@@ -3,6 +3,7 @@ package wheels
 import (
 	"fmt"
 	. "tzgolkin/engine"
+	. "tzgolkin/delta"
 )
 
 func Uxmal0(g *Game, p *Player) []*Delta {
@@ -13,7 +14,7 @@ func Uxmal1(g *Game, p *Player) []*Delta {
 	options := make([]*Delta, 0)
 
 	if p.Corn >= 3 {
-		d := PlayerDeltaWrapper(p.Color, PlayerDelta{
+		d := PlayerDeltaWrapper(int(p.Color), PlayerDelta{
 			Corn: -3,
 		})
 		d.Description = "pay 3 Corn"
@@ -103,7 +104,7 @@ func Uxmal4(g *Game, p *Player) []*Delta {
 		cost := b.CornCost(g, p) 
 		if p.Corn >= cost {
 			for _, effect := range b.GetEffects(g, p) {
-				d := PlayerDeltaWrapper(p.Color, PlayerDelta{
+				d := PlayerDeltaWrapper(int(p.Color), PlayerDelta{
 					Corn: -cost,
 					Buildings: map[int]int{
 						b.Id: 1,
@@ -146,7 +147,7 @@ func Uxmal5(g *Game, p *Player) []*Delta {
 
 
 	for _, option := range allOptions {
-		options = append(options, Combine(option, PlayerDeltaWrapper(p.Color, PlayerDelta{
+		options = append(options, Combine(option, PlayerDeltaWrapper(int(p.Color), PlayerDelta{
 			Corn: -1,
 		})))
 	}

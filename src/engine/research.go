@@ -4,17 +4,18 @@ import (
 	"fmt"
 	"strings"
 	"reflect"
+	. "tzgolkin/delta"
 )
 
 type Science int
-type Levels map[Science]int
+type Levels map[int]int
 
 func MakeLevels() Levels {
 	return Levels{
-		Agriculture: 0,
-		Resources: 0,
-		Construction: 0,
-		Theology: 0,
+		int(Agriculture): 0,
+		int(Resources): 0,
+		int(Construction): 0,
+		int(Theology): 0,
 	}
 }
 
@@ -65,7 +66,7 @@ func (r *Research) Copy(other *Research) {
 func (r *Research) AddDelta(delta ResearchDelta, mul int) {
 	for c, l := range delta.Levels {
 		for s, n := range l {
-			r.Levels[c][s] += n * mul
+			r.Levels[Color(c)][int(s)] += n * mul
 		}
 	}
 }
@@ -109,7 +110,7 @@ func (r *Research) String() string {
 }
 
 func (r *Research) HasLevel(c Color, s Science, level int) bool {
-	return r.Levels[c][s] >= level
+	return r.Levels[c][int(s)] >= level
 }
 
 func (r *Research) Devout(c Color) bool {
@@ -162,7 +163,7 @@ func (r *Research) Built(p *Player) *Delta {
 		pd.Points = 2
 	}
 
-	return PlayerDeltaWrapper(p.Color, pd)
+	return PlayerDeltaWrapper(int(p.Color), pd)
 }
 
 func (r *Research) BuiltString(p *Player) string {

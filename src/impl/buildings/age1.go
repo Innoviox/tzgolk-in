@@ -4,6 +4,7 @@ import (
     // "fmt"
     // "math/rand"
     . "tzgolkin/engine"
+    . "tzgolkin/delta"
 )
 
 func Building1() Building {
@@ -11,7 +12,7 @@ func Building1() Building {
         Id: 1,
         Cost: [4]int{1, 0, 0, 0},
         GetEffects: func (g *Game, p *Player) []*Delta {
-            d := PlayerDeltaWrapper(p.Color, PlayerDelta{
+            d := PlayerDeltaWrapper(int(p.Color), PlayerDelta{
                 FreeWorkers: 1,
             })
             d.Description = "1 free worker"
@@ -61,7 +62,7 @@ func Building5() Building {
         Id: 5,
         Cost: [4]int{4, 0, 0, 0},
         GetEffects: func (g *Game, p *Player) []*Delta {
-            d := PlayerDeltaWrapper(p.Color, PlayerDelta{
+            d := PlayerDeltaWrapper(int(p.Color), PlayerDelta{
                 WorkerDeduction: 1,
             })
             d.Description = "1 worker deduction"
@@ -124,7 +125,7 @@ func Building9() Building {
         GetEffects: func (g *Game, p *Player) []*Delta {
             options := make([]*Delta, 0)
             for _, o := range g.Research.FreeResearch(g, p, Resources) {
-                options = append(options, Combine(o, PlayerDeltaWrapper(p.Color, PlayerDelta{
+                options = append(options, Combine(o, PlayerDeltaWrapper(int(p.Color), PlayerDelta{
                     Corn: 1,
                 })))
             }
@@ -166,7 +167,7 @@ func Building12() Building {
         GetEffects: func (g *Game, p *Player) []*Delta {
             options := make([]*Delta, 0)
             for _, o := range g.Research.FreeResearch(g, p, Resources) {
-                options = append(options, Combine(o, PlayerDeltaWrapper(p.Color, PlayerDelta{
+                options = append(options, Combine(o, PlayerDeltaWrapper(int(p.Color), PlayerDelta{
                     Resources: [4]int{0, 0, 1, 0},
                 })))
             }
@@ -183,7 +184,7 @@ func Building13() Building {
         GetEffects: func (g *Game, p *Player) []*Delta {
             options := make([]*Delta, 0)
             for _, o := range g.Research.FreeResearch(g, p, Agriculture) {
-                options = append(options, Combine(o, PlayerDeltaWrapper(p.Color, PlayerDelta{
+                options = append(options, Combine(o, PlayerDeltaWrapper(int(p.Color), PlayerDelta{
                     Resources: [4]int{0, 1, 0, 0},
                 })))
             }

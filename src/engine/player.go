@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strings"
 	"reflect"
+	. "tzgolkin/delta"
 )
 
 type Player struct {

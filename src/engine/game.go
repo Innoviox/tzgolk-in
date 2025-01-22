@@ -6,6 +6,7 @@ import (
 	"strings"
 	"math/rand"
 	"reflect"
+	. "tzgolkin/delta"
 )
 
 type Game struct {
@@ -88,10 +89,10 @@ func (g *Game) Init() {
 	g.Research = MakeResearch()
 
 	g.NBuildings = 6
-	g.AddDelta(g.DealBuildings(), 1)
+	g.AddDelta(g.DealBuildings(), 1, true)
 
 	g.NMonuments = 6
-	g.AddDelta(g.DealMonuments(), 1)
+	g.AddDelta(g.DealMonuments(), 1, true)
 
 	g.TileSetup()
 
@@ -109,6 +110,8 @@ func (g *Game) Init() {
 	g.Freeze = make(map[int]*Game)
 
 	fmt.Fprintf(os.Stdout, "%s", g.String())
+
+	DeltaPrewarmPools(10000)
 }
 
 func (g *Game) Clone() *Game {
@@ -233,9 +236,9 @@ func (g *Game) Exact(other *Game) bool {
 		g.Over == other.Over
 }
 
-func (g *Game) AddDelta(delta *Delta, mul int) {
+func (g *Game) AddDelta(delta *Delta, mul int, clear bool) {
 	for _, p := range g.Players {
-		res, ok := delta.PlayerDeltas[p.Color]
+		res, ok := delta.PlayerDeltas[int(p.Color)]
 		if ok {
 			p.AddDelta(res, mul)
 		}
@@ -263,6 +266,10 @@ func (g *Game) AddDelta(delta *Delta, mul int) {
 	g.Age += delta.Age * mul
 	g.Day += delta.Day * mul
 	g.Over = Bool(delta.Over, mul, g.Over)
+
+	if clear {
+		PutDelta(delta)
+	}
 }
 
 func (g *Game) Save(key int) {
@@ -311,18 +318,16 @@ func (g *Game) FirstPlayerSpace(MarkStep func(string)) *Delta {
 	worker := g.GetWorker(g.Calendar.FirstPlayer)
 	player := g.GetPlayerByColor(worker.Color)
 
-	d := &Delta{
-		PlayerDeltas: map[Color]PlayerDelta{player.Color: PlayerDelta{
-			Corn: g.AccumulatedCorn,
-		}},
-		WorkerDeltas: map[int]WorkerDelta{worker.Id: WorkerDelta{
-			// Available: 1,
-			// Wheel_id: -1 - worker.Wheel_id, 
-			// Position: -1 - worker.Position,
-		}},
-		CalendarDelta: CalendarDelta{FirstPlayer: -1 - g.Calendar.FirstPlayer},
-		AccumulatedCorn: -g.AccumulatedCorn,
+	d := GetDelta()
+	d.PlayerDeltas = PlayerDeltaMapPool.Get().(map[int]PlayerDelta)
+	d.PlayerDeltas[int(player.Color)] = PlayerDelta{
+		Corn: g.AccumulatedCorn,
 	}
+
+	d.CalendarDelta.FirstPlayer = -1 - g.Calendar.FirstPlayer
+
+	d.AccumulatedCorn = -g.AccumulatedCorn
+
 
 	MarkStep(fmt.Sprintf("FirstPlayer for %s, +%d Corn", player.Color.String(), g.AccumulatedCorn))
 	
@@ -357,7 +362,7 @@ func (g *Game) FirstPlayerSpace(MarkStep func(string)) *Delta {
 
 	if !nextDayIsFoodDay && player.LightSide && g.Rand.Intn(2) == 0 {
 		// todo actually decide
-		d.Add(PlayerDeltaWrapper(player.Color, PlayerDelta{
+		d.Add(PlayerDeltaWrapper(int(player.Color), PlayerDelta{
 			LightSide: -1,
 		}))
 		// fmt.Fprintf(os.Stdout, "Player %s has gone dark\n", player.Color)
@@ -380,7 +385,7 @@ func (g *Game) Rotate(MarkStep func(string)) *Delta {
 }
 
 func (g *Game) CheckDay(MarkStep func(string)) *Delta {
-	d := &Delta{}
+	d := GetDelta()
 	for _, day := range g.ResDays {
 		if g.Day == day {
 			d.Add(g.FoodDay(MarkStep))
@@ -426,7 +431,8 @@ func (g *Game) CheckDay(MarkStep func(string)) *Delta {
 }
 
 func (g *Game) EndGame(MarkStep func(string)) *Delta {
-	d := &Delta{PlayerDeltas: map[Color]PlayerDelta{}}
+	d := GetDelta()
+	d.PlayerDeltas = PlayerDeltaMapPool.Get().(map[int]PlayerDelta)
 	for _, p := range g.Players {
 		i := 0
 		i += p.TotalCorn() / 4
@@ -438,7 +444,7 @@ func (g *Game) EndGame(MarkStep func(string)) *Delta {
 			}
 		}
 		MarkStep(fmt.Sprintf("Gained endgame points for %s", p.Color.String()))
-		d.PlayerDeltas[p.Color] = PlayerDelta{Points: i}
+		d.PlayerDeltas[int(p.Color)] = PlayerDelta{Points: i}
 	}
 
 	d.Over = 1
@@ -446,7 +452,8 @@ func (g *Game) EndGame(MarkStep func(string)) *Delta {
 }
 
 func (g *Game) FoodDay(MarkStep func(string)) *Delta {
-	d := &Delta{PlayerDeltas: map[Color]PlayerDelta{}}
+	d := GetDelta()
+	d.PlayerDeltas = PlayerDeltaMapPool.Get().(map[int]PlayerDelta)
 	for _, player := range g.Players {
 		paid := 0
 		unpaid := 0
@@ -466,7 +473,7 @@ func (g *Game) FoodDay(MarkStep func(string)) *Delta {
 				}
 			}
 		}
-		d.PlayerDeltas[player.Color] = pd
+		d.PlayerDeltas[int(player.Color)] = pd
 		// fmt.Fprintf(os.Stdout, "Player %s paid %d workers, didn't pay %d workers\n", player.Color.String(), paid, unpaid)
 		MarkStep(fmt.Sprintf("Player %s paid %d workers, didn't pay %d workers", player.Color.String(), paid, unpaid))
 	}
@@ -474,7 +481,7 @@ func (g *Game) FoodDay(MarkStep func(string)) *Delta {
 }
 
 func (g *Game) TakeTurn(MarkStep func(string), random bool) *Delta {
-	d := &Delta{}
+	d := GetDelta()
 	player := g.Players[g.CurrPlayer]
 
 	var move *Move
@@ -482,7 +489,16 @@ func (g *Game) TakeTurn(MarkStep func(string), random bool) *Delta {
 		// this number is equal to ply + 1
 		moves := g.GenerateMoves(g.Players[g.CurrPlayer], 3)
 		if len(moves) > 0 {
-			move = &moves[g.Rand.Intn(len(moves))]
+			moveN := g.Rand.Intn(len(moves)) 
+			move = &moves[moveN]
+			for i := 0; i < len(moves); i++ {
+				if i != moveN {
+					for _, p := range moves[i].Positions {
+						PutDelta(p.Execute)
+						p.Execute = nil
+					}
+				}
+			}
 		}
 	} else {
 		move, _ = ComputeMove(g, player, 2, false)
@@ -506,17 +522,17 @@ func (g *Game) Run(MarkStep func(string), random bool) {
 	for !g.IsOver() /* && g.Day < 4 */ {
 		g.CurrPlayer = g.FirstPlayer
 		for i := 0; i < len(g.Players); i++ {
-			g.AddDelta(g.TakeTurn(MarkStep, random), 1)
+			g.AddDelta(g.TakeTurn(MarkStep, random), 1, true)
 			MarkStep("Test")
 			g.CurrPlayer = (g.CurrPlayer + 1) % len(g.Players)
-			return
+			// return
 		}
 
 		if g.Calendar.FirstPlayer != -1 {
-			g.AddDelta(g.FirstPlayerSpace(MarkStep), 1)
+			g.AddDelta(g.FirstPlayerSpace(MarkStep), 1, true)
 		}
 
-		g.AddDelta(g.Rotate(MarkStep), 1)
+		g.AddDelta(g.Rotate(MarkStep), 1, true)
 	}
 }
 
@@ -525,7 +541,7 @@ func mod(a, b int) int {
 }
 
 func (g *Game) RunStop(MarkStep func(string), stopPlayer *Player) *Delta {
-	d := &Delta{}
+	d := GetDelta()
 	run1 := mod(g.FirstPlayer - int(stopPlayer.Color) + 3, 4)
 	ran := false
 	for !g.IsOver() {
@@ -543,24 +559,25 @@ func (g *Game) RunStop(MarkStep func(string), stopPlayer *Player) *Delta {
 			}
 
 			d1 := g.TakeTurn(MarkStep, true)
-			g.AddDelta(d1, 1)
-			// fmt.Println("ADDING D1", d.WorkerDeltas, d1.WorkerDeltas)
 			d.Add(d1)
+			g.AddDelta(d1, 1, true)
+			// fmt.Println("ADDING D1", d.WorkerDeltas, d1.WorkerDeltas)
+			
 			MarkStep("Test")
 			g.CurrPlayer = (g.CurrPlayer + 1) % len(g.Players)
 		}
 
 		if g.Calendar.FirstPlayer != -1 {
 			d2 := g.FirstPlayerSpace(MarkStep)
-			g.AddDelta(d2, 1)
-			// fmt.Println("ADDING D2", d.WorkerDeltas, d2.WorkerDeltas)
 			d.Add(d2)
+			g.AddDelta(d2, 1, true)
+			// fmt.Println("ADDING D2", d.WorkerDeltas, d2.WorkerDeltas)
 		}
 
 		d3 := g.Rotate(MarkStep)
-		g.AddDelta(d3, 1)
-		// fmt.Println("ADDING D3", d.WorkerDeltas, d3.WorkerDeltas)
 		d.Add(d3)
+		g.AddDelta(d3, 1, true)
+		// fmt.Println("ADDING D3", d.WorkerDeltas, d3.WorkerDeltas)
 	}
 	return d
 
@@ -576,9 +593,8 @@ func (g *Game) RunStop(MarkStep func(string), stopPlayer *Player) *Delta {
 
 // -- MARK -- Getters
 func (g *Game) DealBuildings() *Delta {
-	d := &Delta{
-		Buildings: map[int]int{},
-	}
+	d := GetDelta()
+	d.Buildings = IntMapPool.Get().(map[int]int)
 	n := 0
 	for _, v := range g.CurrentBuildings {
 		if v == 1 {
@@ -599,9 +615,8 @@ func (g *Game) DealBuildings() *Delta {
 }
 
 func (g *Game) DealMonuments() *Delta {
-	d := &Delta{
-		Monuments: map[int]int{},
-	}
+	d := GetDelta()
+	d.Monuments = IntMapPool.Get().(map[int]int)
 	r := RandZeros(g.CurrentMonuments, 0, len(g.Monuments), g.NMonuments, g.Rand)
 	for _, n := range r {
 		d.Monuments[n] = 1
@@ -628,7 +643,8 @@ func (g *Game) GetWorker(num int) *Worker {
 }
 
 func (g *Game) UnlockWorker(color Color) *Delta {
-	d := &Delta{WorkerDeltas: map[int]WorkerDelta{}}
+	d := GetDelta()
+	d.WorkerDeltas = WorkerDeltaMapPool.Get().(map[int]WorkerDelta)
 	for _, w := range g.Workers {
 		if w.Color == color {
 			if !w.Unlocked {
@@ -642,13 +658,13 @@ func (g *Game) UnlockWorker(color Color) *Delta {
 }
 
 func (g *Game) RemoveBuilding(b int) *Delta {
-	d := &Delta{}
+	d := GetDelta()
 	d.Buildings[b] = 1
 	return d
 }
 
 func (g *Game) RemoveMonument(m int) *Delta {
-	d := &Delta{}
+	d := GetDelta()
 	d.Buildings[m] = 1
 	return d
 }

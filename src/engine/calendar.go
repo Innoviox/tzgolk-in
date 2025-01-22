@@ -4,6 +4,7 @@ import (
 	"fmt"
 	// "os"
 	"strings"
+	. "tzgolkin/delta"
 )
 
 type Calendar struct {
@@ -146,7 +147,7 @@ func (c *Calendar) Execute(move Move, game *Game, MarkStep func(string)) {
 func (c *Calendar) Execute(move Move, game *Game, MarkStep func(string)) *Delta {
 	player := game.GetPlayerByColor(move.Player)
 
-	d := &Delta{}
+	d := GetDelta()
 
 	pd := PlayerDelta{}
 	if move.Begged != -1 {
@@ -155,7 +156,7 @@ func (c *Calendar) Execute(move Move, game *Game, MarkStep func(string)) *Delta 
 		d.Add(game.Temples.Step(player, move.Begged, -1))
 	}
 	pd.Corn -= move.Corn
-	d.Add(PlayerDeltaWrapper(move.Player, pd))
+	d.Add(PlayerDeltaWrapper(int(move.Player), pd))
 	// fmt.Println(move.String())
 	for i := 0; i < len(move.Workers); i++ {
 		p := move.Positions[i]
@@ -163,14 +164,10 @@ func (c *Calendar) Execute(move Move, game *Game, MarkStep func(string)) *Delta 
 		MarkStep(fmt.Sprintf("Executing step %d: %p %w", i, p, w))
 		if (move.Placing) {
 			if p.FirstPlayer {
-				d.Add(&Delta{
-					WorkerDeltas: map[int]WorkerDelta{move.Workers[i]: WorkerDelta{
-						// Wheel_id: -2 - w.Wheel_id,
-					}},
-					CalendarDelta: CalendarDelta{
-						FirstPlayer: move.Workers[i] - c.FirstPlayer,
-					},
-				})
+				d2 := GetDelta()
+				d2.CalendarDelta.FirstPlayer = move.Workers[i] - c.FirstPlayer
+				d.Add(d2)
+				PutDelta(d2)
 			} else {
 				if p.Corn < 0 {
 					fmt.Println("negative corn", p.Corn)
@@ -216,7 +213,7 @@ func (c *Calendar) LegalPositions() []*SpecificPosition {
 }
 
 func (c *Calendar) Rotate(g *Game) *Delta {
-	d := &Delta{}
+	d := GetDelta()
 	for i := 0; i < len(c.Wheels); i++ {
 		d.Add(c.Wheels[i].Rotate(g))
 	}

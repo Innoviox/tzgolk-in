@@ -19,25 +19,25 @@ func Tile2(g *Game, p *Player) {
 func Tile3(g *Game, p *Player) {
 	p.Resources[Stone] += 1
 	p.Resources[Gold] += 1
-	g.AddDelta(g.Research.FreeResearch(g, p, Agriculture)[0], 1)
+	g.AddDelta(g.Research.FreeResearch(g, p, Agriculture)[0], 1, true)
 }
 
 func Tile4(g *Game, p *Player) {
 	p.Corn += 3
 	p.Resources[Gold] += 1
-	g.AddDelta(g.Research.FreeResearch(g, p, Construction)[0], 1)
+	g.AddDelta(g.Research.FreeResearch(g, p, Construction)[0], 1, true)
 }
 
 func Tile5(g *Game, p *Player) {
 	p.Corn += 5
 	p.Resources[Stone] += 1
-	g.AddDelta(g.Research.FreeResearch(g, p, Theology)[0], 1)
+	g.AddDelta(g.Research.FreeResearch(g, p, Theology)[0], 1, true)
 }
 
 func Tile6(g *Game, p *Player) {
 	p.Resources[Wood] += 1
 	g.Temples.Step(p, 2, 1)
-	g.AddDelta(g.Research.FreeResearch(g, p, Resources)[0], 1)
+	g.AddDelta(g.Research.FreeResearch(g, p, Resources)[0], 1, true)
 }
 
 func Tile7(g *Game, p *Player) {
@@ -60,13 +60,13 @@ func Tile9(g *Game, p *Player) {
 func Tile10(g *Game, p *Player) {
 	p.Corn += 4
 	p.Resources[Wood] += 1
-	g.AddDelta(g.Research.FreeResearch(g, p, Resources)[0], 1)
+	g.AddDelta(g.Research.FreeResearch(g, p, Resources)[0], 1, true)
 }
 
 func Tile11(g *Game, p *Player) {
 	p.Corn += 2
 	g.Temples.Step(p, 0, 1)
-	g.AddDelta(g.Research.FreeResearch(g, p, Construction)[0], 1)
+	g.AddDelta(g.Research.FreeResearch(g, p, Construction)[0], 1, true)
 }
 
 func Tile12(g *Game, p *Player) {
@@ -81,13 +81,13 @@ func Tile13(g *Game, p *Player) {
 }
 
 func Tile14(g *Game, p *Player) {
-	g.AddDelta(g.UnlockWorker(p.Color), 1)
+	g.AddDelta(g.UnlockWorker(p.Color), 1, true)
 }
 
 func Tile15(g *Game, p *Player) {
 	p.Corn += 2
 	p.Resources[Wood] += 2
-	g.AddDelta(g.Research.FreeResearch(g, p, Theology)[0], 1)
+	g.AddDelta(g.Research.FreeResearch(g, p, Theology)[0], 1, true)
 }
 
 func Tile16(g *Game, p *Player) {
@@ -104,7 +104,7 @@ func Tile17(g *Game, p *Player) {
 func Tile18(g *Game, p *Player) {
 	p.Corn += 3
 	g.Temples.Step(p, 1, 1)
-	g.AddDelta(g.Research.FreeResearch(g, p, Agriculture)[0], 1)
+	g.AddDelta(g.Research.FreeResearch(g, p, Agriculture)[0], 1, true)
 }
 
 func Tile19(g *Game, p *Player) {

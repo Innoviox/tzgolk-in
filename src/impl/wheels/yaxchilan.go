@@ -3,6 +3,7 @@ package wheels
 import (
 	"fmt"
 	. "tzgolkin/engine"
+	. "tzgolkin/delta"
 )
 
 func Yaxchilan0(g *Game, p *Player) []*Delta {
@@ -10,7 +11,7 @@ func Yaxchilan0(g *Game, p *Player) []*Delta {
 }
 
 func Yaxchilan1(g *Game, p *Player) []*Delta {
-	d := PlayerDeltaWrapper(p.Color, PlayerDelta{
+	d := PlayerDeltaWrapper(int(p.Color), PlayerDelta{
 		Resources: [4]int{1 + g.Research.ResourceBonus(p.Color, Wood), 0, 0, 0},
 	})
 
@@ -19,7 +20,7 @@ func Yaxchilan1(g *Game, p *Player) []*Delta {
 }
 
 func Yaxchilan2(g *Game, p *Player) []*Delta {
-	d := PlayerDeltaWrapper(p.Color, PlayerDelta{
+	d := PlayerDeltaWrapper(int(p.Color), PlayerDelta{
 		Resources: [4]int{0, 1 + g.Research.ResourceBonus(p.Color, Stone), 0, 0},
 		Corn: 1,
 	})
@@ -29,7 +30,7 @@ func Yaxchilan2(g *Game, p *Player) []*Delta {
 }
 
 func Yaxchilan3(g *Game, p *Player) []*Delta {
-	d := PlayerDeltaWrapper(p.Color, PlayerDelta{
+	d := PlayerDeltaWrapper(int(p.Color), PlayerDelta{
 		Resources: [4]int{0, 0, 1 + g.Research.ResourceBonus(p.Color, Gold), 0},
 		Corn: 1,
 	})
@@ -39,7 +40,7 @@ func Yaxchilan3(g *Game, p *Player) []*Delta {
 }
 
 func Yaxchilan4(g *Game, p *Player) []*Delta {
-	d := PlayerDeltaWrapper(p.Color, PlayerDelta{
+	d := PlayerDeltaWrapper(int(p.Color), PlayerDelta{
 		Resources: [4]int{0, 0, 0, 1 + g.Research.ResourceBonus(p.Color, Skull)},
 		Corn: 1,
 	})
@@ -49,7 +50,7 @@ func Yaxchilan4(g *Game, p *Player) []*Delta {
 }
 
 func Yaxchilan5(g *Game, p *Player) []*Delta {
-	d := PlayerDeltaWrapper(p.Color, PlayerDelta{
+	d := PlayerDeltaWrapper(int(p.Color), PlayerDelta{
 		Resources: [4]int{0, 1 + g.Research.ResourceBonus(p.Color, Stone), 
 						  1 + g.Research.ResourceBonus(p.Color, Gold), 0},
 		Corn: 2,

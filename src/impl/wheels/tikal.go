@@ -3,6 +3,7 @@ package wheels
 import (
 	"fmt"
 	. "tzgolkin/engine"
+	. "tzgolkin/delta"
 )
 
 func Tikal0(g *Game, p *Player) []*Delta {
@@ -30,7 +31,7 @@ func Tikal4(g *Game, p *Player) []*Delta {
 		o1 := o//.Clone()
 
 		// g2 := g.Clone()
-		g.AddDelta(o1, 1)
+		g.AddDelta(o1, 1, false)
 
 		for _, o2 := range g.GetBuildingOptions(p, o.BuildingNum, false) {
 			d := Combine(o, o2)
@@ -38,7 +39,7 @@ func Tikal4(g *Game, p *Player) []*Delta {
 			options = append(options, d)
 		}
 
-		g.AddDelta(o1, -1)
+		g.AddDelta(o1, -1, true)
 		// if !g.Exact(g2) {
 		// 	fmt.Println("PLATO ERROR %")
 		// 	fmt.Println(o1)
@@ -65,7 +66,7 @@ func Tikal5(g *Game, p *Player) []*Delta {
 					r := [4]int{}
 					r[i] -= 1
 
-					d := PlayerDeltaWrapper(p.Color, PlayerDelta{
+					d := PlayerDeltaWrapper(int(p.Color), PlayerDelta{
 						Resources: r,
 					})
 
