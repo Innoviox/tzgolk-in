@@ -146,7 +146,7 @@ func (c *Calendar) Execute(move Move, game *Game, MarkStep func(string)) {
 func (c *Calendar) Execute(move Move, game *Game, MarkStep func(string)) *Delta {
 	player := game.GetPlayerByColor(move.Player)
 
-	d := &Delta{}
+	d := GetDelta()
 
 	pd := PlayerDelta{}
 	if move.Begged != -1 {
@@ -213,7 +213,7 @@ func (c *Calendar) LegalPositions() []*SpecificPosition {
 }
 
 func (c *Calendar) Rotate(g *Game) *Delta {
-	d := &Delta{}
+	d := GetDelta()
 	for i := 0; i < len(c.Wheels); i++ {
 		d.Add(c.Wheels[i].Rotate(g), true)
 	}

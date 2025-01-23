@@ -3,50 +3,7 @@ package engine
 import (
     "fmt"
     // "runtime/debug"
-    "sync"
 )
-
-var (
-    DeltaPool = sync.Pool{
-        New: func() interface{} {
-            return &Delta{}
-        },
-    }
-)
-
-func GetDelta() *Delta {
-    d := DeltaPool.Get().(*Delta)
-    // d.reset()
-    return d
-}
-
-// PutDelta returns a Delta to the pool
-func (d *Delta) Put() {
-    if d == nil {
-        return
-    }
-    d.reset()
-    // d.cleanup()
-    DeltaPool.Put(d)
-}
-
-func (d *Delta) reset() {
-    d.PlayerDeltas = nil
-    d.WorkerDeltas = nil
-    d.CalendarDelta = CalendarDelta{}
-    d.TemplesDelta = TemplesDelta{}
-    d.ResearchDelta = ResearchDelta{}
-    d.Monuments = nil
-    d.Buildings = nil
-    d.CurrPlayer = 0
-    d.FirstPlayer = 0
-    d.AccumulatedCorn = 0
-    d.Age = 0
-    d.Day = 0
-    d.Over = 0
-    d.Description = ""
-    d.BuildingNum = 0
-}
 
 // everything represents a delta
 // booleans are ints; positive means true, negative means false
@@ -153,6 +110,7 @@ func (d *Delta) Add(o *Delta, clear bool) {
     if o.PlayerDeltas != nil {
         if d.PlayerDeltas == nil {
             d.PlayerDeltas = map[Color]PlayerDelta{}
+            // d.PlayerDeltas = PlayerDeltaMapPool.Get().(map[Color]PlayerDelta)
         }
 
         for k, v := range o.PlayerDeltas {
@@ -186,6 +144,7 @@ func (d *Delta) Add(o *Delta, clear bool) {
     if o.WorkerDeltas != nil {
         if d.WorkerDeltas == nil {
             d.WorkerDeltas = map[int]WorkerDelta{}
+            // d.WorkerDeltas = WorkerDeltaMapPool.Get().(map[int]WorkerDelta)
         }
         for k, v := range o.WorkerDeltas {
             w, ok := d.WorkerDeltas[k]
@@ -205,6 +164,7 @@ func (d *Delta) Add(o *Delta, clear bool) {
     if o.CalendarDelta.WheelDeltas != nil {
         if d.CalendarDelta.WheelDeltas == nil {
             d.CalendarDelta.WheelDeltas = map[int]WheelDelta{}
+            // d.CalendarDelta.WheelDeltas = WheelDeltaMapPool.Get().(map[int]WheelDelta)
         } 
         for k, v := range o.CalendarDelta.WheelDeltas {
             w, ok := d.CalendarDelta.WheelDeltas[k]
@@ -215,6 +175,7 @@ func (d *Delta) Add(o *Delta, clear bool) {
             if v.PositionDeltas != nil {
                 if w.PositionDeltas == nil {
                     w.PositionDeltas = map[int]PositionDelta{}
+                    // w.PositionDeltas = PositionDeltaMapPool.Get().(map[int]PositionDelta)
                 }
 
                 for k2, v2 := range v.PositionDeltas {
@@ -241,6 +202,7 @@ func (d *Delta) Add(o *Delta, clear bool) {
     if o.TemplesDelta.TempleDeltas != nil {
         if d.TemplesDelta.TempleDeltas == nil {
             d.TemplesDelta.TempleDeltas = map[int]TempleDelta{}
+            // d.TemplesDelta.TempleDeltas = TempleDeltaMapPool.Get().(map[int]TempleDelta)
         }
 
         for k, v := range o.TemplesDelta.TempleDeltas {
@@ -256,6 +218,7 @@ func (d *Delta) Add(o *Delta, clear bool) {
     if o.ResearchDelta.Levels != nil {
         if d.ResearchDelta.Levels == nil {
             d.ResearchDelta.Levels = map[Color]Levels{}
+            // d.ResearchDelta.Levels = LevelsMapPool.Get().(map[Color]Levels)
         }
 
         for k, v := range o.ResearchDelta.Levels {
@@ -289,7 +252,7 @@ func (d *Delta) Add(o *Delta, clear bool) {
 }
 
 func Combine(d1 *Delta, d2 *Delta) *Delta {
-    d := &Delta{}
+    d := GetDelta()
     d.Add(d1, false)
     d.Add(d2, false)
     return d

@@ -188,7 +188,7 @@ func (w *Wheel) MakeDelta(Occupied map[int]int) *Delta {
 }
 
 func (w *Wheel) Rotate(g *Game) *Delta {
-	d := &Delta{}
+	d := GetDelta()
 
 	// workerToRemove := -1 // only one worker per wheel can fall off
 	new_occupied := make(map[int]int)

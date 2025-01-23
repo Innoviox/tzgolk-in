@@ -109,6 +109,8 @@ func (g *Game) Init() {
 	g.Freeze = make(map[int]*Game)
 
 	fmt.Fprintf(os.Stdout, "%s", g.String())
+
+	DeltaPrewarmPools(10000)
 }
 
 func (g *Game) Clone() *Game {
@@ -384,7 +386,7 @@ func (g *Game) Rotate(MarkStep func(string)) *Delta {
 }
 
 func (g *Game) CheckDay(MarkStep func(string)) *Delta {
-	d := &Delta{}
+	d := GetDelta()
 	for _, day := range g.ResDays {
 		if g.Day == day {
 			d.Add(g.FoodDay(MarkStep), true)
@@ -478,15 +480,17 @@ func (g *Game) FoodDay(MarkStep func(string)) *Delta {
 }
 
 func (g *Game) TakeTurn(MarkStep func(string), random bool) *Delta {
-	d := &Delta{}
+	d := GetDelta()
 	player := g.Players[g.CurrPlayer]
 
 	var move *Move
+	var moves []Move
 	if random {
 		// this number is equal to ply + 1
-		moves := g.GenerateMoves(g.Players[g.CurrPlayer], 3)
+		moves = g.GenerateMoves(g.Players[g.CurrPlayer], 3)
 		if len(moves) > 0 {
-			move = &moves[g.Rand.Intn(len(moves))]
+			moveN := g.Rand.Intn(len(moves))
+			move = &moves[moveN]
 		}
 	} else {
 		move, _ = ComputeMove(g, player, 2, false)
@@ -500,6 +504,15 @@ func (g *Game) TakeTurn(MarkStep func(string), random bool) *Delta {
 	} else {
 		MarkStep(fmt.Sprintf("[FATAL ERROR] No move for %s", player.Color.String()))
 	}
+
+	// if len(moves) > 0 {
+	// 	for _, m := range moves {
+	// 		for _, p := range m.Positions {
+	// 			p.Execute.Put()
+	// 			p.Execute = nil
+	// 		}
+	// 	}
+	// }
 	// player.Corn -= move.Corn
 
 	d.Add(g.DealBuildings(), true)
@@ -529,7 +542,7 @@ func mod(a, b int) int {
 }
 
 func (g *Game) RunStop(MarkStep func(string), stopPlayer *Player) *Delta {
-	d := &Delta{}
+	d := GetDelta()
 	run1 := mod(g.FirstPlayer - int(stopPlayer.Color) + 3, 4)
 	ran := false
 	for !g.IsOver() {
@@ -560,7 +573,6 @@ func (g *Game) RunStop(MarkStep func(string), stopPlayer *Player) *Delta {
 			d.Add(d2, false)
 			g.AddDelta(d2, 1, true)
 			// fmt.Println("ADDING D2", d.WorkerDeltas, d2.WorkerDeltas)
-			
 		}
 
 		d3 := g.Rotate(MarkStep)
@@ -649,13 +661,13 @@ func (g *Game) UnlockWorker(color Color) *Delta {
 }
 
 func (g *Game) RemoveBuilding(b int) *Delta {
-	d := &Delta{}
+	d := GetDelta()
 	d.Buildings[b] = 1
 	return d
 }
 
 func (g *Game) RemoveMonument(m int) *Delta {
-	d := &Delta{}
+	d := GetDelta()
 	d.Buildings[m] = 1
 	return d
 }

@@ -57,8 +57,11 @@ func ComputeMove(g *Game, p *Player, ply int, rec bool) (*Move, float64) {
 
     best := float64(-100)
     var best_move Move
-    for _, m := range moves {
-        // d := &Delta{}
+    for i, m := range moves {
+        if bar != nil && i == 100 {
+            return &best_move, best
+        }
+        // d := GetDelta()
         
         g.CurrPlayer = ccp
         // fmt.Println("TESTING MOVE", m, g.CurrPlayer, g.FirstPlayer)
@@ -79,24 +82,31 @@ func ComputeMove(g *Game, p *Player, ply int, rec bool) (*Move, float64) {
         // d.Add(d2)
         
         _, score := ComputeMove(g, p, ply - 1, true)
+        d3 := Combine(d1, d2)
+        g.AddDelta(d3, -1, true)
+        // g.AddDelta(d2, -1)
+        // g.AddDelta(d, -1)
+        g.CurrPlayer = ccp
         // if !rec {
         //     fmt.Fprintf(os.Stdout, "Score: %f for move %s\n", score, m.String())
         // }
         if score > best {
             best = score
             best_move = m
-        }
+        } 
+        // else {
+        //     for _, p := range m.Positions {
+        //         p.Execute.Put()
+        //         p.Execute = nil
+        //     }
+        // }
 
         if bar != nil {
             bar.Add(1)
         }
         
         // g.Load(ply)
-        d3 := Combine(d1, d2)
-        g.AddDelta(d3, -1, true)
-        // g.AddDelta(d2, -1)
-        // g.AddDelta(d, -1)
-        g.CurrPlayer = ccp
+        
         // fmt.Println(d3, d3.FirstPlayer)
         // if !g.Exact(g2) {
         //     fmt.Println("PLATO ERROR 2")
